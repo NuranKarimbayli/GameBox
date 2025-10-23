@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GameBox - Settings</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg"
+        href="https://imgs.search.brave.com/vcOicL6yCVdeBpDPth1MSwcFzMrlqx3RyoZ_FnlqtZs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcGxheXN0YXRp/b24tc3RpY2stY29u/dHJvbGxlci1jYXJ0/b29uLWlsbHVzdHJh/dGlvbi1wcmVtaXVt/LXZlY3Rvcl8yNjI5/NjItMTU0LmpwZz9z/ZW10PWFpc19oeWJy/aWQmdz03NDA">
+    <link rel="apple-touch-icon"
+        href="https://imgs.search.brave.com/vlz7U7Y0riMxxyxz0KW_KzAyiVhNFtwbM4LXlLlQkXE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzE2L2Nh/L2NmLzE2Y2FjZjJk/MjBlYjY0ODVlNzAx/ODVjZTZhZjIxMzRj/LmpwZw">
+
+    <style>
+        body {
+            font-family: 'Spline Sans', sans-serif;
+            background: linear-gradient(300deg, #f8fafc, #f1f5f9, #e2e8f0);
+            background-size: 180% 180%;
+            animation: gradient-animation 18s ease infinite;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .dark body {
+            background: linear-gradient(300deg, #111421, #1a1e38, #3c2a4d);
+            color: #e2e8f0;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .dark #logout-btn {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .dark #logout-btn:hover {
+            background-color: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #fecaca;
+        }
+
+        .dark .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .success-message {
+            animation: fadeInOut 3s ease forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            20% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            80% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        .password-strength-meter {
+            height: 6px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .password-strength-weak {
+            background-color: #ef4444;
+            width: 25%;
+        }
+
+        .password-strength-medium {
+            background-color: #f59e0b;
+            width: 50%;
+        }
+
+        .password-strength-strong {
+            background-color: #10b981;
+            width: 75%;
+        }
+
+        .password-strength-very-strong {
+            background-color: #22c55e;
+            width: 100%;
+        }
+
+        /* Dark theme text colors */
+        .dark .text-gray-800 {
+            color: #e2e8f0;
+        }
+
+        .dark .text-gray-600 {
+            color: #94a3b8;
+        }
+
+        .dark .text-gray-500 {
+            color: #64748b;
+        }
+
+        .dark .text-gray-700 {
+            color: #cbd5e1;
+        }
+
+        .dark .bg-gray-100 {
+            background-color: #1e293b;
+        }
+
+        .dark .bg-gray-200 {
+            background-color: #334155;
+        }
+
+        .dark .border-gray-200 {
+            border-color: #334155;
+        }
+
+        .dark .border-gray-300 {
+            border-color: #475569;
+        }
+
+        .dark .bg-white {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+
+        .dark .bg-gray-50 {
+            background-color: #1e293b;
+        }
+
+        .dark input,
+        .dark select {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            border-color: #475569;
+        }
+
+        .dark input::placeholder {
+            color: #64748b;
+        }
+
+        .dark .form-input:focus {
+            border-color: #3b82f6;
+            background-color: #1e293b;
+        }
+
+        /* Notification dropdown styles */
+        .notification-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            width: 320px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .notification-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dark .notification-dropdown {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .notification-header {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dark .notification-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .notification-content {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .notification-empty {
+            padding: 2rem 1rem;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .notification-item {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: background-color 0.2s ease;
+        }
+
+        .notification-item:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .dark .notification-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dark .notification-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-message {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .notification-time {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: 0.25rem;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-actions {
+            padding: 0.75rem;
+            display: flex;
+            justify-content: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .notification-actions {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .relative-container {
+            position: relative;
+        }
+
+        /* Profile dropdown styles */
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            width: 240px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .profile-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dark .profile-dropdown {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-header {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .dark .profile-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-email {
+            font-size: 0.875rem;
+            color: #6b7280;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-menu {
+            padding: 0.5rem 0;
+        }
+
+        .profile-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .profile-menu-item:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .dark .profile-menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .profile-menu-item .material-symbols-outlined {
+            font-size: 1.25rem;
+        }
+
+        .profile-divider {
+            height: 1px;
+            background-color: rgba(0, 0, 0, 0.1);
+            margin: 0.5rem 0;
+        }
+
+        .dark .profile-divider {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light text-text-primary font-display">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Header -->
+        <header
+            class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 px-6 sm:px-10 md:px-20 py-3 glass-card rounded-none">
+            <div class="flex items-center gap-4 text-gray-800">
+                <div class="size-8 text-primary">
+                    <span class="material-symbols-outlined !text-4xl">stadia_controller</span>
+                </div>
+                <h2 class="text-gray-800 text-xl font-bold leading-tight tracking-[-0.015em]">GameBox</h2>
+            </div>
+            <div class="hidden md:flex items-center gap-9">
+                <a class="text-gray-600 hover:text-gray-800 text-sm font-medium leading-normal"
+                    href="dashboard.html">Home</a>
+                <a class="text-gray-600 hover:text-gray-800 text-sm font-medium leading-normal"
+                    href="achievements.html">Achievements</a>
+                <a class="text-gray-600 hover:text-gray-800 text-sm font-medium leading-normal"
+                    href="games.html">Games</a>
+                <a class="text-gray-600 hover:text-gray-800 text-sm font-medium leading-normal"
+                    href="store.html">Store</a>
+                <a class="text-gray-600 hover:text-gray-800 text-sm font-medium leading-normal"
+                    href="friends.html">Friends</a>
+                <a class="text-blue-500 text-sm font-medium leading-normal" href="settings.html">Settings</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Notification Button with Dropdown -->
+                <div class="relative-container">
+                    <button id="notification-btn"
+                        class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-gray-100 hover:bg-gray-200 text-gray-700 gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 relative">
+                        <span class="material-symbols-outlined text-gray-700" data-icon="Bell">notifications</span>
+                        <!-- Notification badge (hidden when no notifications) -->
+                        <div id="notification-badge" class="notification-badge hidden">0</div>
+                    </button>
+
+                    <!-- Notification Dropdown -->
+                    <div id="notification-dropdown" class="notification-dropdown">
+                        <div class="notification-header">
+                            <h3 class="text-lg font-bold">Notifications</h3>
+                            <button id="mark-all-read" class="text-sm text-blue-500 hover:text-blue-700">Mark all as
+                                read</button>
+                        </div>
+                        <div class="notification-content">
+                            <!-- Empty state when no notifications -->
+                            <div id="notification-empty" class="notification-empty">
+                                <span
+                                    class="material-symbols-outlined text-4xl mb-2 opacity-50">notifications_off</span>
+                                <p class="text-gray-500">No notifications</p>
+                                <p class="text-sm text-gray-400 mt-1">We'll notify you when something arrives</p>
+                            </div>
+
+                            <!-- Notification items (hidden by default) -->
+                            <div id="notification-items" class="hidden">
+                                <!-- Sample notification items would go here -->
+                            </div>
+                        </div>
+                        <div class="notification-actions">
+                            <button id="view-all-notifications" class="text-sm text-blue-500 hover:text-blue-700">View
+                                all notifications</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Dropdown -->
+                <div class="relative-container">
+                    <div id="user-avatar"
+                        class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all"
+                        data-alt="User avatar"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuChnaVj7NdbpL5KKTRTYhXq1SCWuFVSABMeW7EohGzgh_BeMCdJrmCvAosUI8iz6KUbW_RC8OgaS3sg0uOJLuJBWXByzX8AmkXAwWmbpDUGKG8YoYDXUmeUsRNGbg3rg9enyZPQqiWbyXmM6J4mgcjzU42XbnpgTuO9y-ju7ACsEZ7sX-k2ofN4PwiZWCtejjM8hI30M4SvvnpHUbGsMYMo25FQMcpGCFfSGIIi83kXtqwNa2Xnc3L6gteKzwOV8ni__yQ2mTwCqA");'>
+                    </div>
+
+                    <!-- Profile Dropdown Menu -->
+                    <div id="profile-dropdown" class="profile-dropdown">
+                        <div class="profile-header">
+                            <div id="profile-dropdown-avatar"
+                                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuChnaVj7NdbpL5KKTRTYhXq1SCWuFVSABMeW7EohGzgh_BeMCdJrmCvAosUI8iz6KUbW_RC8OgaS3sg0uOJLuJBWXByzX8AmkXAwWmbpDUGKG8YoYDXUmeUsRNGbg3rg9enyZPQqiWbyXmM6J4mgcjzU42XbnpgTuO9y-ju7ACsEZ7sX-k2ofN4PwiZWCtejjM8hI30M4SvvnpHUbGsMYMo25FQMcpGCFfSGIIi83kXtqwNa2Xnc3L6gteKzwOV8ni__yQ2mTwCqA");'>
+                            </div>
+                            <div class="profile-info">
+                                <div class="profile-name">Nuran Karimbayli</div>
+                                <div class="profile-email">karimbaylinuran@gmail.com</div>
+                            </div>
+                        </div>
+                        <div class="profile-menu">
+                            <div class="profile-menu-item" id="profile-dropdown-settings">
+                                <span class="material-symbols-outlined">settings</span>
+                                <span>Settings</span>
+                            </div>
+                            <div class="profile-menu-item" id="profile-dropdown-edit-profile">
+                                <span class="material-symbols-outlined">edit</span>
+                                <span>Edit Profile</span>
+                            </div>
+                            <div class="profile-menu-item" id="profile-dropdown-achievements">
+                                <span class="material-symbols-outlined">military_tech</span>
+                                <span>Achievements</span>
+                            </div>
+                            <div class="profile-divider"></div>
+                            <div class="profile-menu-item" id="profile-dropdown-logout">
+                                <span class="material-symbols-outlined">logout</span>
+                                <span>Log Out</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button
+                    class="md:hidden flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-gray-100 hover:bg-gray-200 text-gray-700 gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 px-4 sm:px-10 md:px-20 py-10">
+            <div class="max-w-5xl mx-auto">
+                <!-- Page Heading -->
+                <div class="flex flex-wrap justify-between items-center gap-4 mb-10">
+                    <div class="flex min-w-72 flex-col gap-1">
+                        <p class="text-gray-800 text-4xl font-black leading-tight tracking-[-0.033em]">Settings</p>
+                        <p class="text-gray-600 text-base font-normal leading-normal">Manage your account and
+                            preferences.</p>
+                    </div>
+                </div>
+
+                <!-- Profile Settings -->
+                <section class="glass-card rounded-xl p-6 md:p-8 mb-8">
+                    <h2
+                        class="text-gray-800 text-[22px] font-bold leading-tight tracking-[-0.015em] mb-6 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-blue-500">person</span>Profile Settings
+                    </h2>
+                    <div class="flex flex-col @container md:flex-row md:items-start gap-8">
+                        <div class="flex flex-col items-center gap-4">
+                            <div class="relative">
+                                <div id="profile-avatar"
+                                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-32 cursor-pointer hover:ring-2 hover:ring-blue-400 transition-all"
+                                    data-alt="User avatar"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBdOaUv6CekeRn8WjkjGSozX98N1Eo5osb-87z7RwmWZp7I4QCXArlhUyuafI09Ggk7F5wgk95domdjdZpwLnHX2mMWu4ABb3e3DDa7lPHTI2K5baYX4rJAQM7Og4we57IIXp3rwG078OpUYJazjw5Mw1msLjxMiN_-1PacIRdOax9_Dj6OKaqEaRq8E13aR6xa7NdLNRnI-i7gi70sWzZDDL6ncmxhw0eoDreciPb55F2eIfd4ERXRLRZK7I-jKJqHBWyjWZRgvg");'>
+                                </div>
+                                <button id="edit-avatar-btn"
+                                    class="absolute bottom-0 right-0 flex items-center justify-center size-10 bg-blue-500 hover:bg-blue-600 text-white rounded-full">
+                                    <span class="material-symbols-outlined">edit</span>
+                                </button>
+                            </div>
+                            <button id="upload-picture-btn"
+                                class="flex w-full md:w-auto min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold leading-normal tracking-[0.015em]">
+                                <span class="truncate">Upload new picture</span>
+                            </button>
+                        </div>
+                        <div class="flex-1 grid grid-cols-1 @[480px]:grid-cols-2 gap-6">
+                            <label class="flex flex-col col-span-1">
+                                <p class="text-gray-600 text-base font-medium leading-normal pb-2">Username</p>
+                                <input id="username-input"
+                                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-gray-800 focus:outline-0 focus:ring-2 focus:ring-blue-500/50 border border-gray-300 bg-white focus:border-blue-500 h-14 placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal"
+                                    value="NuranKarimbayli" />
+                            </label>
+                            <label class="flex flex-col col-span-1">
+                                <p class="text-gray-600 text-base font-medium leading-normal pb-2">Full Name</p>
+                                <input id="fullname-input"
+                                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-gray-800 focus:outline-0 focus:ring-2 focus:ring-blue-500/50 border border-gray-300 bg-white focus:border-blue-500 h-14 placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal"
+                                    value="Nuran Karimbayli" />
+                            </label>
+                            <div class="flex flex-col col-span-1 @[480px]:col-span-2">
+                                <p class="text-gray-600 text-base font-medium leading-normal pb-2">Email Address</p>
+                                <div
+                                    class="flex items-center justify-between rounded-xl border border-gray-300 bg-gray-50 h-14 px-[15px]">
+                                    <p class="text-gray-500 text-base font-normal leading-normal">
+                                        karimbaylinuran@gmail.com</p>
+                                    <span class="material-symbols-outlined text-gray-400">lock</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-end col-span-1 @[480px]:col-span-2 mt-2">
+                                <button id="save-profile-btn"
+                                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-blue-500 hover:bg-blue-600 text-white text-base font-bold leading-normal tracking-[0.015em]">
+                                    <span class="truncate">Save Changes</span>
+                                </button>
+                            </div>
+                            <div id="profile-success-message"
+                                class="hidden col-span-1 @[480px]:col-span-2 flex items-center justify-center p-3 bg-green-100 border border-green-200 rounded-xl text-green-700 success-message">
+                                <span class="material-symbols-outlined mr-2">check_circle</span>
+                                Profile updated successfully!
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings & Privacy -->
+                <section class="glass-card rounded-xl p-6 md:p-8 mb-8">
+                    <h2
+                        class="text-gray-800 text-[22px] font-bold leading-tight tracking-[-0.015em] mb-6 flex items-center gap-3">
+                        <span class="material-symbols-outlined text-blue-500">security</span>Settings &amp; Privacy
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                        <!-- Change Password -->
+                        <div class="space-y-6">
+                            <h3 class="text-lg font-semibold text-gray-700 border-b border-gray-200 pb-2">Change
+                                Password</h3>
+                            <label class="flex flex-col">
+                                <p class="text-gray-600 text-base font-medium leading-normal pb-2">Current Password</p>
+                                <input id="current-password"
+                                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-gray-800 focus:outline-0 focus:ring-2 focus:ring-blue-500/50 border border-gray-300 bg-white focus:border-blue-500 h-14 placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal"
+                                    placeholder="••••••••" type="password" />
+                            </label>
+                            <label class="flex flex-col">
+                                <p class="text-gray-600 text-base font-medium leading-normal pb-2">New Password</p>
+                                <input id="new-password"
+                                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-gray-800 focus:outline-0 focus:ring-2 focus:ring-blue-500/50 border border-gray-300 bg-white focus:border-blue-500 h-14 placeholder:text-gray-400 p-[15px] text-base font-normal leading-normal"
+                                    placeholder="••••••••" type="password" />
+                                <div id="password-strength-container" class="mt-2 hidden">
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-xs text-gray-500">Password strength:</span>
+                                        <span id="password-strength-text" class="text-xs"></span>
+                                    </div>
+                                    <div id="password-strength-meter" class="password-strength-meter"></div>
+                                </div>
+                            </label>
+                            <div class="flex items-center gap-4">
+                                <button id="save-password-btn"
+                                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-blue-500 hover:bg-blue-600 text-white text-base font-bold leading-normal tracking-[0.015em]">
+                                    <span class="truncate">Save Password</span>
+                                </button>
+                                <div id="password-success-message"
+                                    class="hidden flex items-center justify-center p-3 bg-green-100 border border-green-200 rounded-xl text-green-700 success-message">
+                                    <span class="material-symbols-outlined mr-2">check_circle</span>
+                                    Password changed successfully!
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Security Tips & Danger Zone -->
+                        <div class="space-y-6">
+                            <h3 class="text-lg font-semibold text-gray-700 border-b border-gray-200 pb-2">Security Tips
+                            </h3>
+                            <ul class="space-y-3 text-gray-600 text-sm list-disc list-inside">
+                                <li>Use a strong, unique password for your GameBox account.</li>
+                                <li>Enable Two-Factor Authentication for an extra layer of security.</li>
+                                <li>Never share your account details with anyone.</li>
+                            </ul>
+                            <div class="border-t border-red-200 pt-6">
+                                <h3 class="text-lg font-semibold text-red-500">Danger Zone</h3>
+                                <p class="text-gray-500 text-sm mt-1 mb-4">Deleting your account is permanent and cannot
+                                    be undone.</p>
+                                <button id="delete-account-btn"
+                                    class="flex w-full md:w-auto min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-red-500 hover:bg-red-600 text-white text-base font-bold leading-normal tracking-[0.015em]">
+                                    <span class="truncate">Delete Account</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Personalization & Logout -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Personalization -->
+                    <section class="glass-card rounded-xl p-6 md:p-8">
+                        <h2
+                            class="text-gray-800 text-[22px] font-bold leading-tight tracking-[-0.015em] mb-6 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-blue-500">palette</span>Personalization
+                        </h2>
+                        <div class="space-y-6">
+                            <div class="flex items-center justify-between">
+                                <p class="text-gray-600 font-medium">Theme</p>
+                                <div class="flex items-center gap-4 p-1 rounded-full bg-gray-100">
+                                    <button id="light-theme-btn"
+                                        class="px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-2 bg-blue-500 text-white"><span
+                                            class="material-symbols-outlined !text-base">light_mode</span>Light</button>
+                                    <button id="dark-theme-btn"
+                                        class="px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-2 text-gray-500"><span
+                                            class="material-symbols-outlined !text-base">dark_mode</span>Dark</button>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <p class="text-gray-600 font-medium">Language</p>
+                                <div class="relative">
+                                    <select id="language-select"
+                                        class="form-select appearance-none w-48 block pl-4 pr-10 py-3 text-base text-gray-700 bg-white rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500">
+                                        <option>English (US)</option>
+                                        <option>Español</option>
+                                        <option>Français</option>
+                                        <option>Deutsch</option>
+                                    </select>
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                        <span class="material-symbols-outlined">expand_more</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 pt-4">
+                                <button id="save-preferences-btn"
+                                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-blue-500 hover:bg-blue-600 text-white text-base font-bold leading-normal tracking-[0.015em]">
+                                    <span class="truncate">Save Preferences</span>
+                                </button>
+                                <div id="preferences-success-message"
+                                    class="hidden flex items-center justify-center p-3 bg-green-100 border border-green-200 rounded-xl text-green-700 success-message">
+                                    <span class="material-symbols-outlined mr-2">check_circle</span>
+                                    Preferences saved!
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Log Out -->
+                    <section class="glass-card rounded-xl p-6 md:p-8 flex flex-col justify-center">
+                        <h2
+                            class="text-gray-800 text-[22px] font-bold leading-tight tracking-[-0.015em] mb-4 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-blue-500">logout</span>Log Out
+                        </h2>
+                        <p class="text-gray-500 text-sm mb-4">Are you sure you want to sign out of your account?</p>
+                        <button id="logout-btn"
+                            class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-red-50 border border-red-200 hover:bg-red-100 text-red-500 hover:text-red-700 text-base font-bold leading-normal tracking-[0.015em]">
+                            <span class="truncate">Log Out of GameBox</span>
+                        </button>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center py-8 px-10 border-t border-gray-200 mt-10">
+            <p class="text-sm text-gray-500">Nuran Karimbayli 2025 Open Source Project</p>
+            <!-- Social media links -->
+            <div class="flex justify-center gap-4 mt-4">
+                <a href="https://www.linkedin.com/in/nurankarimbayli/" target="_blank"
+                    class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-700 hover:bg-blue-500 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                    </svg>
+                </a>
+                <a href="https://github.com/NuranKarimbayli" target="_blank"
+                    class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-800 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                    </svg>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Avatar Selection Modal -->
+    <div class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        id="avatar-modal">
+        <div class="bg-white border border-gray-200 rounded-xl p-6 max-w-md w-full shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Choose Avatar</h3>
+                <button id="close-avatar-modal" class="text-gray-500 hover:text-gray-700">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="mb-6">
+                <h4 class="text-lg font-semibold mb-3 text-gray-700">Stock Avatars</h4>
+                <div class="grid grid-cols-4 gap-3">
+                    <div
+                        class="avatar-option bg-blue-500 rounded-full size-16 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-blue-300">
+                        <span class="material-symbols-outlined text-white">person</span>
+                    </div>
+                    <div
+                        class="avatar-option bg-purple-500 rounded-full size-16 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-purple-300">
+                        <span class="material-symbols-outlined text-white">pets</span>
+                    </div>
+                    <div
+                        class="avatar-option bg-green-500 rounded-full size-16 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-green-300">
+                        <span class="material-symbols-outlined text-white">smart_toy</span>
+                    </div>
+                    <div
+                        class="avatar-option bg-yellow-500 rounded-full size-16 flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-yellow-300">
+                        <span class="material-symbols-outlined text-white">sports_esports</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-3 text-gray-700">Upload Custom Avatar</h4>
+                <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
+                    <input type="file" id="avatar-upload" class="hidden" accept="image/*">
+                    <label for="avatar-upload" class="cursor-pointer flex flex-col items-center">
+                        <span class="material-symbols-outlined text-4xl mb-2 text-gray-400">cloud_upload</span>
+                        <p class="text-gray-500">Click to upload an image</p>
+                        <p class="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 5MB</p>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        id="delete-confirm-modal">
+        <div class="bg-white border border-gray-200 rounded-xl p-8 max-w-md w-full text-center shadow-2xl">
+            <span class="material-symbols-outlined text-red-500 !text-6xl">warning</span>
+            <h3 class="text-2xl font-bold mt-4 mb-2 text-gray-800">Are you absolutely sure?</h3>
+            <p class="text-gray-600 mb-6">This action cannot be undone. This will permanently delete your account and
+                all your data.</p>
+            <div class="flex gap-4 justify-center">
+                <button id="cancel-delete"
+                    class="flex-1 min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-gray-100 hover:bg-gray-200 text-gray-700 text-base font-bold">Cancel</button>
+                <button id="confirm-delete"
+                    class="flex-1 min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-red-500 hover:bg-red-600 text-white text-base font-bold">Delete
+                    Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Profile dropdown functionality
+        const userAvatar = document.getElementById('user-avatar');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const profileDropdownAvatar = document.getElementById('profile-dropdown-avatar');
+        const profileDropdownSettings = document.getElementById('profile-dropdown-settings');
+        const profileDropdownEditProfile = document.getElementById('profile-dropdown-edit-profile');
+        const profileDropdownAchievements = document.getElementById('profile-dropdown-achievements');
+        const profileDropdownLogout = document.getElementById('profile-dropdown-logout');
+
+        // Notification dropdown functionality
+        const notificationBtn = document.getElementById('notification-btn');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+        const notificationBadge = document.getElementById('notification-badge');
+        const markAllReadBtn = document.getElementById('mark-all-read');
+        const viewAllNotificationsBtn = document.getElementById('view-all-notifications');
+        const notificationEmpty = document.getElementById('notification-empty');
+        const notificationItems = document.getElementById('notification-items');
+
+        // Close all dropdowns
+        function closeAllDropdowns() {
+            profileDropdown.classList.remove('active');
+            notificationDropdown.classList.remove('active');
+        }
+
+        // Toggle profile dropdown
+        userAvatar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = profileDropdown.classList.contains('active');
+
+            // Close all dropdowns first
+            closeAllDropdowns();
+
+            // Then toggle the clicked dropdown
+            if (!isActive) {
+                profileDropdown.classList.add('active');
+            }
+        });
+
+        // Toggle notification dropdown
+        notificationBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = notificationDropdown.classList.contains('active');
+
+            // Close all dropdowns first
+            closeAllDropdowns();
+
+            // Then toggle the clicked dropdown
+            if (!isActive) {
+                notificationDropdown.classList.add('active');
+            }
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            // Check if click is outside both dropdowns and their buttons
+            if (!profileDropdown.contains(e.target) && !userAvatar.contains(e.target) &&
+                !notificationDropdown.contains(e.target) && !notificationBtn.contains(e.target)) {
+                closeAllDropdowns();
+            }
+        });
+
+        // Profile dropdown menu actions
+        profileDropdownSettings.addEventListener('click', () => {
+            // Already on settings page, just close dropdown
+            closeAllDropdowns();
+        });
+
+        profileDropdownEditProfile.addEventListener('click', () => {
+            // Scroll to profile settings section
+            document.querySelector('#profile-avatar').scrollIntoView({ behavior: 'smooth' });
+            closeAllDropdowns();
+        });
+
+        profileDropdownAchievements.addEventListener('click', () => {
+            // Navigate to achievements page
+            window.location.href = 'achievements.html';
+        });
+
+        profileDropdownLogout.addEventListener('click', () => {
+            // Logout functionality
+            window.location.href = 'auth.html';
+        });
+
+        // Theme switching functionality
+        const lightThemeBtn = document.getElementById('light-theme-btn');
+        const darkThemeBtn = document.getElementById('dark-theme-btn');
+        const savePreferencesBtn = document.getElementById('save-preferences-btn');
+        const preferencesSuccessMessage = document.getElementById('preferences-success-message');
+
+        // Track selected theme before saving
+        let selectedTheme = 'light';
+
+        // Set initial theme button states
+        function updateThemeButtons() {
+            if (selectedTheme === 'light') {
+                lightThemeBtn.classList.add('bg-blue-500', 'text-white');
+                lightThemeBtn.classList.remove('text-gray-500');
+                darkThemeBtn.classList.remove('bg-blue-500', 'text-white');
+                darkThemeBtn.classList.add('text-gray-500');
+            } else {
+                darkThemeBtn.classList.add('bg-blue-500', 'text-white');
+                darkThemeBtn.classList.remove('text-gray-500');
+                lightThemeBtn.classList.remove('bg-blue-500', 'text-white');
+                lightThemeBtn.classList.add('text-gray-500');
+            }
+        }
+
+        // Initialize theme buttons
+        updateThemeButtons();
+
+        lightThemeBtn.addEventListener('click', () => {
+            selectedTheme = 'light';
+            updateThemeButtons();
+        });
+
+        darkThemeBtn.addEventListener('click', () => {
+            selectedTheme = 'dark';
+            updateThemeButtons();
+        });
+
+        // Save preferences functionality
+        savePreferencesBtn.addEventListener('click', () => {
+            // Apply the selected theme
+            if (selectedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+                document.body.classList.remove('dark');
+            } else {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark');
+            }
+
+            // In a real app, this would also save the language preference
+            const selectedLanguage = document.getElementById('language-select').value;
+
+            // Show success message
+            preferencesSuccessMessage.classList.remove('hidden');
+
+            // Hide the success message after 3 seconds
+            setTimeout(() => {
+                preferencesSuccessMessage.classList.add('hidden');
+            }, 3000);
+        });
+
+        // Avatar modal functionality
+        const avatarModal = document.getElementById('avatar-modal');
+        const editAvatarBtn = document.getElementById('edit-avatar-btn');
+        const uploadPictureBtn = document.getElementById('upload-picture-btn');
+        const profileAvatar = document.getElementById('profile-avatar');
+        const closeAvatarModal = document.getElementById('close-avatar-modal');
+        const avatarOptions = document.querySelectorAll('.avatar-option');
+        const avatarUpload = document.getElementById('avatar-upload');
+
+        // Open avatar modal when clicking on the profile avatar
+        profileAvatar.addEventListener('click', () => {
+            avatarModal.classList.remove('hidden');
+        });
+
+        // Open avatar modal
+        editAvatarBtn.addEventListener('click', () => {
+            avatarModal.classList.remove('hidden');
+        });
+
+        uploadPictureBtn.addEventListener('click', () => {
+            avatarModal.classList.remove('hidden');
+        });
+
+        // Close avatar modal
+        closeAvatarModal.addEventListener('click', () => {
+            avatarModal.classList.add('hidden');
+        });
+
+        // Select stock avatar
+        avatarOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const icon = option.querySelector('.material-symbols-outlined').textContent;
+                const bgColor = window.getComputedStyle(option).backgroundColor;
+
+                // Update all avatars
+                userAvatar.innerHTML = `<span class="material-symbols-outlined text-white flex items-center justify-center h-full">${icon}</span>`;
+                userAvatar.style.backgroundColor = bgColor;
+                userAvatar.style.backgroundImage = 'none';
+
+                profileAvatar.innerHTML = `<span class="material-symbols-outlined text-white flex items-center justify-center h-full text-4xl">${icon}</span>`;
+                profileAvatar.style.backgroundColor = bgColor;
+                profileAvatar.style.backgroundImage = 'none';
+
+                profileDropdownAvatar.innerHTML = `<span class="material-symbols-outlined text-white flex items-center justify-center h-full">${icon}</span>`;
+                profileDropdownAvatar.style.backgroundColor = bgColor;
+                profileDropdownAvatar.style.backgroundImage = 'none';
+
+                avatarModal.classList.add('hidden');
+            });
+        });
+
+        // Upload custom avatar
+        avatarUpload.addEventListener('change', function (e) {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    userAvatar.style.backgroundImage = `url(${e.target.result})`;
+                    userAvatar.innerHTML = '';
+
+                    profileAvatar.style.backgroundImage = `url(${e.target.result})`;
+                    profileAvatar.innerHTML = '';
+
+                    profileDropdownAvatar.style.backgroundImage = `url(${e.target.result})`;
+                    profileDropdownAvatar.innerHTML = '';
+                }
+
+                reader.readAsDataURL(this.files[0]);
+                avatarModal.classList.add('hidden');
+            }
+        });
+
+        // Delete account modal functionality
+        const deleteAccountBtn = document.getElementById('delete-account-btn');
+        const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+        const cancelDelete = document.getElementById('cancel-delete');
+        const confirmDelete = document.getElementById('confirm-delete');
+
+        deleteAccountBtn.addEventListener('click', () => {
+            deleteConfirmModal.classList.remove('hidden');
+        });
+
+        cancelDelete.addEventListener('click', () => {
+            deleteConfirmModal.classList.add('hidden');
+        });
+
+        confirmDelete.addEventListener('click', () => {
+            // In a real app, this would send a request to delete the account
+            alert('Account deletion functionality would be implemented here');
+            deleteConfirmModal.classList.add('hidden');
+        });
+
+        // Language selection functionality
+        const languageSelect = document.getElementById('language-select');
+
+        languageSelect.addEventListener('change', () => {
+            // In a real app, this would change the language
+            // We'll handle the actual saving when the user clicks "Save Preferences"
+        });
+
+        // Logout functionality
+        const logoutBtn = document.getElementById('logout-btn');
+
+        logoutBtn.addEventListener('click', () => {
+            // In a real app, this would log the user out and redirect
+            window.location.href = 'auth.html';
+        });
+
+        // Profile save functionality
+        const saveProfileBtn = document.getElementById('save-profile-btn');
+        const profileSuccessMessage = document.getElementById('profile-success-message');
+
+        saveProfileBtn.addEventListener('click', () => {
+            // In a real app, this would save the profile changes
+            profileSuccessMessage.classList.remove('hidden');
+
+            // Hide the success message after 3 seconds
+            setTimeout(() => {
+                profileSuccessMessage.classList.add('hidden');
+            }, 3000);
+        });
+
+        // Password strength checker
+        const newPasswordInput = document.getElementById('new-password');
+        const passwordStrengthContainer = document.getElementById('password-strength-container');
+        const passwordStrengthMeter = document.getElementById('password-strength-meter');
+        const passwordStrengthText = document.getElementById('password-strength-text');
+        const savePasswordBtn = document.getElementById('save-password-btn');
+        const passwordSuccessMessage = document.getElementById('password-success-message');
+
+        newPasswordInput.addEventListener('input', () => {
+            const password = newPasswordInput.value;
+
+            if (password.length === 0) {
+                passwordStrengthContainer.classList.add('hidden');
+                return;
+            }
+
+            passwordStrengthContainer.classList.remove('hidden');
+
+            // Calculate password strength
+            let strength = 0;
+            let feedback = '';
+
+            // Length check
+            if (password.length >= 8) strength += 1;
+            if (password.length >= 12) strength += 1;
+
+            // Character variety checks
+            if (/[a-z]/.test(password)) strength += 1;
+            if (/[A-Z]/.test(password)) strength += 1;
+            if (/[0-9]/.test(password)) strength += 1;
+            if (/[^a-zA-Z0-9]/.test(password)) strength += 1;
+
+            // Set strength level and feedback
+            if (strength <= 2) {
+                passwordStrengthMeter.className = 'password-strength-meter password-strength-weak';
+                passwordStrengthText.textContent = 'Weak';
+                passwordStrengthText.className = 'text-xs text-red-500';
+            } else if (strength <= 4) {
+                passwordStrengthMeter.className = 'password-strength-meter password-strength-medium';
+                passwordStrengthText.textContent = 'Medium';
+                passwordStrengthText.className = 'text-xs text-yellow-500';
+            } else if (strength <= 5) {
+                passwordStrengthMeter.className = 'password-strength-meter password-strength-strong';
+                passwordStrengthText.textContent = 'Strong';
+                passwordStrengthText.className = 'text-xs text-green-500';
+            } else {
+                passwordStrengthMeter.className = 'password-strength-meter password-strength-very-strong';
+                passwordStrengthText.textContent = 'Very Strong';
+                passwordStrengthText.className = 'text-xs text-emerald-500';
+            }
+        });
+
+        // Save password functionality
+        savePasswordBtn.addEventListener('click', () => {
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = newPasswordInput.value;
+
+            // In a real app, this would validate and save the password
+            if (currentPassword && newPassword) {
+                passwordSuccessMessage.classList.remove('hidden');
+
+                // Hide the success message after 3 seconds
+                setTimeout(() => {
+                    passwordSuccessMessage.classList.add('hidden');
+                }, 3000);
+
+                // Clear the password fields
+                document.getElementById('current-password').value = '';
+                newPasswordInput.value = '';
+                passwordStrengthContainer.classList.add('hidden');
+            } else {
+                alert('Please fill in both password fields');
+            }
+        });
+
+        // Mark all notifications as read
+        markAllReadBtn.addEventListener('click', () => {
+            // In a real app, this would mark all notifications as read
+            notificationBadge.classList.add('hidden');
+            alert('All notifications marked as read');
+        });
+
+        // View all notifications
+        viewAllNotificationsBtn.addEventListener('click', () => {
+            // Navigate to notifications page
+            window.location.href = 'notifications.html';
+        });
+
+        // Sample function to add notifications (for testing)
+        function addSampleNotification() {
+            // This would be called when a new notification arrives
+            // For now, we'll keep it empty to show the "No notifications" state
+        }
+
+        // Initialize with no notifications
+        notificationEmpty.classList.remove('hidden');
+        notificationItems.classList.add('hidden');
+        notificationBadge.classList.add('hidden');
+    </script>
+</body>
+
+</html>

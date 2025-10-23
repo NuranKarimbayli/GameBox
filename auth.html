@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GameBox - Login</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link rel="icon" type="image/jpeg"
+        href="https://imgs.search.brave.com/vcOicL6yCVdeBpDPth1MSwcFzMrlqx3RyoZ_FnlqtZs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcGxheXN0YXRp/b24tc3RpY2stY29u/dHJvbGxlci1jYXJ0/b29uLWlsbHVzdHJh/dGlvbi1wcmVtaXVt/LXZlY3Rvcl8yNjI5/NjItMTU0LmpwZz9z/ZW10PWFpc19oeWJy/aWQmdz03NDA">
+    <link rel="apple-touch-icon"
+        href="https://imgs.search.brave.com/vlz7U7Y0riMxxyxz0KW_KzAyiVhNFtwbM4LXlLlQkXE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzE2L2Nh/L2NmLzE2Y2FjZjJk/MjBlYjY0ODVlNzAx/ODVjZTZhZjIxMzRj/LmpwZw">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4c69e6",
+                        "background-light": "#f6f6f8",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+
+        /* Beautiful Animated Gradient Background */
+        body {
+            background: linear-gradient(-45deg,
+                    #e0f7fa,
+                    #b2ebf2,
+                    #80deea,
+                    #4dd0e1,
+                    #26c6da,
+                    #00bcd4,
+                    #00acc1,
+                    #0097a7);
+            background-size: 400% 400%;
+            animation: gradientFlow 20s ease infinite;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+                filter: hue-rotate(0deg);
+            }
+
+            25% {
+                background-position: 50% 75%;
+                filter: hue-rotate(10deg);
+            }
+
+            50% {
+                background-position: 100% 50%;
+                filter: hue-rotate(20deg);
+            }
+
+            75% {
+                background-position: 50% 25%;
+                filter: hue-rotate(10deg);
+            }
+
+            100% {
+                background-position: 0% 50%;
+                filter: hue-rotate(0deg);
+            }
+        }
+
+        /* Main container with glass effect */
+        .main-container {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow:
+                0 8px 32px rgba(31, 38, 135, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Form container */
+        .form-container {
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow:
+                0 8px 32px rgba(0, 112, 209, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        /* Input fields */
+        .form-input {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9) !important;
+            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+            box-shadow:
+                inset 0 2px 4px rgba(0, 0, 0, 0.1),
+                0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            background: rgba(255, 255, 255, 1) !important;
+            border-color: #0070d1 !important;
+            box-shadow:
+                0 0 0 3px rgba(0, 112, 209, 0.15),
+                inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            transform: translateY(-2px);
+        }
+
+        /* Toggle buttons */
+        .toggle-container {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.35) !important;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .toggle-option {
+            transition: all 0.3s ease;
+        }
+
+        .toggle-option.selected {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow:
+                0 4px 12px rgba(0, 112, 209, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        /* Submit button */
+        .submit-btn {
+            background: linear-gradient(135deg, #0070d1, #0056b3) !important;
+            border: none;
+            box-shadow:
+                0 4px 15px rgba(0, 112, 209, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 6px 20px rgba(0, 112, 209, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Social buttons */
+        .social-btn {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.85) !important;
+            border: 1px solid rgba(255, 255, 255, 0.7) !important;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.95) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Logo container */
+        .logo-container {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.25);
+            padding: 12px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: rgba(16, 185, 129, 0.9);
+        }
+
+        .toast.error {
+            background: rgba(239, 68, 68, 0.9);
+        }
+
+        .toast.warning {
+            background: rgba(245, 158, 11, 0.9);
+        }
+
+        /* Floating animation for subtle movement */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Error states */
+        .input-error {
+            border-color: rgba(239, 68, 68, 0.7) !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+
+<body class="font-display">
+    <div class="relative flex min-h-screen w-full flex-col items-center justify-center p-4 main-container floating">
+        <div class="flex flex-col items-center gap-4 py-8">
+            <div class="flex items-center gap-3 logo-container">
+                <span class="material-symbols-outlined text-4xl text-[#0070d1]">stadia_controller</span>
+                <h1 class="text-3xl font-bold text-[#1a1a1a]">GameBox</h1>
+            </div>
+        </div>
+
+        <div class="w-full max-w-md rounded-xl p-6 form-container">
+            <div class="layout-content-container flex flex-col">
+                <div class="flex flex-wrap justify-between gap-3 p-4">
+                    <div class="flex min-w-72 flex-col gap-3">
+                        <p class="text-[#1a1a1a] text-4xl font-black leading-tight tracking-[-0.033em]"
+                            id="welcome-text">Welcome to GameBox</p>
+                        <p class="text-[#4a5568] text-base font-normal leading-normal" id="auth-description">Login or
+                            create an account to start playing.</p>
+                    </div>
+                </div>
+
+                <div class="flex px-4 py-3">
+                    <div class="flex h-10 flex-1 items-center justify-center rounded-lg p-1 toggle-container">
+                        <label
+                            class="flex h-full grow cursor-pointer items-center justify-center overflow-hidden rounded-md px-2 text-[#4a5568] toggle-option selected"
+                            id="login-toggle">
+                            <span class="truncate text-sm font-medium">Login</span>
+                            <input class="invisible w-0" name="auth-toggle" type="radio" value="Login" checked />
+                        </label>
+                        <label
+                            class="flex h-full grow cursor-pointer items-center justify-center overflow-hidden rounded-md px-2 text-[#4a5568] toggle-option"
+                            id="signup-toggle">
+                            <span class="truncate text-sm font-medium">Sign Up</span>
+                            <input class="invisible w-0" name="auth-toggle" type="radio" value="Sign Up" />
+                        </label>
+                    </div>
+                </div>
+
+                <form id="auth-form">
+                    <input type="hidden" id="csrf-token" name="csrf_token" value="" />
+
+                    <div class="flex flex-col gap-4 px-4 py-3">
+                        <label class="flex flex-col">
+                            <p class="pb-2 text-base font-medium text-[#1a1a1a]" id="username-label">Username or Email
+                            </p>
+                            <div class="relative">
+                                <input
+                                    class="form-input h-14 w-full flex-1 resize-none overflow-hidden rounded-lg p-4 pr-10 text-base font-normal text-[#1a1a1a] placeholder:text-[#4a5568] focus:outline-0 focus:ring-0"
+                                    placeholder="Enter your username or email" id="username-input"
+                                    aria-label="Username or email address" aria-required="true" required />
+                                <span
+                                    class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#4a5568]">person</span>
+                            </div>
+                            <div id="username-error" class="error-message hidden"></div>
+                        </label>
+
+                        <label class="flex flex-col">
+                            <p class="pb-2 text-base font-medium text-[#1a1a1a]">Password</p>
+                            <div class="relative">
+                                <input
+                                    class="form-input h-14 w-full flex-1 resize-none overflow-hidden rounded-lg p-4 pr-10 text-base font-normal text-[#1a1a1a] placeholder:text-[#4a5568] focus:outline-0 focus:ring-0"
+                                    placeholder="Enter your password" type="password" id="password-input"
+                                    aria-label="Password" aria-required="true" required />
+                                <span
+                                    class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-[#4a5568]"
+                                    id="toggle-password" aria-label="Toggle password visibility">visibility_off</span>
+                            </div>
+                            <div id="password-error" class="error-message hidden"></div>
+                        </label>
+
+                        <div id="email-field" class="hidden">
+                            <label class="flex flex-col">
+                                <p class="pb-2 text-base font-medium text-[#1a1a1a]">Email</p>
+                                <div class="relative">
+                                    <input
+                                        class="form-input h-14 w-full flex-1 resize-none overflow-hidden rounded-lg p-4 pr-10 text-base font-normal text-[#1a1a1a] placeholder:text-[#4a5568] focus:outline-0 focus:ring-0"
+                                        placeholder="Enter your email" type="email" id="email-input"
+                                        aria-label="Email address" aria-required="true" required />
+                                    <span
+                                        class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#4a5568]">email</span>
+                                </div>
+                                <div id="email-error" class="error-message hidden"></div>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center gap-4 px-1 py-2" id="remember-me-container">
+                            <input
+                                class="h-5 w-5 rounded border-2 border-[#d1d5e6] bg-transparent text-[#0070d1] checked:border-[#0070d1] checked:bg-[#0070d1] focus:outline-none focus:ring-0 focus:ring-offset-0"
+                                id="remember-me" type="checkbox" aria-label="Remember me" />
+                            <label class="flex-1 truncate text-base font-normal text-[#1a1a1a]"
+                                for="remember-me">Remember me</label>
+                            <a class="text-base font-medium text-[#0070d1] hover:underline" href="#"
+                                id="forgot-password">Forgot Password?</a>
+                        </div>
+                    </div>
+
+                    <div class="px-4 py-3">
+                        <button
+                            class="w-full rounded-lg py-3.5 text-base font-medium text-white submit-btn flex items-center justify-center gap-2"
+                            type="submit" id="submit-button">
+                            <span id="button-text">Login</span>
+                            <div id="button-spinner" class="spinner hidden"></div>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="flex items-center gap-4 px-4 py-2">
+                    <hr class="flex-grow border-t border-[rgba(255,255,255,0.4)]" />
+                    <span class="text-sm text-[#4a5568]">or</span>
+                    <hr class="flex-grow border-t border-[rgba(255,255,255,0.4)]" />
+                </div>
+
+                <div class="flex flex-col gap-3 px-4 py-3">
+                    <button
+                        class="flex w-full items-center justify-center gap-3 rounded-lg py-3 text-base font-medium text-[#333333] social-btn">
+                        <img class="h-6 w-6" alt="Google logo"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsy9aKgpvpDlpz9A5D93FDrnB46lahg1YPSRbtYCiTpL_ZDkbzghdQsnOsWb6d-tS7pLwP3Tby7jBqjWWmP_Km9ONK-Dq6M93lSviyg5hdzIhr7GClAZoVIn-VEu62CQNx7V4dNKCRjbOARgmRsYwyyrKFfPOw3wDlfjiN4U-bXEV7xcgCEBywLbZAJqokUGtCwYu8exDadmChbCaDgy9VdzAklDZYGgfHdiZK6lxbmShn7H6x9aBw3s0ZKeo81dXlPOHpkHN_Mg" />
+                        Continue with Google
+                    </button>
+                    <button
+                        class="flex w-full items-center justify-center gap-3 rounded-lg py-3 text-base font-medium text-[#333333] social-btn">
+                        <img class="h-6 w-6" alt="Facebook logo"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiZunUVrmS0-m4-QVSGKQJgOUYskFG9foAH_rM8dGijAxMQiB_q4pleqEG6w1JTidYieQjW0Rq3FQrn68zKbJKET2Nczp2Ue0O8vfiEdwnxIiGWMkCmW3G8ZTleRH4UU0A1q40kOpPXH4KUL0UfIN-pAfa0vUXImPcjAnO5Q6XBCJLfhT-0X_IyN3lULzg2Y22VV1bhkCpZ9dS3ednTJ7q4axu10kQOmZqJy8Sy8rAfVEhJ_aOZBjxpJrj6H6eO69jD7wv65ZX7A" />
+                        Continue with Facebook
+                    </button>
+                    <button
+                        class="flex w-full items-center justify-center gap-3 rounded-lg py-3 text-base font-medium text-[#333333] social-btn">
+                        <img class="h-6 w-6" alt="Steam logo"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoZZ2Y_IIXPwSS4jh_PT_vMe-yzJTrDoo3qVegEHR8ZzyhtSyDc7Pd1oTCHx7uDCMpPl9l-fVpPCR2hVj3iA8H9ajhzNfjGGRsz3uJWjvwCT84hZIzTscxBAcoq1GPMlnybXoBithadeCi2r7IyBxpeYCOQ8ld-GRSZCAqkEQRTq2Nt4zbUX6Xv4xECTcCC9-oWEFhnj2yx6UTAzolIK0GiMUokzwZwoxnbCf1MOXc3DnsG6F94uElzItqcwdBl4kM2Xhzv_IZOw" />
+                        Continue with Steam
+                    </button>
+                </div>
+
+                <div class="py-4 text-center">
+                    <p class="text-base text-[#4a5568]" id="switch-auth-text">Don't have an account?
+                        <a class="font-medium text-[#0070d1] hover:underline" href="#" id="switch-auth-link">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
+
+    <script>
+        // Security and utility functions
+        class SecurityUtils {
+            // Generate CSRF token
+            static generateCSRFToken() {
+                return crypto.randomUUID();
+            }
+
+            // Hash password using SHA-256
+            static async hashPassword(password) {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(password);
+                const hash = await crypto.subtle.digest('SHA-256', data);
+                return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+
+            // Validate email format
+            static isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            // Validate password strength
+            static validatePasswordStrength(password) {
+                const minLength = 6;
+                const hasUpperCase = /[A-Z]/.test(password);
+                const hasLowerCase = /[a-z]/.test(password);
+                const hasNumbers = /\d/.test(password);
+
+                if (password.length < minLength) {
+                    return { valid: false, message: `Password must be at least ${minLength} characters` };
+                }
+
+                if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+                    return {
+                        valid: false,
+                        message: 'Password must contain uppercase, lowercase letters and numbers'
+                    };
+                }
+
+                return { valid: true, message: 'Password is strong' };
+            }
+        }
+
+        // Rate limiting class
+        class RateLimiter {
+            constructor(maxAttempts = 5, timeWindow = 300000) { // 5 attempts per 5 minutes
+                this.maxAttempts = maxAttempts;
+                this.timeWindow = timeWindow;
+                this.attempts = JSON.parse(localStorage.getItem('login_attempts') || '{}');
+            }
+
+            checkLimit(identifier) {
+                const now = Date.now();
+                const userAttempts = this.attempts[identifier] || { count: 0, lastAttempt: 0, lockedUntil: 0 };
+
+                // Check if account is temporarily locked
+                if (userAttempts.lockedUntil > now) {
+                    const minutesLeft = Math.ceil((userAttempts.lockedUntil - now) / 60000);
+                    return {
+                        allowed: false,
+                        message: `Too many attempts. Try again in ${minutesLeft} minute(s)`
+                    };
+                }
+
+                // Reset count if time window has passed
+                if (now - userAttempts.lastAttempt > this.timeWindow) {
+                    userAttempts.count = 0;
+                }
+
+                // Check if attempt is allowed
+                if (userAttempts.count >= this.maxAttempts) {
+                    userAttempts.lockedUntil = now + this.timeWindow;
+                    this.attempts[identifier] = userAttempts;
+                    this.saveAttempts();
+
+                    return {
+                        allowed: false,
+                        message: 'Too many attempts. Account temporarily locked for 5 minutes'
+                    };
+                }
+
+                return { allowed: true };
+            }
+
+            recordAttempt(identifier, success) {
+                const now = Date.now();
+                let userAttempts = this.attempts[identifier] || { count: 0, lastAttempt: 0, lockedUntil: 0 };
+
+                if (success) {
+                    // Reset on successful login
+                    userAttempts.count = 0;
+                    userAttempts.lockedUntil = 0;
+                } else {
+                    // Increment on failed attempt
+                    userAttempts.count++;
+                    userAttempts.lastAttempt = now;
+
+                    // Lock account if max attempts reached
+                    if (userAttempts.count >= this.maxAttempts) {
+                        userAttempts.lockedUntil = now + this.timeWindow;
+                    }
+                }
+
+                this.attempts[identifier] = userAttempts;
+                this.saveAttempts();
+            }
+
+            saveAttempts() {
+                localStorage.setItem('login_attempts', JSON.stringify(this.attempts));
+            }
+        }
+
+        // Session management
+        class SessionManager {
+            static createSession(user) {
+                const sessionId = crypto.randomUUID();
+                const session = {
+                    id: sessionId,
+                    user: {
+                        username: user.username,
+                        email: user.email
+                    },
+                    created: Date.now(),
+                    expires: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+                };
+
+                localStorage.setItem('current_session', JSON.stringify(session));
+                document.cookie = `session_id=${sessionId}; path=/; max-age=86400; secure; samesite=strict`;
+                return sessionId;
+            }
+
+            static getCurrentSession() {
+                const session = localStorage.getItem('current_session');
+                return session ? JSON.parse(session) : null;
+            }
+
+            static clearSession() {
+                localStorage.removeItem('current_session');
+                document.cookie = 'session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+            }
+
+            static isSessionValid() {
+                const session = this.getCurrentSession();
+                if (!session) return false;
+
+                return Date.now() < session.expires;
+            }
+        }
+
+        // DOM elements
+        const loginToggle = document.getElementById('login-toggle');
+        const signupToggle = document.getElementById('signup-toggle');
+        const authForm = document.getElementById('auth-form');
+        const usernameLabel = document.getElementById('username-label');
+        const usernameInput = document.getElementById('username-input');
+        const passwordInput = document.getElementById('password-input');
+        const emailField = document.getElementById('email-field');
+        const emailInput = document.getElementById('email-input');
+        const rememberMeContainer = document.getElementById('remember-me-container');
+        const forgotPassword = document.getElementById('forgot-password');
+        const submitButton = document.getElementById('submit-button');
+        const buttonText = document.getElementById('button-text');
+        const buttonSpinner = document.getElementById('button-spinner');
+        const switchAuthText = document.getElementById('switch-auth-text');
+        const switchAuthLink = document.getElementById('switch-auth-link');
+        const welcomeText = document.getElementById('welcome-text');
+        const authDescription = document.getElementById('auth-description');
+        const togglePassword = document.getElementById('toggle-password');
+        const toast = document.getElementById('toast');
+        const csrfTokenInput = document.getElementById('csrf-token');
+
+        // Error message elements
+        const usernameError = document.getElementById('username-error');
+        const passwordError = document.getElementById('password-error');
+        const emailError = document.getElementById('email-error');
+
+        // Initialize rate limiter
+        const rateLimiter = new RateLimiter();
+
+        // Variables
+        let isLoginMode = true;
+
+        // Initialize CSRF token
+        function initializeCSRFToken() {
+            const token = SecurityUtils.generateCSRFToken();
+            csrfTokenInput.value = token;
+            localStorage.setItem('csrf_token', token);
+        }
+
+        // Toggle functionality
+        loginToggle.addEventListener('click', function () {
+            isLoginMode = true;
+            updateAuthUI();
+        });
+
+        signupToggle.addEventListener('click', function () {
+            isLoginMode = false;
+            updateAuthUI();
+        });
+
+        // Switch auth link - using event delegation to avoid re-attaching
+        document.addEventListener('click', function (e) {
+            if (e.target.id === 'switch-auth-link') {
+                e.preventDefault();
+                isLoginMode = !isLoginMode;
+                updateAuthUI();
+            }
+        });
+
+        // Toggle password visibility
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? 'visibility_off' : 'visibility';
+            this.setAttribute('aria-label',
+                type === 'password' ? 'Show password' : 'Hide password');
+        });
+
+        // Update UI based on auth mode
+        function updateAuthUI() {
+            // Clear previous errors
+            clearErrors();
+
+            if (isLoginMode) {
+                loginToggle.classList.add('selected');
+                signupToggle.classList.remove('selected');
+
+                usernameLabel.textContent = 'Username or Email';
+                usernameInput.placeholder = 'Enter your username or email';
+                emailField.classList.add('hidden');
+                rememberMeContainer.classList.remove('hidden');
+                forgotPassword.classList.remove('hidden');
+                buttonText.textContent = 'Login';
+
+                // Safe text content update
+                switchAuthText.textContent = 'Don\'t have an account? ';
+                const link = document.createElement('a');
+                link.textContent = 'Sign up';
+                link.href = '#';
+                link.className = 'font-medium text-[#0070d1] hover:underline';
+                link.id = 'switch-auth-link';
+                switchAuthText.appendChild(link);
+
+                welcomeText.textContent = 'Welcome to GameBox';
+                authDescription.textContent = 'Login or create an account to start playing.';
+            } else {
+                loginToggle.classList.remove('selected');
+                signupToggle.classList.add('selected');
+
+                usernameLabel.textContent = 'Username';
+                usernameInput.placeholder = 'Enter your username';
+                emailField.classList.remove('hidden');
+                rememberMeContainer.classList.add('hidden');
+                forgotPassword.classList.add('hidden');
+                buttonText.textContent = 'Sign Up';
+
+                // Safe text content update
+                switchAuthText.textContent = 'Already have an account? ';
+                const link = document.createElement('a');
+                link.textContent = 'Login';
+                link.href = '#';
+                link.className = 'font-medium text-[#0070d1] hover:underline';
+                link.id = 'switch-auth-link';
+                switchAuthText.appendChild(link);
+
+                welcomeText.textContent = 'Join GameBox';
+                authDescription.textContent = 'Create an account to start playing.';
+            }
+        }
+
+        // Clear all error states
+        function clearErrors() {
+            usernameInput.classList.remove('input-error');
+            passwordInput.classList.remove('input-error');
+            emailInput.classList.remove('input-error');
+
+            usernameError.classList.add('hidden');
+            passwordError.classList.add('hidden');
+            emailError.classList.add('hidden');
+
+            usernameError.textContent = '';
+            passwordError.textContent = '';
+            emailError.textContent = '';
+        }
+
+        // Show error for specific field
+        function showError(field, message) {
+            const input = document.getElementById(`${field}-input`);
+            const error = document.getElementById(`${field}-error`);
+
+            input.classList.add('input-error');
+            error.textContent = message;
+            error.classList.remove('hidden');
+        }
+
+        // Show toast message
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = 'toast';
+            toast.classList.add(type, 'show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        // Set loading state
+        function setLoadingState(loading) {
+            if (loading) {
+                submitButton.disabled = true;
+                buttonSpinner.classList.remove('hidden');
+                buttonText.textContent = isLoginMode ? 'Logging in...' : 'Creating account...';
+            } else {
+                submitButton.disabled = false;
+                buttonSpinner.classList.add('hidden');
+                buttonText.textContent = isLoginMode ? 'Login' : 'Sign Up';
+            }
+        }
+
+        // Validate form data
+        function validateForm(data, isLoginMode) {
+            const errors = [];
+
+            // Username validation
+            if (data.username.length < 3) {
+                errors.push({ field: 'username', message: 'Username must be at least 3 characters' });
+            }
+
+            if (!isLoginMode && !/^[a-zA-Z0-9_]+$/.test(data.username)) {
+                errors.push({ field: 'username', message: 'Username can only contain letters, numbers and underscores' });
+            }
+
+            // Password validation
+            if (data.password.length < 6) {
+                errors.push({ field: 'password', message: 'Password must be at least 6 characters' });
+            }
+
+            if (!isLoginMode) {
+                const passwordCheck = SecurityUtils.validatePasswordStrength(data.password);
+                if (!passwordCheck.valid) {
+                    errors.push({ field: 'password', message: passwordCheck.message });
+                }
+
+                // Email validation
+                if (!data.email) {
+                    errors.push({ field: 'email', message: 'Email is required' });
+                } else if (!SecurityUtils.isValidEmail(data.email)) {
+                    errors.push({ field: 'email', message: 'Please enter a valid email address' });
+                }
+            }
+
+            return errors;
+        }
+
+        // Handle authentication
+        async function handleAuthentication(data, isLoginMode) {
+            const users = JSON.parse(localStorage.getItem('gamebox_users') || '[]');
+
+            if (isLoginMode) {
+                // Check rate limiting
+                const rateLimitCheck = rateLimiter.checkLimit(data.username);
+                if (!rateLimitCheck.allowed) {
+                    showToast(rateLimitCheck.message, 'warning');
+                    return false;
+                }
+
+                // Find user
+                const user = users.find(u =>
+                    (u.username === data.username || u.email === data.username)
+                );
+
+                if (!user) {
+                    rateLimiter.recordAttempt(data.username, false);
+                    showToast('Invalid username/email or password!', 'error');
+                    return false;
+                }
+
+                // Verify password
+                const hashedPassword = await SecurityUtils.hashPassword(data.password);
+                if (user.password !== hashedPassword) {
+                    rateLimiter.recordAttempt(data.username, false);
+                    showToast('Invalid username/email or password!', 'error');
+                    return false;
+                }
+
+                // Successful login
+                rateLimiter.recordAttempt(data.username, true);
+                SessionManager.createSession(user);
+                showToast('Login successful!', 'success');
+
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+
+                return true;
+            } else {
+                // Registration
+                const existingUser = users.find(u =>
+                    u.username === data.username || u.email === data.email
+                );
+
+                if (existingUser) {
+                    showToast('Username or email already exists!', 'error');
+                    return false;
+                }
+
+                // Hash password before storing
+                const hashedPassword = await SecurityUtils.hashPassword(data.password);
+
+                const newUser = {
+                    username: data.username,
+                    email: data.email,
+                    password: hashedPassword,
+                    createdAt: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                localStorage.setItem('gamebox_users', JSON.stringify(users));
+
+                // Auto login after registration
+                SessionManager.createSession(newUser);
+                showToast('Registration successful!', 'success');
+
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+
+                return true;
+            }
+        }
+
+        // Form submission
+        authForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Clear previous errors
+            clearErrors();
+
+            // CSRF validation
+            const formToken = csrfTokenInput.value;
+            const storedToken = localStorage.getItem('csrf_token');
+
+            if (formToken !== storedToken) {
+                showToast('Security validation failed. Please refresh the page.', 'error');
+                return;
+            }
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const email = isLoginMode ? '' : emailInput.value.trim();
+
+            // Basic validation
+            if (!username || !password) {
+                showToast('Please fill in all required fields!', 'error');
+                return;
+            }
+
+            if (!isLoginMode && !email) {
+                showError('email', 'Please enter your email!');
+                return;
+            }
+
+            const formData = { username, password, email };
+
+            // Detailed validation
+            const validationErrors = validateForm(formData, isLoginMode);
+            if (validationErrors.length > 0) {
+                validationErrors.forEach(error => {
+                    showError(error.field, error.message);
+                });
+                return;
+            }
+
+            // Set loading state
+            setLoadingState(true);
+
+            try {
+                await handleAuthentication(formData, isLoginMode);
+            } catch (error) {
+                console.error('Authentication error:', error);
+                showToast('An unexpected error occurred. Please try again.', 'error');
+            } finally {
+                setLoadingState(false);
+            }
+        });
+
+        // Forgot password
+        forgotPassword.addEventListener('click', function (e) {
+            e.preventDefault();
+            showToast('Password reset feature coming soon!', 'warning');
+        });
+
+        // Real-time validation
+        usernameInput.addEventListener('blur', function () {
+            if (!isLoginMode && this.value.trim().length > 0 && this.value.trim().length < 3) {
+                showError('username', 'Username must be at least 3 characters');
+            }
+        });
+
+        passwordInput.addEventListener('blur', function () {
+            if (!isLoginMode && this.value.trim().length > 0) {
+                const passwordCheck = SecurityUtils.validatePasswordStrength(this.value);
+                if (!passwordCheck.valid) {
+                    showError('password', passwordCheck.message);
+                }
+            }
+        });
+
+        emailInput.addEventListener('blur', function () {
+            if (!isLoginMode && this.value.trim().length > 0 && !SecurityUtils.isValidEmail(this.value)) {
+                showError('email', 'Please enter a valid email address');
+            }
+        });
+
+        // Clear error when user starts typing
+        [usernameInput, passwordInput, emailInput].forEach(input => {
+            input.addEventListener('input', function () {
+                this.classList.remove('input-error');
+                const errorElement = document.getElementById(`${this.id.replace('-input', '')}-error`);
+                if (errorElement) {
+                    errorElement.classList.add('hidden');
+                }
+            });
+        });
+
+        // Initialize
+        initializeCSRFToken();
+        updateAuthUI();
+
+        // Check for existing valid session
+        if (SessionManager.isSessionValid()) {
+            showToast('Welcome back! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>

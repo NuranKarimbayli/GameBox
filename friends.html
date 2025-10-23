@@ -1,0 +1,2493 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GameBox - Friends</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300..700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg"
+        href="https://imgs.search.brave.com/vcOicL6yCVdeBpDPth1MSwcFzMrlqx3RyoZ_FnlqtZs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcGxheXN0YXRp/b24tc3RpY2stY29u/dHJvbGxlci1jYXJ0/b29uLWlsbHVzdHJh/dGlvbi1wcmVtaXVt/LXZlY3Rvcl8yNjI5/NjItMTU0LmpwZz9z/ZW10PWFpc19oeWJy/aWQmdz03NDA">
+    <link rel="apple-touch-icon"
+        href="https://imgs.search.brave.com/vlz7U7Y0riMxxyxz0KW_KzAyiVhNFtwbM4LXlLlQkXE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzE2L2Nh/L2NmLzE2Y2FjZjJk/MjBlYjY0ODVlNzAx/ODVjZTZhZjIxMzRj/LmpwZw">
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4c69e6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111421",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .glassmorphism {
+            background: rgba(37, 43, 70, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Light theme for profile dropdown */
+        .light #profile-dropdown {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .light #profile-dropdown .border-b,
+        .light #profile-dropdown .border-t {
+            border-color: #e5e7eb;
+        }
+
+        .light #profile-dropdown #profile-name {
+            color: #111421;
+        }
+
+        .light #profile-dropdown #profile-email {
+            color: #6b7280;
+        }
+
+        .light #profile-dropdown .text-gray-500 {
+            color: #6b7280;
+        }
+
+        .light #profile-dropdown .text-gray-700 {
+            color: #374151;
+        }
+
+        .light #profile-dropdown .hover\:bg-gray-100:hover {
+            background-color: #f9fafb;
+        }
+
+        .light #profile-dropdown .text-red-600 {
+            color: #dc2626;
+        }
+
+        .light #profile-dropdown .hover\:bg-red-50:hover {
+            background-color: #fef2f2;
+        }
+
+        .light #profile-dropdown .text-xs.text-gray-500 {
+            color: #6b7280;
+        }
+
+        .light #profile-dropdown .text-xs.text-red-500 {
+            color: #ef4444;
+        }
+
+        /* Profile button light theme */
+        .light #profile-button {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .light #profile-button:hover {
+            background: #d1d5db;
+        }
+
+        /* Dropdown menu items light theme */
+        .light .dropdown-menu {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .light .dropdown-menu button {
+            color: #374151;
+        }
+
+        .light .dropdown-menu button:hover {
+            background-color: #f9fafb;
+        }
+
+        .light .dropdown-menu .border-t {
+            border-color: #e5e7eb;
+        }
+
+        .light .dropdown-menu .text-red-600 {
+            color: #dc2626;
+        }
+
+        .light .dropdown-menu .hover\:bg-red-50:hover {
+            background-color: #fef2f2;
+        }
+
+        /* Light theme for friend options dropdown */
+        .light #friend-options-dropdown {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .light #friend-options-dropdown button {
+            color: #374151;
+        }
+
+        .light #friend-options-dropdown button:hover {
+            background-color: #f9fafb;
+        }
+
+        .light #friend-options-dropdown .border-t {
+            border-color: #e5e7eb;
+        }
+
+        .light #friend-options-dropdown .text-red-600 {
+            color: #dc2626;
+        }
+
+        .light #friend-options-dropdown .hover\:bg-red-50:hover {
+            background-color: #fef2f2;
+        }
+
+        .light #friend-options-dropdown .text-gray-700 {
+            color: #374151;
+        }
+
+        .light #friend-options-dropdown .text-gray-300 {
+            color: #6b7280;
+        }
+
+        .light #friend-options-dropdown .dark\:text-gray-300 {
+            color: #6b7280;
+        }
+
+        .light #friend-options-dropdown .dark\:hover\:bg-gray-700:hover {
+            background-color: #f3f4f6;
+        }
+
+        .light #friend-options-dropdown .dark\:text-red-400 {
+            color: #dc2626;
+        }
+
+        .light #friend-options-dropdown .dark\:hover\:bg-red-900\/20:hover {
+            background-color: #fef2f2;
+        }
+
+        /* More options button light theme */
+        .light .more-options-btn {
+            color: #6b7280;
+        }
+
+        .light .more-options-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: #374151;
+        }
+
+        /* Light theme for chat options dropdown */
+        .light #chat-options-dropdown {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .light #chat-options-dropdown button {
+            color: #374151;
+        }
+
+        .light #chat-options-dropdown button:hover {
+            background-color: #f9fafb;
+        }
+
+        .light #chat-options-dropdown .border-t {
+            border-color: #e5e7eb;
+        }
+
+        .light #chat-options-dropdown .text-red-600 {
+            color: #dc2626;
+        }
+
+        .light #chat-options-dropdown .hover\:bg-red-50:hover {
+            background-color: #fef2f2;
+        }
+
+        .light #chat-options-dropdown .text-gray-500 {
+            color: #6b7280;
+        }
+
+        .light #chat-options-dropdown .text-gray-400 {
+            color: #6b7280;
+        }
+
+        /* Light theme for modals */
+        .light #add-friends-modal {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .light #add-friends-modal>div {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+
+        .light #add-friends-modal h3,
+        .light #add-friends-modal h4 {
+            color: #111421;
+        }
+
+        .light #add-friends-modal input {
+            background: #f9fafb;
+            color: #111421;
+            border: 1px solid #d1d5db;
+        }
+
+        .light #add-friends-modal input::placeholder {
+            color: #6b7280;
+        }
+
+        .light .discovery-tab {
+            color: #6b7280;
+        }
+
+        .light .discovery-tab.text-gray-400 {
+            color: #6b7280;
+        }
+
+        .light .discovery-tab.bg-primary {
+            background: #4c69e6;
+            color: white;
+        }
+
+        .light #friend-suggestions .space-y-3>div,
+        .light #sent-requests .space-y-3>div {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+        }
+
+        .light #friend-suggestions .space-y-3>div:hover,
+        .light #sent-requests .space-y-3>div:hover {
+            background: #f3f4f6;
+        }
+
+        .light #friend-suggestions p.text-white,
+        .light #sent-requests p.text-white {
+            color: #111421;
+        }
+
+        .light #friend-suggestions p.text-\[\#9ea3b7\],
+        .light #sent-requests p.text-\[\#9ea3b7\] {
+            color: #6b7280;
+        }
+
+        .light .add-suggestion-btn {
+            background: #4c69e6;
+            color: white;
+        }
+
+        .light .add-suggestion-btn:hover {
+            background: #3a56d4;
+        }
+
+        .light .resend-request-btn {
+            background: rgba(76, 105, 230, 0.1);
+            color: #4c69e6;
+        }
+
+        .light .cancel-request-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .light #close-add-friends {
+            color: #6b7280;
+        }
+
+        .light #close-add-friends:hover {
+            color: #111421;
+        }
+
+        .dark .glassmorphism {
+            background: rgba(37, 43, 70, 0.5);
+        }
+
+        .light .glassmorphism {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .glassmorphism-light {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dark .glassmorphism-light {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .light .glassmorphism-light {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #4c69e6 0%, #6a82fb 100%);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4c69e6, #6a82fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .message-bubble-received {
+            background: linear-gradient(135deg, #292c38, #363a4a);
+            border-radius: 1rem 1rem 1rem 0;
+        }
+
+        .light .message-bubble-received {
+            background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+        }
+
+        .message-bubble-sent {
+            background: linear-gradient(135deg, #4c69e6, #6a82fb);
+            border-radius: 1rem 1rem 0 1rem;
+        }
+
+        .friend-card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .friend-card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(76, 105, 230, 0.2);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #959ec6;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .light .typing-dot {
+            background-color: #6b7280;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px rgba(76, 105, 230, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(76, 105, 230, 0.8);
+            }
+        }
+
+        .status-online {
+            background-color: #10b981;
+        }
+
+        .status-away {
+            background-color: #f59e0b;
+        }
+
+        .status-busy {
+            background-color: #ef4444;
+        }
+
+        .status-offline {
+            background-color: #6b7280;
+        }
+
+        .status-gaming {
+            background-color: #8b5cf6;
+        }
+
+        /* Custom Scrollbar for both themes */
+        .scrollbar-thin {
+            scrollbar-width: thin;
+        }
+
+        .dark .scrollbar-thin {
+            scrollbar-color: rgba(76, 105, 230, 0.3) transparent;
+        }
+
+        .light .scrollbar-thin {
+            scrollbar-color: rgba(76, 105, 230, 0.5) #f1f5f9;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .dark .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .light .scrollbar-thin::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: rgba(76, 105, 230, 0.3);
+            border-radius: 3px;
+        }
+
+        .light .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: rgba(76, 105, 230, 0.5);
+            border-radius: 3px;
+        }
+
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(76, 105, 230, 0.5);
+        }
+
+        .light .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(76, 105, 230, 0.7);
+        }
+
+        /* Horizontal scrollbar for tabs */
+        .tabs-scroll {
+            scrollbar-width: thin;
+        }
+
+        .dark .tabs-scroll {
+            scrollbar-color: rgba(76, 105, 230, 0.3) transparent;
+        }
+
+        .light .tabs-scroll {
+            scrollbar-color: rgba(76, 105, 230, 0.5) #f1f5f9;
+        }
+
+        .tabs-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .dark .tabs-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .light .tabs-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 2px;
+        }
+
+        .dark .tabs-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(76, 105, 230, 0.3);
+            border-radius: 2px;
+        }
+
+        .light .tabs-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(76, 105, 230, 0.5);
+            border-radius: 2px;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #ef4444, #f87171);
+        }
+
+        .toast.info {
+            background: linear-gradient(135deg, #4c69e6, #6a82fb);
+        }
+
+        .btn-cooldown {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-cooldown::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-cooldown.active::after {
+            left: 100%;
+        }
+
+        .btn-disabled {
+            pointer-events: none;
+            opacity: 0.6;
+            filter: grayscale(0.5);
+        }
+
+        /* Dropdown styles */
+        .dropdown-menu {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Light theme specific styles */
+        .light {
+            background-color: #f6f6f8;
+            color: #111421;
+        }
+
+        .light .bg-background-dark {
+            background-color: #e1feff;
+        }
+
+        .light .text-white {
+            color: #111421;
+        }
+
+        .light .text-\[\#959ec6\] {
+            color: #6b7280;
+        }
+
+        .light .bg-\[\#252b46\] {
+            background-color: #e5e7eb;
+        }
+
+        .light .bg-\[\#111421\] {
+            background-color: #ffffff;
+        }
+
+        .light .border-b-\[\#252b46\] {
+            border-bottom-color: #e5e7eb;
+        }
+
+        .light .bg-\[\#292c38\] {
+            background-color: #f9fafb;
+        }
+
+        .light .border-\[\#363e63\] {
+            border-color: #d1d5db;
+        }
+
+        .light .hover\:bg-primary\/20:hover {
+            background-color: rgba(76, 105, 230, 0.1);
+        }
+
+        /* Tüm light theme hover elementleri */
+        .light .hover\:text-white:hover {
+            color: #4c69e6 !important;
+            /* İstediğiniz renk */
+        }
+
+        /* Sadece header için */
+        .light header .hover\:text-white:hover {
+            color: #4c69e6;
+        }
+
+        .light .hover\:bg-white\/10:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .light .bg-background-dark\/70 {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .light .border-white\/10 {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .light .bg-background-dark\/80 {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .light .text-gray-400 {
+            color: #6b7280;
+        }
+
+        .light .text-gray-500 {
+            color: #6b7280;
+        }
+
+        .light .bg-\[\#292c38\]\/50 {
+            background-color: rgba(249, 250, 251, 0.7);
+        }
+
+        .light .hover\:bg-\[\#292c38\] {
+            background-color: #f3f4f6;
+        }
+
+        .light .bg-primary\/20 {
+            background-color: rgba(76, 105, 230, 0.1);
+        }
+
+        .light .bg-red-500\/20 {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .light .hover\:bg-red-500\/30:hover {
+            background-color: rgba(239, 68, 68, 0.15);
+        }
+
+        .light .hover\:bg-primary\/30:hover {
+            background-color: rgba(76, 105, 230, 0.15);
+        }
+
+        .light .text-red-400 {
+            color: #ef4444;
+        }
+
+        .light .text-primary {
+            color: #4c69e6;
+        }
+
+        /* Toggle switch styles */
+        .toggle-switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            height: 2rem;
+            width: 3.5rem;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .dark .toggle-switch {
+            background-color: #4b5563;
+        }
+
+        .toggle-switch.active {
+            background-color: #4c69e6;
+        }
+
+        .toggle-knob {
+            position: absolute;
+            left: 0.25rem;
+            height: 1.5rem;
+            width: 1.5rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(1.5rem);
+        }
+
+        .toggle-icon {
+            font-size: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        .light-icon {
+            color: #f59e0b;
+            position: relative;
+            left: 8px;
+        }
+
+        .dark-icon {
+            color: #9ca3af;
+            position: relative;
+            left: -8px;
+        }
+
+        .toggle-switch.active .light-icon {
+            opacity: 0;
+        }
+
+        .toggle-switch:not(.active) .dark-icon {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body class="bg-background-dark font-display dark">
+    <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="flex flex-1 justify-center py-5">
+                <div class="layout-content-container flex flex-col w-full max-w-7xl flex-1 px-4 sm:px-6 lg:px-8">
+                    <!-- Header -->
+                    <header
+                        class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#252b46] px-6 py-3">
+                        <div class="flex items-center gap-4 text-white">
+                            <div class="size-6">
+                                <svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                    <g clip-path="url(#clip0_6_543)">
+                                        <path
+                                            d="M42.1739 20.1739L27.8261 5.82609C29.1366 7.13663 28.3989 10.1876 26.2002 13.7654C24.8538 15.9564 22.9595 18.3449 20.6522 20.6522C18.3449 22.9595 15.9564 24.8538 13.7654 26.2002C10.1876 28.3989 7.13663 29.1366 5.82609 27.8261L20.1739 42.1739C21.4845 43.4845 24.5355 42.7467 28.1133 40.548C30.3042 39.2016 32.6927 37.3073 35 35C37.3073 32.6927 39.2016 30.3042 40.548 28.1133C42.7467 24.5355 43.4845 21.4845 42.1739 20.1739Z"
+                                            fill="currentColor"></path>
+                                        <path clip-rule="evenodd"
+                                            d="M7.24189 26.4066C7.31369 26.4411 7.64204 26.5637 8.52504 26.3738C9.59462 26.1438 11.0343 25.5311 12.7183 24.4963C14.7583 23.2426 17.0256 21.4503 19.238 19.238C21.4503 17.0256 23.2426 14.7583 24.4963 12.7183C25.5311 11.0343 26.1438 9.59463 26.3738 8.52504C26.5637 7.64204 26.4411 7.31369 26.4066 7.24189C26.345 7.21246 26.143 7.14535 25.6664 7.1918C24.9745 7.25925 23.9954 7.5498 22.7699 8.14278C20.3369 9.32007 17.3369 11.4915 14.4142 14.4142C11.4915 17.3369 9.32007 20.3369 8.14278 22.7699C7.5498 23.9954 7.25925 24.9745 7.1918 25.6664C7.14534 26.143 7.21246 26.345 7.24189 26.4066ZM29.9001 10.7285C29.4519 12.0322 28.7617 13.4172 27.9042 14.8126C26.465 17.1544 24.4686 19.6641 22.0664 22.0664C19.6641 24.4686 17.1544 26.465 14.8126 27.9042C13.4172 28.7617 12.0322 29.4519 10.7285 29.9001L21.5754 40.747C21.6001 40.7606 21.8995 40.931 22.8729 40.7217C23.9424 40.4916 25.3821 39.879 27.0661 38.8441C29.1062 37.5904 31.3734 35.7982 33.5858 33.5858C35.7982 31.3734 37.5904 29.1062 38.8441 27.0661C39.879 25.3821 40.4916 23.9425 40.7216 22.8729C40.931 21.8995 40.7606 21.6001 40.747 21.5754L29.9001 10.7285ZM29.2403 4.41187L43.5881 18.7597C44.9757 20.1473 44.9743 22.1235 44.6322 23.7139C44.2714 25.3919 43.4158 27.2666 42.252 29.1604C40.8128 31.5022 38.8165 34.012 36.4142 36.4142C34.012 38.8165 31.5022 40.8128 29.1604 42.252C27.2666 43.4158 25.3919 44.2714 23.7139 44.6322C22.1235 44.9743 20.1473 44.9757 18.7597 43.5881L4.41187 29.2403C3.29027 28.1187 3.08209 26.5973 3.21067 25.2783C3.34099 23.9415 3.8369 22.4852 4.54214 21.0277C5.96129 18.0948 8.43335 14.7382 11.5858 11.5858C14.7382 8.43335 18.0948 5.9613 21.0277 4.54214C22.4852 3.8369 23.9415 3.34099 25.2783 3.21067C26.5973 3.08209 28.1187 3.29028 29.2403 4.41187Z"
+                                            fill="currentColor" fill-rule="evenodd"></path>
+                                    </g>
+                                    <defs>
+                                        <clippath id="clip0_6_543">
+                                            <rect fill="white" height="48" width="48"></rect>
+                                        </clippath>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">GameBox</h2>
+                        </div>
+                        <div class="hidden lg:flex flex-1 justify-center items-center gap-9">
+                            <a class="text-[#959ec6] hover:text-white transition-colors text-sm font-medium leading-normal"
+                                href="dashboard.html">Home</a>
+                            <a class="text-[#959ec6] hover:text-white transition-colors text-sm font-medium leading-normal"
+                                href="achievements.html">Achievements</a>
+                            <a class="text-[#959ec6] hover:text-white transition-colors text-sm font-medium leading-normal"
+                                href="games.html">Games</a>
+                            <a class="text-[#959ec6] hover:text-white transition-colors text-sm font-medium leading-normal"
+                                href="store.html">Store</a>
+                            <a class="text-primary text-sm font-bold leading-normal" href="friends.html">Friends</a>
+                            <a class="text-[#959ec6] hover:text-white transition-colors text-sm font-medium leading-normal"
+                                href="settings.html">Settings</a>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <button id="theme-toggle" class="toggle-switch">
+                                <div class="toggle-knob">
+                                    <span class="toggle-icon light-icon material-symbols-outlined">light_mode</span>
+                                    <span class="toggle-icon dark-icon material-symbols-outlined">dark_mode</span>
+                                </div>
+                            </button>
+                            <div class="relative">
+                                <button id="profile-button"
+                                    class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-[#252b46] text-white transition-all duration-300 hover:scale-105">
+                                    <span class="material-symbols-outlined">person</span>
+                                </button>
+                                <div id="profile-dropdown"
+                                    class="dropdown-menu absolute right-0 top-12 mt-2 w-64 rounded-xl bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+                                    <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                                        <p class="text-gray-900 dark:text-white font-medium text-lg" id="profile-name">
+                                            Nuran Karimbayli</p>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm truncate mt-1"
+                                            id="profile-email">karimbaylinuran@gmail.com</p>
+                                        <div class="flex items-center gap-2 mt-2">
+                                            <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                                            <span class="text-xs text-gray-500 dark:text-gray-400">Online</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <a href="profile.html"
+                                            class="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                            <span class="material-symbols-outlined text-xl">person</span>
+                                            <div class="flex flex-col">
+                                                <span class="font-medium">Your Profile</span>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400">View and edit
+                                                    your profile</span>
+                                            </div>
+                                        </a>
+                                        <a href="settings.html"
+                                            class="flex items-center gap-3 px-3 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                            <span class="material-symbols-outlined text-xl">settings</span>
+                                            <div class="flex flex-col">
+                                                <span class="font-medium">Settings</span>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400">Customize your
+                                                    experience</span>
+                                            </div>
+                                        </a>
+                                        <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                                        <a href="auth.html"
+                                            class="flex items-center gap-3 px-3 py-3 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                            <span class="material-symbols-outlined text-xl">logout</span>
+                                            <div class="flex flex-col">
+                                                <span class="font-medium">Log Out</span>
+                                                <span class="text-xs text-red-500 dark:text-red-400">Sign out of your
+                                                    account</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Main Content -->
+                    <main class="flex-1 grid grid-cols-12 gap-8 mt-8">
+                        <!-- Friends List Sidebar -->
+                        <div class="col-span-12 lg:col-span-4 relative">
+                            <div class="glassmorphism p-4 rounded-xl sticky top-8">
+                                <div class="flex flex-wrap justify-between items-center gap-4 p-2">
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-white text-3xl font-black leading-tight tracking-[-0.033em]">
+                                            Friends <span id="friends-count">(128)</span></p>
+                                        <p class="text-[#959ec6] text-base font-normal leading-normal"><span
+                                                id="online-count">12</span> Online</p>
+                                    </div>
+                                    <button id="add-friend-btn"
+                                        class="btn-cooldown flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105">
+                                        <span class="material-symbols-outlined">person_add</span>
+                                        <span>Add Friend</span>
+                                    </button>
+                                </div>
+
+                                <div class="px-2 py-3">
+                                    <label class="flex flex-col min-w-40 h-12 w-full">
+                                        <div class="flex w-full flex-1 items-stretch rounded-xl h-full">
+                                            <div
+                                                class="text-[#959ec6] flex bg-[#111421] items-center justify-center pl-4 rounded-l-xl border-r-0">
+                                                <span class="material-symbols-outlined text-2xl">search</span>
+                                            </div>
+                                            <input id="friend-search"
+                                                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-xl text-white focus:outline-0 focus:ring-0 border-none bg-[#111421] h-full placeholder:text-[#959ec6] px-4 pl-2 text-base font-normal leading-normal"
+                                                placeholder="Search friends..." value="" />
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="pb-3">
+                                    <div class="flex border-b border-[#363e63] px-2 gap-4 overflow-x-auto tabs-scroll">
+                                        <button
+                                            class="tab-btn flex flex-col items-center justify-center border-b-[3px] border-b-primary text-white pb-[13px] pt-4 px-2"
+                                            data-tab="all">
+                                            <p
+                                                class="text-white text-sm font-bold leading-normal tracking-[0.015em] whitespace-nowrap">
+                                                All Friends</p>
+                                        </button>
+                                        <button
+                                            class="tab-btn flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#959ec6] pb-[13px] pt-4 px-2"
+                                            data-tab="online">
+                                            <p
+                                                class="text-[#959ec6] text-sm font-bold leading-normal tracking-[0.015em]">
+                                                Online</p>
+                                        </button>
+                                        <button
+                                            class="tab-btn flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#959ec6] pb-[13px] pt-4 px-2 relative"
+                                            data-tab="pending">
+                                            <p
+                                                class="text-[#959ec6] text-sm font-bold leading-normal tracking-[0.015em]">
+                                                Pending</p>
+                                            <span id="pending-badge"
+                                                class="absolute top-2 -right-1 bg-primary text-white text-xs w-5 h-5 flex items-center justify-center rounded-full hidden">3</span>
+                                        </button>
+                                        <button
+                                            class="tab-btn flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#959ec6] pb-[13px] pt-4 px-2"
+                                            data-tab="blocked">
+                                            <p
+                                                class="text-[#959ec6] text-sm font-bold leading-normal tracking-[0.015em]">
+                                                Blocked</p>
+                                        </button>
+                                        <button
+                                            class="tab-btn flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#959ec6] pb-[13px] pt-4 px-2"
+                                            data-tab="recent">
+                                            <p
+                                                class="text-[#959ec6] text-sm font-bold leading-normal tracking-[0.015em] whitespace-nowrap">
+                                                Recently Played</p>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="friends-list"
+                                    class="space-y-1 py-2 max-h-[calc(100vh-360px)] overflow-y-auto scrollbar-thin">
+                                    <!-- Friends will be dynamically loaded here -->
+                                </div>
+
+                                <button id="floating-add-btn"
+                                    class="absolute -bottom-4 right-8 w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-lg hover:bg-primary/90 transition-all duration-300 transform hover:scale-110 pulse-glow">
+                                    <span class="material-symbols-outlined text-3xl">add</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Main Chat Area -->
+                        <div class="col-span-12 lg:col-span-8 glassmorphism rounded-xl flex flex-col">
+                            <!-- Default State - No Chat Selected -->
+                            <div id="default-chat-state" class="flex-1 flex items-center justify-center p-8">
+                                <div class="text-center">
+                                    <span class="material-symbols-outlined text-7xl text-[#959ec6]">chat</span>
+                                    <h3 class="text-2xl font-bold text-white mt-4">Select a friend to start chatting
+                                    </h3>
+                                    <p class="text-[#959ec6] mt-2">Your conversations will appear here.</p>
+                                </div>
+                            </div>
+
+                            <!-- Active Chat Interface (Hidden by default) -->
+                            <div id="active-chat" class="hidden flex flex-col h-full">
+                                <!-- Chat Header -->
+                                <div
+                                    class="flex items-center gap-4 bg-background-dark/70 backdrop-blur-xl px-4 min-h-[72px] py-2 justify-between border-b border-white/10 shadow-lg">
+                                    <div class="flex items-center gap-4">
+                                        <div class="relative">
+                                            <img id="chat-friend-avatar"
+                                                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14"
+                                                alt="Friend avatar" src="" />
+                                            <span id="chat-friend-status"
+                                                class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-background-dark"></span>
+                                        </div>
+                                        <div class="flex flex-col justify-center">
+                                            <p id="chat-friend-name"
+                                                class="text-white text-lg font-medium leading-normal"></p>
+                                            <p id="chat-friend-status-text"
+                                                class="text-gray-400 text-sm font-normal leading-normal"></p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <button id="video-call-btn"
+                                            class="p-2 text-white rounded-full hover:bg-white/10 transition-colors">
+                                            <span class="material-symbols-outlined">videocam</span>
+                                        </button>
+                                        <button id="voice-call-btn"
+                                            class="p-2 text-white rounded-full hover:bg-white/10 transition-colors">
+                                            <span class="material-symbols-outlined">call</span>
+                                        </button>
+                                        <div class="relative">
+                                            <button id="chat-options-btn"
+                                                class="p-2 text-white rounded-full hover:bg-white/10 transition-colors">
+                                                <span class="material-symbols-outlined">more_vert</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Message Area -->
+                                <div id="message-area" class="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin">
+                                    <!-- Messages will be dynamically loaded here -->
+                                </div>
+
+                                <!-- Message Input -->
+                                <div
+                                    class="bg-background-dark/70 backdrop-blur-xl p-4 border-t border-white/10 shadow-lg">
+                                    <div class="flex items-center gap-4 bg-[#292c38] rounded-xl px-4 py-2">
+                                        <button class="text-gray-400 hover:text-primary transition-colors">
+                                            <span class="material-symbols-outlined">add_reaction</span>
+                                        </button>
+                                        <input id="message-input"
+                                            class="flex-1 bg-transparent border-none text-white placeholder-gray-500 focus:ring-0"
+                                            placeholder="Type a message..." type="text" />
+                                        <button class="text-gray-400 hover:text-primary transition-colors">
+                                            <span class="material-symbols-outlined">attach_file</span>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-primary transition-colors">
+                                            <span class="material-symbols-outlined">mic</span>
+                                        </button>
+                                        <button id="send-message-btn"
+                                            class="p-2 bg-primary rounded-full text-white hover:bg-primary/80 transition-transform transform hover:scale-110">
+                                            <span class="material-symbols-outlined">send</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Friends Modal -->
+    <div id="add-friends-modal"
+        class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div
+            class="bg-background-dark/90 backdrop-blur-xl rounded-2xl p-6 w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto border border-white/10">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white">Add Friends</h3>
+                <button id="close-add-friends" class="text-gray-400 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-2xl">close</span>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Search Section -->
+                <div>
+                    <h4 class="text-white text-lg font-semibold mb-3">Search and Discover</h4>
+                    <div class="relative">
+                        <input id="search-friends-input" type="text"
+                            class="w-full bg-[#292c38] rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                            placeholder="Search by username, email, or game ID">
+                        <span class="absolute right-3 top-3 text-gray-400 material-symbols-outlined">search</span>
+                    </div>
+
+                    <div class="flex mt-3 bg-[#292c38] rounded-xl p-1">
+                        <button
+                            class="discovery-tab flex-1 py-2 text-center text-sm font-medium rounded-lg bg-primary text-white"
+                            data-type="suggestions">
+                            People You May Know
+                        </button>
+                        <button
+                            class="discovery-tab flex-1 py-2 text-center text-sm font-medium rounded-lg text-gray-400"
+                            data-type="contacts">
+                            Import Contacts
+                        </button>
+                        <button
+                            class="discovery-tab flex-1 py-2 text-center text-sm font-medium rounded-lg text-gray-400"
+                            data-type="qr">
+                            Scan QR Code
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Friend Suggestions -->
+                <div id="friend-suggestions">
+                    <h4 class="text-white text-lg font-semibold mb-3">Friend Suggestions</h4>
+                    <div class="space-y-3">
+                        <!-- Suggestions will be dynamically loaded here -->
+                    </div>
+                </div>
+
+                <!-- Sent Requests -->
+                <div id="sent-requests">
+                    <h4 class="text-white text-lg font-semibold mb-3">Sent Requests</h4>
+                    <div class="space-y-3">
+                        <!-- Sent requests will be dynamically loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Friend Options Dropdown -->
+    <div id="friend-options-dropdown"
+        class="dropdown-menu fixed z-50 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 min-w-48 py-1">
+        <button
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">person</span>
+            <span>View Profile</span>
+        </button>
+        <button
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">notifications</span>
+            <span>Mute Notifications</span>
+        </button>
+        <button
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">block</span>
+            <span>Block User</span>
+        </button>
+        <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+        <button
+            class="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">person_remove</span>
+            <span>Remove Friend</span>
+        </button>
+    </div>
+
+    <!-- Chat Options Dropdown -->
+    <div id="chat-options-dropdown"
+        class="dropdown-menu fixed z-50 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 min-w-64 py-2 max-h-96 overflow-y-auto">
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+            data-action="view-profile">
+            <span class="material-symbols-outlined text-lg text-blue-500">person</span>
+            <div class="flex flex-col">
+                <span class="font-medium">View Profile</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">See friend's profile information</span>
+            </div>
+        </button>
+
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+            data-action="search">
+            <span class="material-symbols-outlined text-lg text-green-500">search</span>
+            <div class="flex flex-col">
+                <span class="font-medium">Search in Chat</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Find messages in this conversation</span>
+            </div>
+        </button>
+
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+            data-action="new-group">
+            <span class="material-symbols-outlined text-lg text-purple-500">group</span>
+            <div class="flex flex-col">
+                <span class="font-medium">Create Group</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Start a group chat with multiple friends</span>
+            </div>
+        </button>
+
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+            data-action="media">
+            <span class="material-symbols-outlined text-lg text-orange-500">photo_library</span>
+            <div class="flex flex-col">
+                <span class="font-medium">Media, Files & Links</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">View shared photos, videos and documents</span>
+            </div>
+        </button>
+
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+            data-action="mute">
+            <span class="material-symbols-outlined text-lg text-yellow-500">notifications_off</span>
+            <div class="flex flex-col">
+                <span class="font-medium">Mute Notifications</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Silence notifications from this chat</span>
+            </div>
+        </button>
+
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+            data-action="disappearing">
+            <span class="material-symbols-outlined text-lg text-indigo-500">timer</span>
+            <div class="flex flex-col">
+                <span class="font-medium">Disappearing Messages</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Set messages to disappear after reading</span>
+            </div>
+        </button>
+
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+            data-action="theme">
+            <span class="material-symbols-outlined text-lg text-pink-500">palette</span>
+            <div class="flex flex-col">
+                <span class="font-medium">Chat Theme</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Customize the appearance of this chat</span>
+            </div>
+        </button>
+
+        <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3"
+            data-action="more">
+            <span class="material-symbols-outlined text-lg text-gray-500">more_horiz</span>
+            <div class="flex flex-col">
+                <span class="font-medium">More Options</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Additional settings and features</span>
+            </div>
+        </button>
+
+        <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-3"
+            data-action="report">
+            <span class="material-symbols-outlined text-lg">flag</span>
+            <div class="flex flex-col">
+                <span class="font-medium">Report User</span>
+                <span class="text-xs text-red-500 dark:text-red-400">Report inappropriate behavior</span>
+            </div>
+        </button>
+
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-3"
+            data-action="block">
+            <span class="material-symbols-outlined text-lg">block</span>
+            <div class="flex flex-col">
+                <span class="font-medium">Block User</span>
+                <span class="text-xs text-red-500 dark:text-red-400">Block and stop receiving messages</span>
+            </div>
+        </button>
+
+        <button
+            class="chat-option-btn w-full text-left px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-3"
+            data-action="clear-chat">
+            <span class="material-symbols-outlined text-lg">delete</span>
+            <div class="flex flex-col">
+                <span class="font-medium">Clear Chat</span>
+                <span class="text-xs text-red-500 dark:text-red-400">Delete all messages in this conversation</span>
+            </div>
+        </button>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script>
+        // Global state
+        let currentUser = {
+            id: 1,
+            name: "You",
+            avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAEacD8d--9OlgSY8AaATROTu8gN2ycTqh66SKHFPa2uCaHojZOvdunsMcAC2H_m6poAGO4A0kjeAdiaaaO8JnL8h5naUyc7ieXrgNuZnC7qXkPw4r28DepFjjVzEQjw7oeBhOA1bK0nhz7rR6h6zV_5zoIMA2x2QJh9Ca4e0LTmcWDzw8j6X7Me7LyGZqjfCOutBFgufEYTVomDrx_gfl2Vln7oXcS7D_8oKJgpHuDaYkT5aha9CnMvBSQSI1vMa_PJBTsXwP9DQ"
+        };
+
+        let friends = [
+            {
+                id: 1,
+                name: "Alex_Smith",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDGHbvfsNzqPZoYx-1e7TLWt7A1hdgVjNLMJsT3SV_St-2n4qZGKLBN0fHO0YPiqPp4zeCxCSYd7RoWn15RkTqkYH7Q8ZB8X3e6-Hja0ymKwJrm1wnHPks1JTNWzCQrK5c23bnPDUJ_UG1PbKZjup1a1xeq4hd63gLI__4LLy-dqFAcIc7tvR0GBz9ygEh1xIxSW-wo3Za2AGYDtyTHbbYws3uA87ZzuiteqUHYnK8BtPihV-C0p78HrOec55IuGM09QEBOfxzvOg",
+                status: "online",
+                statusText: "Playing Cyberpunk 2077",
+                lastSeen: null,
+                isTyping: false,
+                messages: [
+                    {
+                        id: 1,
+                        sender: 1,
+                        text: "Hey, how is it going? I saw you were playing the new Zelda game. Is it any good?",
+                        timestamp: new Date(Date.now() - 30 * 60 * 1000),
+                        read: true
+                    },
+                    {
+                        id: 2,
+                        sender: 0,
+                        text: "Hey! It's awesome, the world is so big and there is so much to do. We should play together sometime!",
+                        timestamp: new Date(Date.now() - 29 * 60 * 1000),
+                        read: true
+                    }
+                ]
+            },
+            {
+                id: 2,
+                name: "Sarah_J",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDG9F7NFaIv5qK9auIskBsu_tLnppb7f7gUuBlnOrStlpa7_VmSU539OZdaNUaGL6pJAN7hwjhGSneiusX7ngL4bDmKe89sZmkTFoviEM0_I3ps-bPl0iitJGYMCoI2EJSOvLe51D36-dy1K8VsoqQy0cwGBDOMjWi2ljdjKAR6Bshxl89TB9wx8uvK18EVdXBrymTvclSkW0nvRlA13kT3QlPu54t_A01yVMOIGsvsbjOfbTj7afKh4NT4plbjJ69y7qQ_xg3TJw",
+                status: "online",
+                statusText: "Online",
+                lastSeen: null,
+                isTyping: false,
+                messages: []
+            },
+            {
+                id: 3,
+                name: "Mike_P",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBHyvThoQlNPah6CiTD5giERoHk3WnDlipOc6uP-lhKCgyPFRFu66Au9Gmw6mbeeDqtP29iuCt4XFF-OXsx9rp4CsLrKyGaF2NS4oJWROEfp_HguhcbcG4sQUIIKsmmsxalhnMZ3qBBdCB6D5Zt8y2veuqpWRarZIMuEa-VgYsiW3LlCoq_qSPAzss8bmzHUB06oHK0aFqtGrBIrMBYIb0smVCcliEEMdfd0nVxwosI9oZzIMH8iun1UMOFFkh4WuetgwaXfbfJwg",
+                status: "away",
+                statusText: "Away",
+                lastSeen: null,
+                isTyping: false,
+                messages: []
+            },
+            {
+                id: 4,
+                name: "David_C",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAEacD8d--9OlgSY8AaATROTu8gN2ycTqh66SKHFPa2uCaHojZOvdunsMcAC2H_m6poAGO4A0kjeAdiaaaO8JnL8h5naUyc7ieXrgNuZnC7qXkPw4r28DepFjjVzEQjw7oeBhOA1bK0nhz7rR6h6zV_5zoIMA2x2QJh9Ca4e0LTmcWDzw8j6X7Me7LyGZqjfCOutBFgufEYTVomDrx_gfl2Vln7oXcS7D_8oKJgpHuDaYkT5aha9CnMvBSQSI1vMa_PJBTsXwP9DQ",
+                status: "offline",
+                statusText: "Offline - Last seen 2h ago",
+                lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000),
+                isTyping: false,
+                messages: []
+            }
+        ];
+
+        let friendRequests = [
+            {
+                id: 1,
+                name: "ShadowStriker",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuABsZ47d-q9oieMqU-DMrSJ2-zxqG56UuENymK7El62juTLS4SDYkuD0G7gwaICJpM7L6HM8kH3wa4dvJbVUUVIbJbTl-IkpwAmIXpqi832i981-C1L_UEJQy0gTUQZEiK7KPd48F6WGhaFKse4XBVLSdG1bOjuFuMsnUU70p1vjtjV0DY3P_RrrMCIivYL_rSekD5TsrZRNcz3rF4YFqDZJ1M35ukzUSDIzroiIsuNVIcnfzUFcwN47UJ56GlCXzidMH7UlrV_aw",
+                expiresIn: "2d"
+            },
+            {
+                id: 2,
+                name: "PixelAvenger",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBulisx59nf9lGPxlQVa8gg2fYVYtn2P5wWF2QE7lYxlWAs11t6z7RX3fvqmUvRQ1mPSQPSIWFRSB6L4h-NLbv0QZPHIHxw2PPf30Je-Td_a14EJab5CBPljifOoftcK-NYE-bEMSsps4x7YrC_9zWO3nLPSacsTIltKcZvSoTn2spIhCfufx2zRC-wzTUjdys6syarCqRv2VC2xx6lwm6bcv-oM0Mi6-jncp2S5iNarIf2slAficb-Vdl-l_vEYW1473Io--VGdg",
+                expiresIn: "5d"
+            },
+            {
+                id: 3,
+                name: "LunaGamer",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBo8C14cNs0RwrhssZfirhkue33EGT6QNOEVoJv_3JTd1Sc9GRz8J1dauGQFaoS8rb17IyvozDcjYzQIid3jujf9aPJ9LhwbxhDmfSAkEqVeQH-mSrOPiRh9ZRT4Hd55nQBAgcYSukItNy3KorHrbDy5v7GuuNxcSOSuCcQexz2VmLz80r-7b3v_sGY0tDUT0qBvBedBd7vTimb7WjfELlkno1tlxVgLzJcxUZ_jPFaNYTkefht9ZMg61jY8UklJYlEqOtI4mn1rA",
+                expiresIn: "1d"
+            }
+        ];
+
+        let friendSuggestions = [
+            {
+                id: 1,
+                name: "Alex_Gamer",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBszqvR0r55hVHJzhhTQM43LoOrziw0iiuhwi-hlzpXJT6FyamRnAzp6IbOl1uUS9otJ8YdJsPLOfWNOxaL46HFyevCmyAE7ttRt71rLsNWfwtKkCVcM0E6cKjlr0_SXRxCXyRefUZldGTQ1BJzYl4SanaNt7-IROajypg9-NP3Izr3Od4USY4hFGV1l2G5PtcDqTih7NFN9OqARZ5spt0sxANte9Sxw3SaoGX7Oy8FZOaecaNhU92UpHczLBzLYCwCLgewfEeJCg",
+                mutualInfo: "Plays Apex Legends"
+            },
+            {
+                id: 2,
+                name: "MiaStreams",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDVaXTtPj78mohGtOvyaZli-RlokC0ZUVdP9vZTqO-7iaOQePuODZ5SfKq1FpVqix56iiJuzIKxxCM9BwiphT5IXBIKDrpSYxx8BJbWckDX9S7MbMV6YCYppSuRt0WAiKWjm-7H79DyDtBWeseeTEM_0fp7k0GpPk7K4HWTkVvNFvk4QPjqQ6i8FMYVdFTpN46jZ2sMFovAeZM4osfqCOe6Ik1WAYhGFO5-oJlrsKlFqJyKvXlTn7BnIQnGMuGpo8gwm14s5XaBrw",
+                mutualInfo: "3 Mutual Friends"
+            },
+            {
+                id: 3,
+                name: "PixelPioneer",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAuV6OE1Igdo2L8Q9Us4cU2k89z_aAMw9P81nAwj00f78fttIwcM23uAw5Iajl6YeTcUmJBAh1l1EQJQRfi5XzfoskXkhJyLZ9JUoSnmKB6lf1l5IiIGq1oAdBZ9HaPQwGC8M-BATS7lLjWkf3TSt4EmvMQ0EJiAvvIb8ig6jGusuj3snbxt4Oz0LZ3LLW-bbemoMYws71xcsIYe_dpslkhLjfoG6lEEr1FXXwZ4N1Lo1xaK6m7QTLfYTpXoKVjBYtksrdoNA95sA",
+                mutualInfo: "Recently Played With"
+            }
+        ];
+
+        let sentRequests = [
+            {
+                id: 1,
+                name: "GameQueen",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCyip4CBCcqoq64SxM93gljRZaF7XdVk1GSirieCSOZyHwFKJcEDTyreh19Fvd2K3nW6z0RUTInMGfMojXUDs56r_8j9-f3ujA75f0bC2Jbe4WemnlatsMFs7VdAWIr-Erq2HcYZ8LPr1CZkuiiD4yXPBqVJML0aOPN7kPjeqgRh5ZaWYH1nPHL3VTo2-_oGbeUtW9ZV7dEExbx3Sbsua9dtfvQC1YLz47Zpixk3UDr1oKtNXNZ7JcCUPP4aOC1HC3C9HhIwnc4DQ",
+                status: "Pending"
+            },
+            {
+                id: 2,
+                name: "ShadowSlayer",
+                avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCyE9XxzPM1yVxiotOeLuM4GlHpp3nYN7bUGV7bJHStJJxoupOcX5TuQrdunSXDXQceJmRi8FmfNYnYEWwgO6t-kx0WCaOSL29FFpjrzU95Hf4EYgqaaYEqV7QL5zNZZpxWAWdmfhU-Gn6rQITqWRSgoJkctv4qxs17O9ILpkdbEJB31TMHfcRQegvUDnphxcH3lg1AruWNmo8xXWdJXW8rLlRnpLughy2ymJMKOpn1ez5nTc-SavwQT4XZWSAYsIDV4q6Hz_RYkA",
+                status: "Pending"
+            }
+        ];
+
+        let activeChatFriendId = null;
+        let buttonCooldowns = new Map();
+        const cooldownTime = 1000;
+
+        // AI API Service with your actual API key
+        const AIService = {
+            async getAIResponse(message, context = "") {
+                try {
+                    console.log("Sending request to OpenAI API...");
+
+                    // OpenAI API çağrısı - Gerçek API key kullanılıyor
+                    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer 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`
+                        },
+                        body: JSON.stringify({
+                            model: "gpt-3.5-turbo",
+                            messages: [
+                                {
+                                    role: "system",
+                                    content: `Sen bir oyun arkadaşısın. Dostane, heyecanlı ve oyun odaklı yanıtlar ver. 
+                                             Kullanıcı: ${currentUser.name}
+                                             Bağlam: ${context}
+                                             Kısa ve samimi yanıtlar ver (1-2 cümle). Oyunlardan bahset, birlikte oynamayı teklif et.
+                                             Çok uzun yanıtlar verme, 20-30 kelimeyi geçme.`
+                                },
+                                {
+                                    role: "user",
+                                    content: message
+                                }
+                            ],
+                            max_tokens: 80,
+                            temperature: 0.8
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('API request failed:', response.status, errorText);
+                        throw new Error(`API request failed: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    console.log("OpenAI Response:", data);
+
+                    if (data.choices && data.choices[0] && data.choices[0].message) {
+                        return data.choices[0].message.content;
+                    } else {
+                        throw new Error('Invalid response format from OpenAI');
+                    }
+                } catch (error) {
+                    console.error('AI API Error:', error);
+                    // Fallback yanıtları
+                    return this.getFallbackResponse();
+                }
+            },
+
+            getFallbackResponse() {
+                const fallbackResponses = [
+                    "That sounds amazing! I'd love to join you for a gaming session sometime.",
+                    "I've been meaning to try that game too! How's the gameplay?",
+                    "That's awesome! I just finished a different game, maybe we can play together next?",
+                    "Nice! I've heard great things about that game. What's your favorite part so far?",
+                    "I'm definitely up for some gaming! When are you free to play?",
+                    "That game looks incredible! I've seen some gameplay videos and it seems really fun.",
+                    "I'm always looking for new gaming buddies! What other games do you enjoy?",
+                    "Sounds like a plan! I'll make sure to clear my schedule for some gaming time.",
+                    "I've been playing a lot recently too! We should definitely team up sometime.",
+                    "That's great to hear! I'm always excited to try new games with friends."
+                ];
+                return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+            }
+        };
+
+        // Toast notification system
+        function showToast(message, type = 'info', duration = 4000) {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">
+                        ${type === 'success' ? 'check_circle' :
+                    type === 'error' ? 'error' : 'info'}
+                    </span>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Show toast with animation
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+
+            // Hide and remove toast after duration
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, duration);
+        }
+
+        // Button cooldown system
+        function setButtonCooldown(button, duration = cooldownTime) {
+            if (buttonCooldowns.has(button)) {
+                return false;
+            }
+
+            button.classList.add('btn-disabled');
+            buttonCooldowns.set(button, true);
+
+            // Cooldown animasiyası
+            button.classList.add('active');
+            setTimeout(() => {
+                button.classList.remove('active');
+            }, 500);
+
+            setTimeout(() => {
+                button.classList.remove('btn-disabled');
+                buttonCooldowns.delete(button);
+            }, duration);
+
+            return true;
+        }
+
+        // Format time for messages
+        function formatTime(date) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Format date for messages
+        function formatDate(date) {
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (date.toDateString() === today.toDateString()) {
+                return 'Today';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'Yesterday';
+            } else {
+                return date.toLocaleDateString();
+            }
+        }
+
+        // Get status color and text
+        function getStatusInfo(status, statusText) {
+            switch (status) {
+                case 'online':
+                    return { color: 'status-online', text: statusText || 'Online' };
+                case 'away':
+                    return { color: 'status-away', text: statusText || 'Away' };
+                case 'busy':
+                    return { color: 'status-busy', text: statusText || 'Busy' };
+                case 'gaming':
+                    return { color: 'status-gaming', text: statusText || 'In Game' };
+                default:
+                    return { color: 'status-offline', text: statusText || 'Offline' };
+            }
+        }
+
+        // Render friends list
+        function renderFriendsList(filter = 'all') {
+            const friendsList = document.getElementById('friends-list');
+            friendsList.innerHTML = '';
+
+            let filteredFriends = friends;
+
+            if (filter === 'online') {
+                filteredFriends = friends.filter(friend => friend.status === 'online');
+            } else if (filter === 'pending') {
+                // This would be friend requests in a real app
+                return renderFriendRequests();
+            } else if (filter === 'recent') {
+                // Sort by last interaction
+                filteredFriends = [...friends].sort((a, b) => {
+                    const aLastMsg = a.messages.length > 0 ? a.messages[a.messages.length - 1].timestamp : new Date(0);
+                    const bLastMsg = b.messages.length > 0 ? b.messages[b.messages.length - 1].timestamp : new Date(0);
+                    return bLastMsg - aLastMsg;
+                });
+            }
+
+            filteredFriends.forEach(friend => {
+                const statusInfo = getStatusInfo(friend.status, friend.statusText);
+
+                const friendElement = document.createElement('div');
+                friendElement.className = `friend-card-hover flex items-center gap-4 bg-transparent hover:bg-primary/20 p-2 rounded-lg transition-all duration-300 cursor-pointer ${activeChatFriendId === friend.id ? 'bg-primary/20' : ''}`;
+                friendElement.innerHTML = `
+                    <div class="relative">
+                        <img class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" alt="${friend.name} avatar" src="${friend.avatar}"/>
+                        <span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full ${statusInfo.color} border-2 border-[#1a1e2e]"></span>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-center">
+                        <p class="text-white text-base font-bold leading-normal line-clamp-1">${friend.name}</p>
+                        <p class="${statusInfo.color === 'status-online' ? 'text-green-400' : statusInfo.color === 'status-away' ? 'text-yellow-400' : statusInfo.color === 'status-gaming' ? 'text-purple-400' : 'text-[#959ec6]'} text-sm font-normal leading-normal line-clamp-2">${statusInfo.text}</p>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                        <button class="chat-btn p-2 rounded-full hover:bg-white/10 text-[#959ec6] hover:text-white transition-colors" data-friend-id="${friend.id}">
+                            <span class="material-symbols-outlined">chat_bubble</span>
+                        </button>
+                        <button class="game-invite-btn p-2 rounded-full hover:bg-white/10 text-[#959ec6] hover:text-white transition-colors" data-friend-id="${friend.id}">
+                            <span class="material-symbols-outlined">stadia_controller</span>
+                        </button>
+                        <div class="relative">
+                            <button class="more-options-btn p-2 rounded-full hover:bg-white/10 text-[#959ec6] hover:text-white transition-colors" data-friend-id="${friend.id}">
+                                <span class="material-symbols-outlined">more_vert</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                friendElement.addEventListener('click', (e) => {
+                    if (!e.target.closest('button')) {
+                        openChat(friend.id);
+                    }
+                });
+
+                friendsList.appendChild(friendElement);
+            });
+
+            // Update counts
+            document.getElementById('friends-count').textContent = `(${friends.length})`;
+            document.getElementById('online-count').textContent = friends.filter(f => f.status === 'online').length;
+
+            // Update pending badge
+            const pendingBadge = document.getElementById('pending-badge');
+            if (friendRequests.length > 0) {
+                pendingBadge.textContent = friendRequests.length;
+                pendingBadge.classList.remove('hidden');
+            } else {
+                pendingBadge.classList.add('hidden');
+            }
+        }
+
+        // Render friend requests
+        function renderFriendRequests() {
+            const friendsList = document.getElementById('friends-list');
+            friendsList.innerHTML = '';
+
+            if (friendRequests.length === 0) {
+                friendsList.innerHTML = `
+                    <div class="text-center py-8">
+                        <span class="material-symbols-outlined text-5xl text-[#959ec6]">person_add_disabled</span>
+                        <p class="text-[#959ec6]">No pending friend requests</p>
+                    </div>
+                `;
+                return;
+            }
+
+            friendRequests.forEach(request => {
+                const requestElement = document.createElement('div');
+                requestElement.className = 'friend-card-hover flex items-center gap-4 bg-transparent hover:bg-primary/20 p-2 rounded-lg transition-all duration-300';
+                requestElement.innerHTML = `
+                    <div class="relative">
+                        <img class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14" alt="${request.name} avatar" src="${request.avatar}"/>
+                    </div>
+                    <div class="flex-1 flex flex-col justify-center">
+                        <p class="text-white text-base font-bold leading-normal line-clamp-1">${request.name}</p>
+                        <p class="text-[#959ec6] text-sm font-normal leading-normal line-clamp-2">Expires in ${request.expiresIn}</p>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                        <button class="decline-request-btn btn-cooldown p-2 rounded-full hover:bg-red-500/20 text-[#959ec6] hover:text-red-400 transition-colors" data-request-id="${request.id}">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                        <button class="accept-request-btn btn-cooldown p-2 rounded-full hover:bg-green-500/20 text-[#959ec6] hover:text-green-400 transition-colors" data-request-id="${request.id}">
+                            <span class="material-symbols-outlined">check</span>
+                        </button>
+                    </div>
+                `;
+
+                friendsList.appendChild(requestElement);
+            });
+        }
+
+        // Open chat with a friend
+        function openChat(friendId) {
+            const friend = friends.find(f => f.id === friendId);
+            if (!friend) return;
+
+            activeChatFriendId = friendId;
+
+            // Update UI
+            document.getElementById('default-chat-state').classList.add('hidden');
+            document.getElementById('active-chat').classList.remove('hidden');
+
+            // Update chat header
+            const statusInfo = getStatusInfo(friend.status, friend.statusText);
+            document.getElementById('chat-friend-avatar').src = friend.avatar;
+            document.getElementById('chat-friend-name').textContent = friend.name;
+            document.getElementById('chat-friend-status-text').textContent = statusInfo.text;
+            document.getElementById('chat-friend-status').className = `absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-background-dark ${statusInfo.color}`;
+
+            // Render messages
+            renderMessages(friendId);
+
+            // Highlight active friend in list
+            document.querySelectorAll('.friend-card-hover').forEach(el => {
+                el.classList.remove('bg-primary/20');
+            });
+            document.querySelector(`.chat-btn[data-friend-id="${friendId}"]`).closest('.friend-card-hover').classList.add('bg-primary/20');
+
+            // Add slide-in animation
+            document.getElementById('active-chat').classList.add('slide-in-right');
+            setTimeout(() => {
+                document.getElementById('active-chat').classList.remove('slide-in-right');
+            }, 300);
+        }
+
+        // Render messages for a chat
+        function renderMessages(friendId) {
+            const messageArea = document.getElementById('message-area');
+            const friend = friends.find(f => f.id === friendId);
+            if (!friend) return;
+
+            messageArea.innerHTML = '';
+
+            if (friend.messages.length === 0) {
+                messageArea.innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-[#959ec6]">No messages yet. Start a conversation!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Group messages by date
+            const messagesByDate = {};
+            friend.messages.forEach(message => {
+                const dateKey = formatDate(message.timestamp);
+                if (!messagesByDate[dateKey]) {
+                    messagesByDate[dateKey] = [];
+                }
+                messagesByDate[dateKey].push(message);
+            });
+
+            // Render messages grouped by date
+            Object.keys(messagesByDate).forEach(date => {
+                // Add date separator
+                const dateSeparator = document.createElement('p');
+                dateSeparator.className = 'text-gray-400 text-sm font-normal leading-normal pb-3 pt-1 px-4 text-center';
+                dateSeparator.textContent = date;
+                messageArea.appendChild(dateSeparator);
+
+                // Add messages for this date
+                messagesByDate[date].forEach(message => {
+                    const isSent = message.sender === 0; // 0 represents current user
+                    const messageElement = document.createElement('div');
+                    messageElement.className = `flex items-end gap-3 p-4 ${isSent ? 'justify-end' : ''}`;
+
+                    if (!isSent) {
+                        messageElement.innerHTML = `
+                            <img class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 shrink-0" alt="${friend.name} avatar" src="${friend.avatar}"/>
+                            <div class="flex flex-1 flex-col gap-1 items-start">
+                                <div class="flex items-baseline gap-2">
+                                    <p class="text-gray-400 text-sm font-normal leading-normal">${friend.name}</p>
+                                    <p class="text-gray-500 text-xs">${formatTime(message.timestamp)}</p>
+                                </div>
+                                <div class="relative group">
+                                    <p class="text-base font-normal leading-normal flex max-w-md rounded-xl rounded-bl-none px-4 py-3 message-bubble-received text-white">
+                                        ${message.text}
+                                    </p>
+                                    ${message.attachment ? `
+                                        <img class="mt-2 rounded-lg max-w-xs" alt="Attachment" src="${message.attachment.url}"/>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        messageElement.innerHTML = `
+                            <div class="flex flex-1 flex-col gap-1 items-end">
+                                <div class="flex items-baseline gap-2">
+                                    <p class="text-gray-500 text-xs">${formatTime(message.timestamp)}</p>
+                                    <p class="text-gray-400 text-sm font-normal leading-normal">You</p>
+                                </div>
+                                <div class="relative group">
+                                    <p class="text-base font-normal leading-normal flex max-w-md rounded-xl rounded-br-none px-4 py-3 message-bubble-sent text-white">
+                                        ${message.text}
+                                    </p>
+                                    ${message.attachment ? `
+                                        <img class="mt-2 rounded-lg max-w-xs" alt="Attachment" src="${message.attachment.url}"/>
+                                    ` : ''}
+                                </div>
+                                ${message.read ? `
+                                    <div class="flex items-center gap-1 text-gray-400">
+                                        <span class="material-symbols-outlined text-base">done_all</span>
+                                        <span class="text-xs">Read</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <img class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 shrink-0" alt="Your avatar" src="${currentUser.avatar}"/>
+                        `;
+                    }
+
+                    messageArea.appendChild(messageElement);
+                });
+            });
+
+            // Add typing indicator if friend is typing
+            if (friend.isTyping) {
+                const typingElement = document.createElement('div');
+                typingElement.className = 'flex items-end gap-3 p-4';
+                typingElement.innerHTML = `
+                    <img class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 shrink-0" alt="${friend.name} avatar" src="${friend.avatar}"/>
+                    <div class="flex items-center gap-2 px-4 py-3 rounded-xl bg-[#292c38]">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                `;
+                messageArea.appendChild(typingElement);
+            }
+
+            // Scroll to bottom
+            messageArea.scrollTop = messageArea.scrollHeight;
+        }
+
+        // Send a message
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const messageText = messageInput.value.trim();
+
+            if (!messageText || !activeChatFriendId) return;
+
+            const friend = friends.find(f => f.id === activeChatFriendId);
+            if (!friend) return;
+
+            // Add message to friend's messages
+            const newMessage = {
+                id: friend.messages.length + 1,
+                sender: 0, // Current user
+                text: messageText,
+                timestamp: new Date(),
+                read: false
+            };
+
+            friend.messages.push(newMessage);
+
+            // Clear input
+            messageInput.value = '';
+
+            // Re-render messages
+            renderMessages(activeChatFriendId);
+
+            // Simulate friend typing and AI response after a delay
+            simulateAIResponse(activeChatFriendId, messageText);
+        }
+
+        // Simulate AI response for Alex_Smith
+        async function simulateAIResponse(friendId, userMessage) {
+            const friend = friends.find(f => f.id === friendId);
+            if (!friend) return;
+
+            // Show typing indicator
+            friend.isTyping = true;
+            renderMessages(friendId);
+
+            try {
+                // AI yanıtı al
+                const aiResponse = await AIService.getAIResponse(
+                    userMessage,
+                    `Playing Cyberpunk 2077, interested in gaming together with ${currentUser.name}`
+                );
+
+                // After a delay, add AI response and hide typing indicator
+                setTimeout(() => {
+                    friend.isTyping = false;
+
+                    const responseMessage = {
+                        id: friend.messages.length + 1,
+                        sender: friend.id,
+                        text: aiResponse,
+                        timestamp: new Date(),
+                        read: true
+                    };
+
+                    friend.messages.push(responseMessage);
+                    renderMessages(friendId);
+
+                    // Mark our last message as read
+                    const lastMessage = friend.messages[friend.messages.length - 2];
+                    if (lastMessage && lastMessage.sender === 0) {
+                        lastMessage.read = true;
+                    }
+
+
+                }, 1500 + Math.random() * 2000);
+
+            } catch (error) {
+                console.error('AI Response Error:', error);
+
+                // Hata durumunda fallback kullan
+                setTimeout(() => {
+                    friend.isTyping = false;
+
+                    const responseMessage = {
+                        id: friend.messages.length + 1,
+                        sender: friend.id,
+                        text: AIService.getFallbackResponse(),
+                        timestamp: new Date(),
+                        read: true
+                    };
+
+                    friend.messages.push(responseMessage);
+                    renderMessages(friendId);
+
+                    const lastMessage = friend.messages[friend.messages.length - 2];
+                    if (lastMessage && lastMessage.sender === 0) {
+                        lastMessage.read = true;
+                    }
+
+                    showToast('AI used fallback response', 'warning');
+                }, 1500);
+            }
+        }
+
+        // Render friend suggestions in modal
+        function renderFriendSuggestions() {
+            const suggestionsContainer = document.querySelector('#friend-suggestions .space-y-3');
+            suggestionsContainer.innerHTML = '';
+
+            friendSuggestions.forEach(suggestion => {
+                const suggestionElement = document.createElement('div');
+                suggestionElement.className = 'flex items-center justify-between p-3 rounded-lg bg-[#292c38]/50 hover:bg-[#292c38] transition-colors duration-300';
+                suggestionElement.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <img class="w-12 h-12 rounded-full object-cover" alt="${suggestion.name} avatar" src="${suggestion.avatar}"/>
+                        <div>
+                            <p class="text-white font-semibold">${suggestion.name}</p>
+                            <p class="text-sm text-[#9ea3b7]">${suggestion.mutualInfo}</p>
+                        </div>
+                    </div>
+                    <button class="add-suggestion-btn btn-cooldown flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white hover:bg-primary/80 transition-colors duration-300" data-suggestion-id="${suggestion.id}">
+                        <span class="material-symbols-outlined">add</span>
+                    </button>
+                `;
+
+                suggestionsContainer.appendChild(suggestionElement);
+            });
+        }
+
+        // Render sent requests in modal
+        function renderSentRequests() {
+            const requestsContainer = document.querySelector('#sent-requests .space-y-3');
+            requestsContainer.innerHTML = '';
+
+            if (sentRequests.length === 0) {
+                requestsContainer.innerHTML = `
+                    <div class="text-center py-4">
+                        <p class="text-[#9ea3b7]">No sent requests</p>
+                    </div>
+                `;
+                return;
+            }
+
+            sentRequests.forEach(request => {
+                const requestElement = document.createElement('div');
+                requestElement.className = 'flex items-center justify-between p-3 rounded-lg bg-[#292c38]/50';
+                requestElement.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <img class="w-12 h-12 rounded-full object-cover" alt="${request.name} avatar" src="${request.avatar}"/>
+                        <div>
+                            <p class="text-white font-semibold">${request.name}</p>
+                            <p class="text-sm text-[#9ea3b7]">${request.status}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="resend-request-btn btn-cooldown flex items-center justify-center w-10 h-10 rounded-full bg-primary/20 text-primary hover:bg-primary/30 transition-colors duration-300" data-request-id="${request.id}">
+                            <span class="material-symbols-outlined">refresh</span>
+                        </button>
+                        <button class="cancel-request-btn btn-cooldown flex items-center justify-center w-10 h-10 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors duration-300" data-request-id="${request.id}">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                `;
+
+                requestsContainer.appendChild(requestElement);
+            });
+        }
+
+        // Theme toggle functionality
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+
+            // Check saved theme or default to dark
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'dark') {
+                htmlElement.classList.add('dark');
+                htmlElement.classList.remove('light');
+                themeToggle.classList.add('active');
+            } else {
+                htmlElement.classList.add('light');
+                htmlElement.classList.remove('dark');
+                themeToggle.classList.remove('active');
+            }
+
+            // Toggle theme
+            themeToggle.addEventListener('click', function () {
+                if (htmlElement.classList.contains('dark')) {
+                    htmlElement.classList.remove('dark');
+                    htmlElement.classList.add('light');
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.classList.remove('active');
+                } else {
+                    htmlElement.classList.remove('light');
+                    htmlElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.classList.add('active');
+                }
+            });
+        }
+
+        // Profile dropdown functionality
+        function setupProfileDropdown() {
+            const profileButton = document.getElementById('profile-button');
+            const profileDropdown = document.getElementById('profile-dropdown');
+
+            profileButton.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const isExpanded = profileButton.getAttribute('aria-expanded') === 'true';
+                profileButton.setAttribute('aria-expanded', !isExpanded);
+                profileDropdown.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function () {
+                profileDropdown.classList.remove('show');
+                profileButton.setAttribute('aria-expanded', 'false');
+            });
+
+            // Don't close when clicking inside dropdown
+            profileDropdown.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        }
+
+        // Friend options dropdown functionality
+        function setupFriendOptionsDropdown() {
+            const optionsDropdown = document.getElementById('friend-options-dropdown');
+
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.more-options-btn')) {
+                    e.stopPropagation();
+                    const friendId = parseInt(e.target.closest('.more-options-btn').getAttribute('data-friend-id'));
+                    const friend = friends.find(f => f.id === friendId);
+
+                    if (!friend) return;
+
+                    // Position dropdown near the button
+                    const buttonRect = e.target.closest('.more-options-btn').getBoundingClientRect();
+                    optionsDropdown.style.top = `${buttonRect.bottom + window.scrollY + 5}px`;
+                    optionsDropdown.style.left = `${buttonRect.left + window.scrollX - 150}px`;
+
+                    // Show dropdown
+                    optionsDropdown.classList.add('show');
+
+                    // Update dropdown actions
+                    updateFriendOptionsActions(friendId);
+                } else {
+                    // Close dropdown when clicking outside
+                    optionsDropdown.classList.remove('show');
+                }
+            });
+
+            // Don't close when clicking inside dropdown
+            optionsDropdown.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        }
+
+        // Chat options dropdown functionality
+        function setupChatOptionsDropdown() {
+            const chatOptionsBtn = document.getElementById('chat-options-btn');
+            const chatOptionsDropdown = document.getElementById('chat-options-dropdown');
+
+            chatOptionsBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const isExpanded = chatOptionsBtn.getAttribute('aria-expanded') === 'true';
+                chatOptionsBtn.setAttribute('aria-expanded', !isExpanded);
+
+                // Position dropdown near the button
+                const buttonRect = chatOptionsBtn.getBoundingClientRect();
+                chatOptionsDropdown.style.top = `${buttonRect.bottom + window.scrollY + 5}px`;
+                chatOptionsDropdown.style.right = `${window.innerWidth - buttonRect.right - window.scrollX}px`;
+
+                chatOptionsDropdown.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function () {
+                chatOptionsDropdown.classList.remove('show');
+                chatOptionsBtn.setAttribute('aria-expanded', 'false');
+            });
+
+            // Don't close when clicking inside dropdown
+            chatOptionsDropdown.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+
+            // Handle chat option button clicks
+            chatOptionsDropdown.addEventListener('click', function (e) {
+                if (e.target.closest('.chat-option-btn')) {
+                    const action = e.target.closest('.chat-option-btn').getAttribute('data-action');
+                    handleChatOptionAction(action);
+                    chatOptionsDropdown.classList.remove('show');
+                    chatOptionsBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+
+        // Handle chat option actions
+        function handleChatOptionAction(action) {
+            const friend = friends.find(f => f.id === activeChatFriendId);
+            if (!friend) return;
+
+            switch (action) {
+                case 'view-profile':
+                    showToast(`Opening ${friend.name}'s profile`, 'info');
+                    break;
+                case 'search':
+                    showToast('Search in chat feature coming soon', 'info');
+                    break;
+                case 'new-group':
+                    showToast('Group creation feature coming soon', 'info');
+                    break;
+                case 'media':
+                    showToast('Media, files & links viewer coming soon', 'info');
+                    break;
+                case 'mute':
+                    showToast(`Notifications for ${friend.name} muted`, 'success');
+                    break;
+                case 'disappearing':
+                    showToast('Disappearing messages feature coming soon', 'info');
+                    break;
+                case 'theme':
+                    showToast('Chat theme customization coming soon', 'info');
+                    break;
+                case 'more':
+                    showToast('More options panel coming soon', 'info');
+                    break;
+                case 'report':
+                    if (confirm(`Are you sure you want to report ${friend.name}?`)) {
+                        showToast(`${friend.name} has been reported`, 'success');
+                    }
+                    break;
+                case 'block':
+                    if (confirm(`Are you sure you want to block ${friend.name}?`)) {
+                        showToast(`${friend.name} has been blocked`, 'success');
+                    }
+                    break;
+                case 'clear-chat':
+                    if (confirm('Are you sure you want to clear this chat? This action cannot be undone.')) {
+                        friend.messages = [];
+                        renderMessages(activeChatFriendId);
+                        showToast('Chat cleared', 'success');
+                    }
+                    break;
+            }
+        }
+
+        // Update friend options dropdown actions
+        function updateFriendOptionsActions(friendId) {
+            const friend = friends.find(f => f.id === friendId);
+            if (!friend) return;
+
+            const dropdown = document.getElementById('friend-options-dropdown');
+
+            // Update all buttons with the friend ID
+            dropdown.querySelectorAll('button').forEach(button => {
+                button.setAttribute('data-friend-id', friendId);
+            });
+
+            // Add event listeners for each action
+            dropdown.querySelectorAll('button').forEach(button => {
+                button.onclick = function () {
+                    const action = this.textContent.trim();
+                    const friendId = parseInt(this.getAttribute('data-friend-id'));
+
+                    switch (action) {
+                        case 'View Profile':
+                            showToast(`Opening ${friend.name}'s profile`, 'info');
+                            break;
+                        case 'Mute Notifications':
+                            showToast(`Notifications for ${friend.name} muted`, 'info');
+                            break;
+                        case 'Block User':
+                            if (confirm(`Are you sure you want to block ${friend.name}?`)) {
+                                showToast(`${friend.name} has been blocked`, 'success');
+                            }
+                            break;
+                        case 'Remove Friend':
+                            if (confirm(`Are you sure you want to remove ${friend.name} from your friends?`)) {
+                                removeFriend(friendId);
+                            }
+                            break;
+                    }
+
+                    // Close dropdown
+                    dropdown.classList.remove('show');
+                };
+            });
+        }
+
+        // Remove friend function
+        function removeFriend(friendId) {
+            const friend = friends.find(f => f.id === friendId);
+            if (!friend) return;
+
+            // Remove from friends list
+            friends = friends.filter(f => f.id !== friendId);
+
+            // Update UI
+            renderFriendsList('all');
+
+            // If the removed friend was in active chat, close the chat
+            if (activeChatFriendId === friendId) {
+                document.getElementById('default-chat-state').classList.remove('hidden');
+                document.getElementById('active-chat').classList.add('hidden');
+                activeChatFriendId = null;
+            }
+
+            showToast(`${friend.name} has been removed from your friends`, 'success');
+        }
+
+        // Initialize the app
+        function init() {
+            // Set up theme toggle
+            setupThemeToggle();
+
+            // Set up profile dropdown
+            setupProfileDropdown();
+
+            // Set up friend options dropdown
+            setupFriendOptionsDropdown();
+
+            // Set up chat options dropdown
+            setupChatOptionsDropdown();
+
+            // Render initial friends list
+            renderFriendsList('all');
+
+            // Set up tab switching
+            document.querySelectorAll('.tab-btn').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Update active tab
+                    document.querySelectorAll('.tab-btn').forEach(t => {
+                        t.classList.remove('border-b-primary', 'text-white');
+                        t.classList.add('border-b-transparent', 'text-[#959ec6]');
+                    });
+
+                    tab.classList.remove('border-b-transparent', 'text-[#959ec6]');
+                    tab.classList.add('border-b-primary', 'text-white');
+
+                    // Render appropriate content
+                    const tabType = tab.getAttribute('data-tab');
+                    renderFriendsList(tabType);
+                });
+            });
+
+            // Set up friend search
+            document.getElementById('friend-search').addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                // In a real app, this would filter the friends list
+                // For now, we'll just show a message
+                if (searchTerm) {
+                    // Filter logic would go here
+                }
+            });
+
+            // Set up chat buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.chat-btn')) {
+                    const friendId = parseInt(e.target.closest('.chat-btn').getAttribute('data-friend-id'));
+                    if (setButtonCooldown(e.target.closest('.chat-btn'))) {
+                        openChat(friendId);
+                    }
+                }
+
+                if (e.target.closest('.game-invite-btn')) {
+                    const friendId = parseInt(e.target.closest('.game-invite-btn').getAttribute('data-friend-id'));
+                    const friend = friends.find(f => f.id === friendId);
+                    if (friend && setButtonCooldown(e.target.closest('.game-invite-btn'))) {
+                        showToast(`Game invitation sent to ${friend.name}`, 'success');
+                    }
+                }
+
+                if (e.target.closest('.accept-request-btn')) {
+                    const requestId = parseInt(e.target.closest('.accept-request-btn').getAttribute('data-request-id'));
+                    if (setButtonCooldown(e.target.closest('.accept-request-btn'))) {
+                        acceptFriendRequest(requestId);
+                    }
+                }
+
+                if (e.target.closest('.decline-request-btn')) {
+                    const requestId = parseInt(e.target.closest('.decline-request-btn').getAttribute('data-request-id'));
+                    if (setButtonCooldown(e.target.closest('.decline-request-btn'))) {
+                        declineFriendRequest(requestId);
+                    }
+                }
+            });
+
+            // Set up message sending
+            document.getElementById('send-message-btn').addEventListener('click', () => {
+                if (setButtonCooldown(document.getElementById('send-message-btn'))) {
+                    sendMessage();
+                }
+            });
+
+            document.getElementById('message-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Set up video and voice call buttons
+            document.getElementById('video-call-btn').addEventListener('click', () => {
+                showToast('Video call feature coming soon!', 'info');
+            });
+
+            document.getElementById('voice-call-btn').addEventListener('click', () => {
+                showToast('Voice call feature coming soon!', 'info');
+            });
+
+            // Set up add friends modal
+            document.getElementById('add-friend-btn').addEventListener('click', () => {
+                if (setButtonCooldown(document.getElementById('add-friend-btn'))) {
+                    openAddFriendsModal();
+                }
+            });
+
+            document.getElementById('floating-add-btn').addEventListener('click', () => {
+                if (setButtonCooldown(document.getElementById('floating-add-btn'))) {
+                    openAddFriendsModal();
+                }
+            });
+
+            document.getElementById('close-add-friends').addEventListener('click', () => {
+                closeAddFriendsModal();
+            });
+
+            // Set up discovery tabs in modal
+            document.querySelectorAll('.discovery-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.discovery-tab').forEach(t => {
+                        t.classList.remove('bg-primary', 'text-white');
+                        t.classList.add('text-gray-400');
+                    });
+
+                    tab.classList.remove('text-gray-400');
+                    tab.classList.add('bg-primary', 'text-white');
+
+                    // In a real app, this would load different content
+                    // For now, we'll just show suggestions
+                    renderFriendSuggestions();
+                });
+            });
+
+            // Set up modal suggestion buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.add-suggestion-btn')) {
+                    const suggestionId = parseInt(e.target.closest('.add-suggestion-btn').getAttribute('data-suggestion-id'));
+                    if (setButtonCooldown(e.target.closest('.add-suggestion-btn'))) {
+                        sendFriendRequest(suggestionId);
+                    }
+                }
+
+                if (e.target.closest('.cancel-request-btn')) {
+                    const requestId = parseInt(e.target.closest('.cancel-request-btn').getAttribute('data-request-id'));
+                    if (setButtonCooldown(e.target.closest('.cancel-request-btn'))) {
+                        cancelFriendRequest(requestId);
+                    }
+                }
+            });
+        }
+
+        // Add friends modal functions
+        function openAddFriendsModal() {
+            document.getElementById('add-friends-modal').classList.remove('hidden');
+            document.getElementById('add-friends-modal').classList.add('fade-in');
+            renderFriendSuggestions();
+            renderSentRequests();
+        }
+
+        function closeAddFriendsModal() {
+            document.getElementById('add-friends-modal').classList.add('hidden');
+        }
+
+        // Friend request functions
+        function sendFriendRequest(suggestionId) {
+            const suggestion = friendSuggestions.find(s => s.id === suggestionId);
+            if (!suggestion) return;
+
+            // Add to sent requests
+            sentRequests.push({
+                id: suggestionId,
+                name: suggestion.name,
+                avatar: suggestion.avatar,
+                status: 'Pending'
+            });
+
+            // Remove from suggestions
+            friendSuggestions = friendSuggestions.filter(s => s.id !== suggestionId);
+
+            // Update UI
+            renderFriendSuggestions();
+            renderSentRequests();
+
+            showToast(`Friend request sent to ${suggestion.name}`, 'success');
+        }
+
+        function cancelFriendRequest(requestId) {
+            const request = sentRequests.find(r => r.id === requestId);
+            if (!request) return;
+
+            // Add back to suggestions
+            friendSuggestions.push({
+                id: requestId,
+                name: request.name,
+                avatar: request.avatar,
+                mutualInfo: "Previously requested"
+            });
+
+            // Remove from sent requests
+            sentRequests = sentRequests.filter(r => r.id !== requestId);
+
+            // Update UI
+            renderFriendSuggestions();
+            renderSentRequests();
+
+            showToast(`Friend request to ${request.name} cancelled`, 'info');
+        }
+
+        function acceptFriendRequest(requestId) {
+            const request = friendRequests.find(r => r.id === requestId);
+            if (!request) return;
+
+            // Add to friends
+            const newFriend = {
+                id: friends.length + 1,
+                name: request.name,
+                avatar: request.avatar,
+                status: 'online',
+                statusText: 'Online',
+                lastSeen: null,
+                isTyping: false,
+                messages: []
+            };
+
+            friends.push(newFriend);
+
+            // Remove from requests
+            friendRequests = friendRequests.filter(r => r.id !== requestId);
+
+            // Update UI
+            renderFriendRequests();
+            renderFriendsList('all');
+
+            showToast(`You are now friends with ${request.name}`, 'success');
+        }
+
+        function declineFriendRequest(requestId) {
+            const request = friendRequests.find(r => r.id === requestId);
+            if (!request) return;
+
+            // Remove from requests
+            friendRequests = friendRequests.filter(r => r.id !== requestId);
+
+            // Update UI
+            renderFriendRequests();
+
+            showToast(`Friend request from ${request.name} declined`, 'info');
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

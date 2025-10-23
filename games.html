@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GameBox - Games</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg"
+        href="https://imgs.search.brave.com/vcOicL6yCVdeBpDPth1MSwcFzMrlqx3RyoZ_FnlqtZs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcGxheXN0YXRp/b24tc3RpY2stY29u/dHJvbGxlci1jYXJ0/b29uLWlsbHVzdHJh/dGlvbi1wcmVtaXVt/LXZlY3Rvcl8yNjI5/NjItMTU0LmpwZz9z/ZW10PWFpc19oeWJy/aWQmdz03NDA">
+    <link rel="apple-touch-icon"
+        href="https://imgs.search.brave.com/vlz7U7Y0riMxxyxz0KW_KzAyiVhNFtwbM4LXlLlQkXE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzE2L2Nh/L2NmLzE2Y2FjZjJk/MjBlYjY0ODVlNzAx/ODVjZTZhZjIxMzRj/LmpwZw">
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4c69e6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111421",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .glassmorphism {
+            background: rgba(18, 21, 33, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(37, 43, 70, 0.3);
+        }
+
+        .glassmorphism-light {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .friends-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .friends-popup.active {
+            display: flex;
+        }
+
+        /* Toggle switch animation */
+        .toggle-switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            height: 2rem;
+            width: 3.5rem;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .dark .toggle-switch {
+            background-color: #4b5563;
+        }
+
+        .toggle-switch.active {
+            background-color: #4c69e6;
+        }
+
+        .toggle-knob {
+            position: absolute;
+            left: 0.25rem;
+            height: 1.5rem;
+            width: 1.5rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(1.5rem);
+        }
+
+        .toggle-icon {
+            font-size: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        .light-icon {
+            color: #f59e0b;
+            transform: translateX(8px);
+        }
+
+        .dark-icon {
+            color: #9ca3af;
+            transform: translateX(-8px);
+        }
+
+        .toggle-switch.active .light-icon {
+            opacity: 0;
+        }
+
+        .toggle-switch:not(.active) .dark-icon {
+            opacity: 0;
+        }
+
+        .dropdown-menu {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Glass Effect Styles */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-effect-dark {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-hover {
+            transition: all 0.3s ease;
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .glass-hover-dark:hover {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* DARK/LIGHT THEME FIXES */
+        .dark .glassmorphism {
+            background: rgba(18, 21, 33, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(37, 43, 70, 0.3);
+        }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .dark .text-light-mode {
+            color: #1a1f36;
+        }
+
+        .dark .bg-light-mode {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .bg-select-light {
+            background-color: #e5e7eb;
+        }
+
+        .bg-select-light {
+            background-color: #e5e7eb;
+        }
+
+        .dark .text-select-light {
+            color: #1a1f36;
+        }
+
+        .text-select-light {
+            color: #1a1f36;
+        }
+
+        /* Game card cursor */
+        .game-card {
+            cursor: pointer;
+        }
+
+        /* Game images with dark mode support */
+        .game-image {
+            background-color: #f8fafc;
+            transition: background-color 0.3s;
+        }
+
+        .dark .game-image {
+            background-color: #1e293b;
+        }
+
+        /* Friends section centering */
+        .friends-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100%;
+            margin-top: -35px;
+        }
+
+        /* Enhanced dropdown styles */
+        .custom-select {
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .custom-select select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            border: none;
+            background-color: #e5e7eb;
+            color: #1a1f36;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .custom-select select {
+            background-color: #252b46;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-select select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 105, 230, 0.3);
+        }
+
+        .dark .custom-select select:focus {
+            box-shadow: 0 0 0 2px rgba(76, 105, 230, 0.5);
+        }
+
+        .custom-select::after {
+            content: "expand_more";
+            font-family: 'Material Symbols Outlined';
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #6b7280;
+            transition: transform 0.3s ease;
+        }
+
+        .dark .custom-select::after {
+            color: #959ec6;
+        }
+
+        .custom-select.active::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        /* Custom dropdown options styling */
+        .custom-select select option {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0.25rem 0;
+            background-color: white;
+            color: #1a1f36;
+        }
+
+        .dark .custom-select select option {
+            background-color: #252b46;
+            color: white;
+        }
+
+        .custom-select select option:hover,
+        .custom-select select option:focus {
+            background-color: #4c69e6;
+            color: white;
+        }
+
+        /* Checkbox styling */
+        .custom-checkbox {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .custom-checkbox input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 0.375rem;
+            background-color: #e5e7eb;
+            border: 2px solid #d1d5db;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .dark .custom-checkbox input[type="checkbox"] {
+            background-color: #252b46;
+            border-color: #4b5563;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked {
+            background-color: #4c69e6;
+            border-color: #4c69e6;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked::after {
+            content: "✓";
+            position: absolute;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .custom-checkbox input[type="checkbox"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 105, 230, 0.3);
+        }
+
+        .dark .custom-checkbox input[type="checkbox"]:focus {
+            box-shadow: 0 0 0 2px rgba(76, 105, 230, 0.5);
+        }
+
+        /* Game card border styles */
+        .game-card-container {
+            border: 1px solid rgba(76, 105, 230, 0.2);
+            border-radius: 1rem;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .game-card-container:hover {
+            border-color: rgba(76, 105, 230, 0.5);
+            box-shadow: 0 4px 12px rgba(76, 105, 230, 0.15);
+        }
+
+        .dark .game-card-container {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dark .game-card-container:hover {
+            border-color: rgba(76, 105, 230, 0.5);
+            box-shadow: 0 4px 12px rgba(76, 105, 230, 0.2);
+        }
+
+        /* Store Button Styles */
+        .store-button {
+            background: linear-gradient(135deg, #4c69e6 0%, #6c8aff 100%);
+            box-shadow: 0 4px 15px rgba(76, 105, 230, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .store-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .store-button:hover::before {
+            left: 100%;
+        }
+
+        .store-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(76, 105, 230, 0.4);
+        }
+
+        .store-button:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        .store-icon {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .store-button:hover .store-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display">
+    <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- YENİ HEADER -->
+            <header
+                class="flex items-center justify-between whitespace-nowrap bg-white/50 dark:bg-black/30 backdrop-blur-sm rounded-xl px-6 py-3 shadow-sm transition-colors duration-500 mb-6 mx-4 md:mx-10 mt-4">
+                <div class="flex items-center gap-4 text-gray-800 dark:text-white">
+                    <!-- BACK TO HOME BUTTON -->
+                    <a class="flex items-center gap-2 glass-effect glass-hover dark:glass-effect-dark dark:glass-hover-dark rounded-full px-3 md:px-5 py-2 md:py-3 text-gray-800 dark:text-white text-sm md:text-base font-semibold leading-tight tracking-[-0.015em] transition-all duration-300 hover:scale-105"
+                        href="dashboard.html">
+                        <span class="material-symbols-outlined text-lg">arrow_back_ios</span>
+                        <span class="truncate hidden sm:inline">Back to Home</span>
+                    </a>
+
+                    <div class="size-6 md:size-8 text-primary">
+                        <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20 5.5H4C3.72 5.5 3.5 5.28 3.5 5V4C3.5 3.72 3.72 3.5 4 3.5H20C20.28 3.5 20.5 3.72 20.5 4V5C20.5 5.28 20.28 5.5 20 5.5Z">
+                            </path>
+                            <path
+                                d="M21.5 9H2.5C2.22 9 2 8.78 2 8.5V7.5C2 7.22 2.22 7 2.5 7H21.5C21.78 7 22 7.22 22 7.5V8.5C22 8.78 21.78 9 21.5 9Z">
+                            </path>
+                            <path
+                                d="M20 20.5H4C3.72 20.5 3.5 20.28 3.5 20V11H20.5V20C20.5 20.28 20.28 20.5 20 20.5ZM17.5 12.25H16.25V13.5H17.5V12.25ZM17.5 14.75H16.25V16H17.5V14.75ZM17.5 17.25H16.25V18.5H17.5V17.25ZM7.75 16.25H6.5V17.5H7.75V16.25ZM10.25 14.75H9V16H10.25V14.75ZM12.75 16.25H11.5V17.5H12.75V16.25Z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h2
+                        class="text-gray-800 dark:text-white text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">
+                        GameBox</h2>
+                </div>
+
+                <div class="hidden md:flex flex-1 justify-center gap-6 lg:gap-8">
+                    <a class="text-gray-800 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="dashboard.html">Home</a>
+                    <a class="text-gray-800 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="achievements.html">Achievements</a>
+                    <a class="text-primary text-sm font-medium leading-normal" href="games.html">Games</a>
+                    <a class="text-gray-800 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="store.html">Store</a>
+                    <a class="text-gray-800 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="friends.html">Friends</a>
+                    <a class="text-gray-800 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="settings.html">Settings</a>
+                </div>
+
+                <div class="flex items-center gap-3 md:gap-4">
+                    <!-- Dark/Light Mode Toggle -->
+                    <div class="toggle-switch" id="theme-toggle">
+                        <div class="toggle-knob">
+                            <span class="toggle-icon light-icon material-symbols-outlined">light_mode</span>
+                            <span class="toggle-icon dark-icon material-symbols-outlined">dark_mode</span>
+                        </div>
+                    </div>
+
+                    <!-- Profile Dropdown -->
+                    <div class="relative">
+                        <button id="profile-button"
+                            class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 w-8 md:h-10 md:w-10 glass-effect glass-hover dark:glass-effect-dark dark:glass-hover-dark text-gray-800 dark:text-white transition-all duration-300 hover:scale-105">
+                            <span class="material-symbols-outlined text-base md:text-lg">person</span>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="profile-dropdown"
+                            class="dropdown-menu absolute right-0 top-10 md:top-12 mt-2 w-48 md:w-56 rounded-xl bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+                            <div class="p-3 md:p-4 border-b border-gray-200 dark:border-gray-700">
+                                <p class="text-gray-900 dark:text-white font-medium text-sm md:text-base"
+                                    id="profile-name">Nuran</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-xs md:text-sm truncate"
+                                    id="profile-email">karimbaylinuran@gmail.com</p>
+                            </div>
+                            <div class="p-2">
+                                <a href="#"
+                                    class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm md:text-base">
+                                    <span class="material-symbols-outlined text-base md:text-lg">person</span>
+                                    <span>Your Profile</span>
+                                </a>
+                                <a href="settings.html"
+                                    class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm md:text-base">
+                                    <span class="material-symbols-outlined text-base md:text-lg">settings</span>
+                                    <span>Settings</span>
+                                </a>
+                                <div class="border-t border-gray-200 dark:border-gray-700 my-1 md:my-2"></div>
+                                <a href="auth.html"
+                                    class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm md:text-base">
+                                    <span class="material-symbols-outlined text-base md:text-lg">logout</span>
+                                    <span>Log Out</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+                <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                    <!-- Friends Section -->
+                    <section class="mt-6 p-4 md:p-6 lg:p-8 rounded-xl glassmorphism dark:glassmorphism h-40">
+                        <div class="flex items-center justify-between mb-1">
+                            <h3 class="text-gray-800 dark:text-white text-xl font-bold">Friends</h3>
+                            <div class="flex items-center gap-2">
+                                <span class="text-gray-600 dark:text-[#959ec6] text-sm">0 friends</span>
+                                <button id="add-friend-btn"
+                                    class="flex items-center justify-center rounded-full bg-primary text-white w-8 h-8 hover:bg-primary/90 transition-colors">
+                                    <span class="material-symbols-outlined text-sm">person_add</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="friends-content">
+                            <div
+                                class="rounded-full bg-gray-200 dark:bg-[#252b46] w-12 h-12 flex items-center justify-center mb-2">
+                                <span class="material-symbols-outlined text-gray-600 dark:text-[#959ec6]">person</span>
+                            </div>
+                            <p class="text-gray-600 dark:text-[#959ec6] text-sm">No friends yet</p>
+                            <p class="text-gray-600 dark:text-[#959ec6] text-xs mt-1">Add friends to see them here</p>
+                        </div>
+                    </section>
+
+                    <!-- Store Button Section -->
+                    <section class="mt-8 flex justify-center">
+                        <a href="store.html"
+                            class="store-button floating rounded-2xl p-6 md:p-8 flex flex-col items-center justify-center text-white w-full max-w-md group">
+                            <div class="store-icon mb-4">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 7H19V19H5V7Z" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path
+                                        d="M8 7V5C8 4.46957 8.21071 3.96086 8.58579 3.58579C8.96086 3.21071 9.46957 3 10 3H14C14.5304 3 15.0391 3.21071 15.4142 3.58579C15.7893 3.96086 16 4.46957 16 5V7"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M12 12V15" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M9 12H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-black mb-2 text-center">Discover Premium Games</h3>
+                            <p class="text-white/90 text-center mb-4">Explore our exclusive collection with amazing
+                                discounts and new releases</p>
+                            <div class="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                                <span class="font-bold">Visit Store</span>
+                                <span
+                                    class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+                            </div>
+                        </a>
+                    </section>
+
+                    <main
+                        class="flex-1 mt-8 p-4 md:p-6 lg:p-8 rounded-xl glassmorphism dark:glassmorphism flex flex-col lg:flex-row gap-6">
+                        <div
+                            class="filter-sort-panel w-full lg:w-64 glassmorphism dark:glassmorphism rounded-xl p-4 flex flex-col gap-6">
+                            <p
+                                class="text-gray-800 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">
+                                Filters &amp; Sort</p>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-gray-600 dark:text-[#959ec6] text-sm font-medium"
+                                    for="genre-filter">Genre</label>
+                                <div class="custom-select" id="genre-select">
+                                    <select class="w-full" id="genre-filter">
+                                        <option value="">All Genres</option>
+                                        <option value="puzzle">Puzzle</option>
+                                        <option value="arcade">Arcade</option>
+                                        <option value="strategy">Strategy</option>
+                                        <option value="action">Action</option>
+                                        <option value="adventure">Adventure</option>
+                                        <option value="sports">Sports</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-gray-600 dark:text-[#959ec6] text-sm font-medium"
+                                    for="creator-filter">Creator</label>
+                                <div class="custom-select" id="creator-select">
+                                    <select class="w-full" id="creator-filter">
+                                        <option value="">All Creators</option>
+                                        <option value="gamebox-team">GameBox Team</option>
+                                        <option value="indie-devs">Indie Devs</option>
+                                        <option value="community">Community</option>
+                                        <option value="partners">Partners</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-gray-600 dark:text-[#959ec6] text-sm font-medium"
+                                    for="popularity-sort">Popularity</label>
+                                <div class="custom-checkbox">
+                                    <input type="checkbox" id="popularity-sort">
+                                    <span class="text-gray-800 dark:text-white text-sm">Sort by Most Popular</span>
+                                </div>
+                            </div>
+                            <button
+                                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors mt-auto">
+                                <span class="truncate">Apply Filters</span>
+                            </button>
+                        </div>
+                        <div class="flex flex-col flex-1">
+                            <div class="flex flex-wrap justify-between gap-3 p-4">
+                                <p
+                                    class="text-gray-800 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">
+                                    Games</p>
+                            </div>
+                            <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-6 p-4">
+                                <!-- 2048 Game -->
+                                <div class="game-card-container">
+                                    <div class="flex flex-col gap-3 pb-3 group transform transition-transform duration-300 hover:scale-105 game-card"
+                                        data-game="2048.html">
+                                        <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl game-image"
+                                            data-alt="2048 game"
+                                            style='background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/2048_logo.svg/1200px-2048_logo.svg.png"); background-size: 80%;'>
+                                        </div>
+                                        <div>
+                                            <p
+                                                class="text-gray-800 dark:text-white text-base font-medium leading-normal">
+                                                2048</p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                GameBox Team</p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                0 likes, 0 comments</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Snake Game -->
+                                <div class="game-card-container">
+                                    <div class="flex flex-col gap-3 pb-3 group transform transition-transform duration-300 hover:scale-105 game-card"
+                                        data-game="snake.html">
+                                        <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl game-image"
+                                            data-alt="Snake game"
+                                            style='background-image: url("https://imgs.search.brave.com/kwikNgAg9LEMmRRydkMW59VK1astZq1S4Lu5_SS3vIQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/cG9raS1jZG4uY29t/L2Nkbi1jZ2kvaW1h/Z2UvcT03OCxzY3E9/NTAsd2lkdGg9MjA0/LGhlaWdodD0yMDQs/Zml0PWNvdmVyLGY9/YXV0by85ZmNjMTFk/OWJiNzAxM2QxNDU1/OGNjMzQ3YWY2NGI2/Ni9zbmFrZS5wbmc"); background-size: cover;'>
+                                        </div>
+                                        <div>
+                                            <p
+                                                class="text-gray-800 dark:text-white text-base font-medium leading-normal">
+                                                Snake Game</p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                GameBox Team</p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                0 likes, 0 comments</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Memory Cards Game -->
+                                <div class="game-card-container">
+                                    <div class="flex flex-col gap-3 pb-3 group transform transition-transform duration-300 hover:scale-105 game-card"
+                                        data-game="memorycard.html">
+                                        <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl game-image"
+                                            data-alt="Memory Cards game"
+                                            style='background-image: url("https://imgs.search.brave.com/DHc5ZQ4tweYwWybgn_T8VuFumxDegFADpJyzplmoXPU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/Y29rb2dhbWVzLmNv/bS93cC1jb250ZW50/L3VwbG9hZHMvMjAy/My8wNS9tZW1vcnkt/Z2FtZS1raWRzLW9u/bGluZS5qcGc"); background-size: cover;'>
+                                        </div>
+                                        <div>
+                                            <p
+                                                class="text-gray-800 dark:text-white text-base font-medium leading-normal">
+                                                Memory Cards</p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                GameBox Team</p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                0 likes, 0 comments</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Friend Popup -->
+    <div id="friends-popup" class="friends-popup">
+        <div class="bg-white dark:bg-[#252b46] rounded-xl p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white">Add Friend</h3>
+                <button id="close-popup"
+                    class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Enter username to add a friend</p>
+            <div class="mb-4">
+                <input type="text" id="friend-username"
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1a1f36] text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Username">
+            </div>
+            <div class="flex justify-end gap-2">
+                <button id="cancel-add"
+                    class="px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Cancel</button>
+                <button id="confirm-add"
+                    class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors">Add
+                    Friend</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        // Check user preference
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'dark') {
+            htmlElement.classList.add('dark');
+            themeToggle.classList.add('active');
+        } else {
+            htmlElement.classList.remove('dark');
+            themeToggle.classList.remove('active');
+        }
+
+        // Theme switching
+        themeToggle.addEventListener('click', function () {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                themeToggle.classList.remove('active');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.classList.add('dark');
+                themeToggle.classList.add('active');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Profile dropdown functionality
+        const profileButton = document.getElementById('profile-button');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        profileButton.addEventListener('click', function (e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function () {
+            profileDropdown.classList.remove('show');
+        });
+
+        // Don't close when clicking inside dropdown
+        profileDropdown.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+
+        // Friends popup functionality
+        const addFriendBtn = document.getElementById('add-friend-btn');
+        const friendsPopup = document.getElementById('friends-popup');
+        const closePopup = document.getElementById('close-popup');
+        const cancelAdd = document.getElementById('cancel-add');
+        const confirmAdd = document.getElementById('confirm-add');
+        const friendUsername = document.getElementById('friend-username');
+
+        addFriendBtn.addEventListener('click', () => {
+            friendsPopup.classList.add('active');
+        });
+
+        const closeFriendsPopup = () => {
+            friendsPopup.classList.remove('active');
+            friendUsername.value = '';
+        };
+
+        closePopup.addEventListener('click', closeFriendsPopup);
+        cancelAdd.addEventListener('click', closeFriendsPopup);
+
+        confirmAdd.addEventListener('click', () => {
+            const username = friendUsername.value.trim();
+            if (username) {
+                alert(`Friend request sent to ${username}`);
+                closeFriendsPopup();
+            } else {
+                alert('Please enter a username');
+            }
+        });
+
+        // Close popup when clicking outside
+        friendsPopup.addEventListener('click', (e) => {
+            if (e.target === friendsPopup) {
+                closeFriendsPopup();
+            }
+        });
+
+        // Game card click functionality - redirect to game page
+        const gameCards = document.querySelectorAll('.game-card');
+        gameCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const gamePage = card.getAttribute('data-game');
+                if (gamePage) {
+                    window.location.href = gamePage;
+                }
+            });
+        });
+
+        // Enhanced dropdown functionality
+        const customSelects = document.querySelectorAll('.custom-select');
+
+        customSelects.forEach(select => {
+            const selectElement = select.querySelector('select');
+
+            // Add active class when focused
+            selectElement.addEventListener('focus', () => {
+                select.classList.add('active');
+            });
+
+            // Remove active class when blurred
+            selectElement.addEventListener('blur', () => {
+                select.classList.remove('active');
+            });
+
+            // Add click handler to the custom select container
+            select.addEventListener('click', () => {
+                selectElement.focus();
+            });
+        });
+    </script>
+</body>
+
+</html>

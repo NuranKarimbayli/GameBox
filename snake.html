@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GameBox - Snake Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg"
+        href="https://imgs.search.brave.com/vcOicL6yCVdeBpDPth1MSwcFzMrlqx3RyoZ_FnlqtZs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcGxheXN0YXRp/b24tc3RpY2stY29u/dHJvbGxlci1jYXJ0/b29uLWlsbHVzdHJh/dGlvbi1wcmVtaXVt/LXZlY3Rvcl8yNjI5/NjItMTU0LmpwZz9z/ZW10PWFpc19oeWJy/aWQmdz03NDA">
+    <link rel="apple-touch-icon"
+        href="https://imgs.search.brave.com/vlz7U7Y0riMxxyxz0KW_KzAyiVhNFtwbM4LXlLlQkXE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzE2L2Nh/L2NmLzE2Y2FjZjJk/MjBlYjY0ODVlNzAx/ODVjZTZhZjIxMzRj/LmpwZw">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-light": "#4c69e6",
+                        "primary-dark": "#3d3b8e",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0a0a0a",
+                        "card-dark": "#1a1d2d",
+                        "text-light": "#0e111b",
+                        "text-dark": "#ffffff",
+                    },
+                    fontFamily: {
+                        display: ["Spline Sans"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        lg: "1rem",
+                        xl: "1.5rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        }
+
+        /* Glass Effect Styles */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-effect-dark {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-hover {
+            transition: all 0.3s ease;
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .glass-hover-dark:hover {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Toggle switch animation */
+        .toggle-switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            height: 2rem;
+            width: 3.5rem;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .dark .toggle-switch {
+            background-color: #4b5563;
+        }
+
+        .toggle-switch.active {
+            background-color: #4c69e6;
+        }
+
+        .toggle-knob {
+            position: absolute;
+            left: 0.25rem;
+            height: 1.5rem;
+            width: 1.5rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(1.5rem);
+        }
+
+        .toggle-icon {
+            font-size: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        .light-icon {
+            color: #f59e0b;
+            transform: translateX(8px);
+        }
+
+        .dark-icon {
+            color: #9ca3af;
+            transform: translateX(-8px);
+        }
+
+        .toggle-switch.active .light-icon {
+            opacity: 0;
+        }
+
+        .toggle-switch:not(.active) .dark-icon {
+            opacity: 0;
+        }
+
+        .dropdown-menu {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Snake Game Styles */
+        #game-canvas {
+            border: 2px solid #4c69e6;
+            border-radius: 0.75rem;
+            background-color: #0a0a0a;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .dark #game-canvas {
+            border-color: #3d3b8e;
+            background-color: #111421;
+        }
+
+        .skin-item {
+            transition: all 0.3s ease;
+        }
+
+        .skin-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .skin-item.owned {
+            border-color: #10b981;
+        }
+
+        .skin-item.equipped {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+        .skin-item.locked {
+            opacity: 0.7;
+            filter: grayscale(0.7);
+        }
+
+        .achievement {
+            animation: achievement 3s ease-out;
+        }
+
+        @keyframes achievement {
+            0% {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            20% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            80% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        /* 3D Snake Styles */
+        .snake-segment {
+            transition: transform 0.2s ease;
+        }
+
+        .snake-head {
+            position: relative;
+            z-index: 10;
+        }
+
+        .snake-eye {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: white;
+            border-radius: 50%;
+            top: 25%;
+        }
+
+        .snake-tongue {
+            position: absolute;
+            width: 8px;
+            height: 4px;
+            background-color: red;
+            border-radius: 2px;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: tongue 0.5s infinite alternate;
+        }
+
+        @keyframes tongue {
+            0% {
+                height: 4px;
+            }
+
+            100% {
+                height: 8px;
+            }
+        }
+
+        .food-apple {
+            position: relative;
+            animation: float 2s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .close-btn {
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: rgba(239, 68, 68, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Touch controls */
+        .touch-control {
+            touch-action: none;
+            user-select: none;
+        }
+
+        /* Pause overlay */
+        .pause-overlay {
+            background: rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+
+<body class="bg-white dark:bg-gray-900 font-display text-text-light dark:text-text-dark transition-colors duration-500">
+    <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- HEADER -->
+            <header
+                class="flex items-center justify-between whitespace-nowrap bg-white/50 dark:bg-black/30 backdrop-blur-sm rounded-xl px-6 py-3 shadow-sm transition-colors duration-500 mb-6 mx-4 md:mx-10 mt-4">
+                <div class="flex items-center gap-4 text-text-light dark:text-text-dark">
+                    <!-- BACK TO HOME BUTTON -->
+                    <a class="flex items-center gap-2 glass-effect glass-hover dark:glass-effect-dark dark:glass-hover-dark rounded-full px-3 md:px-5 py-2 md:py-3 text-text-light dark:text-text-dark text-sm md:text-base font-semibold leading-tight tracking-[-0.015em] transition-all duration-300 hover:scale-105"
+                        href="dashboard.html">
+                        <span class="material-symbols-outlined text-lg">arrow_back_ios</span>
+                        <span class="truncate hidden sm:inline">Back to Home</span>
+                    </a>
+
+                    <div class="size-6 md:size-8 text-primary-light dark:text-primary-dark">
+                        <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20 5.5H4C3.72 5.5 3.5 5.28 3.5 5V4C3.5 3.72 3.72 3.5 4 3.5H20C20.28 3.5 20.5 3.72 20.5 4V5C20.5 5.28 20.28 5.5 20 5.5Z">
+                            </path>
+                            <path
+                                d="M21.5 9H2.5C2.22 9 2 8.78 2 8.5V7.5C2 7.22 2.22 7 2.5 7H21.5C21.78 7 22 7.22 22 7.5V8.5C22 8.78 21.78 9 21.5 9Z">
+                            </path>
+                            <path
+                                d="M20 20.5H4C3.72 20.5 3.5 20.28 3.5 20V11H20.5V20C20.5 20.28 20.28 20.5 20 20.5ZM17.5 12.25H16.25V13.5H17.5V12.25ZM17.5 14.75H16.25V16H17.5V14.75ZM17.5 17.25H16.25V18.5H17.5V17.25ZM7.75 16.25H6.5V17.5H7.75V16.25ZM10.25 14.75H9V16H10.25V14.75ZM12.75 16.25H11.5V17.5H12.75V16.25Z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h2
+                        class="text-text-light dark:text-text-dark text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">
+                        GameBox
+                    </h2>
+                </div>
+
+                <div class="hidden md:flex flex-1 justify-center gap-6 lg:gap-8">
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="dashboard.html">Home</a>
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="achievements.html">Achievements</a>
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="games.html">Games</a>
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="store.html">Store</a>
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="friends.html">Friends</a>
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="settings.html">Settings</a>
+                </div>
+
+                <div class="flex items-center gap-3 md:gap-4">
+                    <!-- Dark/Light Mode Toggle -->
+                    <div class="toggle-switch" id="theme-toggle">
+                        <div class="toggle-knob">
+                            <span class="toggle-icon light-icon material-symbols-outlined">light_mode</span>
+                            <span class="toggle-icon dark-icon material-symbols-outlined">dark_mode</span>
+                        </div>
+                    </div>
+
+                    <!-- Profile Dropdown -->
+                    <div class="relative">
+                        <button id="profile-button"
+                            class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 w-8 md:h-10 md:w-10 glass-effect glass-hover dark:glass-effect-dark dark:glass-hover-dark text-text-light dark:text-text-dark transition-all duration-300 hover:scale-105">
+                            <span class="material-symbols-outlined text-base md:text-lg">person</span>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="profile-dropdown"
+                            class="dropdown-menu absolute right-0 top-10 md:top-12 mt-2 w-48 md:w-56 rounded-xl bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+                            <div class="p-3 md:p-4 border-b border-gray-200 dark:border-gray-700">
+                                <p class="text-gray-900 dark:text-white font-medium text-sm md:text-base"
+                                    id="profile-name">
+                                    Nuran
+                                </p>
+                                <p class="text-gray-500 dark:text-gray-400 text-xs md:text-sm truncate"
+                                    id="profile-email">
+                                    karimbaylinuran@gmail.com
+                                </p>
+                            </div>
+                            <div class="p-2">
+                                <a href="#"
+                                    class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm md:text-base">
+                                    <span class="material-symbols-outlined text-base md:text-lg">person</span>
+                                    <span>Your Profile</span>
+                                </a>
+                                <a href="settings.html"
+                                    class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm md:text-base">
+                                    <span class="material-symbols-outlined text-base md:text-lg">settings</span>
+                                    <span>Settings</span>
+                                </a>
+                                <div class="border-t border-gray-200 dark:border-gray-700 my-1 md:my-2"></div>
+                                <a href="auth.html"
+                                    class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm md:text-base">
+                                    <span class="material-symbols-outlined text-base md:text-lg">logout</span>
+                                    <span>Log Out</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="px-4 md:px-10 flex flex-1 justify-center py-4 md:py-5">
+                <div class="layout-content-container flex flex-col max-w-[1200px] flex-1">
+                    <div
+                        class="flex flex-wrap justify-between items-center gap-3 md:gap-4 p-3 md:p-4 border-b border-b-[#e8eaf3] dark:border-b-gray-700 mb-6 md:mb-8">
+                        <p
+                            class="text-2xl md:text-4xl font-black leading-tight tracking-[-0.033em] min-w-48 md:min-w-72">
+                            Snake Game
+                        </p>
+                        <div class="flex items-center gap-2 md:gap-4 flex-wrap">
+                            <div
+                                class="flex min-w-[120px] md:min-w-[158px] flex-1 flex-col gap-1 md:gap-2 rounded-xl p-3 md:p-4 glass-effect dark:glass-effect-dark shadow-sm">
+                                <p class="text-sm md:text-base font-medium leading-normal">
+                                    Score
+                                </p>
+                                <p id="score-counter"
+                                    class="tracking-light text-xl md:text-2xl font-bold leading-tight">
+                                    0
+                                </p>
+                            </div>
+                            <div
+                                class="flex min-w-[120px] md:min-w-[158px] flex-1 flex-col gap-1 md:gap-2 rounded-xl p-3 md:p-4 glass-effect dark:glass-effect-dark shadow-sm">
+                                <p class="text-sm md:text-base font-medium leading-normal">
+                                    High Score
+                                </p>
+                                <p id="high-score" class="tracking-light text-xl md:text-2xl font-bold leading-tight">
+                                    0
+                                </p>
+                            </div>
+                            <div
+                                class="flex min-w-[120px] md:min-w-[158px] flex-1 flex-col gap-1 md:gap-2 rounded-xl p-3 md:p-4 glass-effect dark:glass-effect-dark shadow-sm">
+                                <p class="text-sm md:text-base font-medium leading-normal">
+                                    Coins
+                                </p>
+                                <p id="coins-counter"
+                                    class="tracking-light text-xl md:text-2xl font-bold leading-tight">
+                                    100
+                                </p>
+                            </div>
+                            <button id="restart-btn"
+                                class="flex min-w-[70px] md:min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 md:h-14 px-3 md:px-4 flex-1 bg-orange-500 text-white gap-1 md:gap-2 text-xs md:text-sm font-bold leading-normal tracking-[0.015em] shadow-sm transition-all duration-300 hover:scale-105">
+                                <span class="material-symbols-outlined text-lg md:text-2xl">refresh</span>
+                                <span class="truncate hidden sm:inline">Restart</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+                        <!-- Game Area -->
+                        <div class="lg:col-span-2 flex flex-col items-center">
+                            <div class="relative w-full max-w-[600px]">
+                                <canvas id="game-canvas" width="600" height="600"></canvas>
+
+                                <!-- Loading Overlay -->
+                                <div id="loading-overlay"
+                                    class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 rounded-xl">
+                                    <div class="loading-spinner mb-4"></div>
+                                    <h2 class="text-xl md:text-2xl font-bold text-white mb-2">
+                                        Loading Game...
+                                    </h2>
+                                    <p class="text-sm md:text-base text-white text-center px-4">
+                                        Preparing game assets
+                                    </p>
+                                </div>
+
+                                <!-- Start Overlay -->
+                                <div id="game-overlay"
+                                    class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 rounded-xl">
+                                    <h2 class="text-2xl md:text-4xl font-bold text-white mb-3 md:mb-4">
+                                        Snake Game
+                                    </h2>
+                                    <p class="text-base md:text-xl text-white mb-1 md:mb-2 text-center px-4">
+                                        Use <strong>W A S D</strong> or
+                                        <strong>Arrow Keys</strong> to move
+                                    </p>
+                                    <p class="text-sm md:text-lg text-white mb-4 md:mb-6 text-center px-4">
+                                        Collect food and avoid walls!
+                                    </p>
+                                    <button id="start-btn"
+                                        class="px-6 md:px-8 py-2 md:py-3 bg-green-500 text-white rounded-xl text-lg md:text-xl font-bold hover:bg-green-600 transition-all duration-300 hover:scale-105">
+                                        Start Game
+                                    </button>
+                                    <button id="market-btn"
+                                        class="mt-3 md:mt-4 px-4 md:px-6 py-1.5 md:py-2 glass-effect glass-hover dark:glass-effect-dark dark:glass-hover-dark text-white rounded-xl text-base md:text-lg font-medium transition-all duration-300 hover:scale-105">
+                                        Visit Market
+                                    </button>
+                                </div>
+
+                                <!-- Pause Overlay -->
+                                <div id="pause-overlay"
+                                    class="absolute inset-0 flex flex-col items-center justify-center bg-black/70 rounded-xl hidden">
+                                    <h2 class="text-2xl md:text-4xl font-bold text-white mb-3 md:mb-4">
+                                        Game Paused
+                                    </h2>
+                                    <p class="text-base md:text-xl text-white mb-4 md:mb-6">
+                                        Press <strong>SPACE</strong> to resume
+                                    </p>
+                                    <button id="resume-btn"
+                                        class="px-6 md:px-8 py-2 md:py-3 bg-green-500 text-white rounded-xl text-lg md:text-xl font-bold hover:bg-green-600 transition-all duration-300 hover:scale-105">
+                                        Resume Game
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Touch Controls for Mobile -->
+                            <div id="touch-controls"
+                                class="mt-4 md:mt-6 grid grid-cols-3 grid-rows-2 gap-2 max-w-[200px] md:hidden">
+                                <div></div>
+                                <button
+                                    class="touch-control flex flex-col items-center p-3 bg-white dark:bg-gray-700 rounded-xl"
+                                    data-direction="up">
+                                    <span class="text-xl font-bold">↑</span>
+                                </button>
+                                <div></div>
+                                <button
+                                    class="touch-control flex flex-col items-center p-3 bg-white dark:bg-gray-700 rounded-xl"
+                                    data-direction="left">
+                                    <span class="text-xl font-bold">←</span>
+                                </button>
+                                <button
+                                    class="touch-control flex flex-col items-center p-3 bg-white dark:bg-gray-700 rounded-xl"
+                                    data-direction="down">
+                                    <span class="text-xl font-bold">↓</span>
+                                </button>
+                                <button
+                                    class="touch-control flex flex-col items-center p-3 bg-white dark:bg-gray-700 rounded-xl"
+                                    data-direction="right">
+                                    <span class="text-xl font-bold">→</span>
+                                </button>
+                            </div>
+
+                            <div class="mt-4 md:mt-6 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 w-full max-w-md">
+                                <div
+                                    class="flex flex-col items-center p-3 md:p-4 rounded-xl glass-effect dark:glass-effect-dark">
+                                    <span
+                                        class="material-symbols-outlined text-2xl md:text-3xl text-green-500">restaurant</span>
+                                    <p class="text-xs md:text-sm mt-1 md:mt-2">
+                                        Food Collected
+                                    </p>
+                                    <p id="food-counter" class="text-lg md:text-xl font-bold">
+                                        0
+                                    </p>
+                                </div>
+                                <div
+                                    class="flex flex-col items-center p-3 md:p-4 rounded-xl glass-effect dark:glass-effect-dark">
+                                    <span
+                                        class="material-symbols-outlined text-2xl md:text-3xl text-blue-500">speed</span>
+                                    <p class="text-xs md:text-sm mt-1 md:mt-2">Speed</p>
+                                    <p id="speed-counter" class="text-lg md:text-xl font-bold">
+                                        1x
+                                    </p>
+                                </div>
+                                <div
+                                    class="flex flex-col items-center p-3 md:p-4 rounded-xl glass-effect dark:glass-effect-dark">
+                                    <span
+                                        class="material-symbols-outlined text-2xl md:text-3xl text-purple-500">straighten</span>
+                                    <p class="text-xs md:text-sm mt-1 md:mt-2">Length</p>
+                                    <p id="length-counter" class="text-lg md:text-xl font-bold">
+                                        3
+                                    </p>
+                                </div>
+                                <div
+                                    class="flex flex-col items-center p-3 md:p-4 rounded-xl glass-effect dark:glass-effect-dark">
+                                    <span
+                                        class="material-symbols-outlined text-2xl md:text-3xl text-red-500">timer</span>
+                                    <p class="text-xs md:text-sm mt-1 md:mt-2">Time</p>
+                                    <p id="time-counter" class="text-lg md:text-xl font-bold">
+                                        0s
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Market & Skins -->
+                        <div class="lg:col-span-1">
+                            <div class="glass-effect dark:glass-effect-dark rounded-xl p-4 md:p-6 shadow-sm">
+                                <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">
+                                    Snake Skins Market
+                                </h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base mb-4 md:mb-6">
+                                    Use your coins to buy new snake skins!
+                                </p>
+
+                                <div id="skins-container" class="grid grid-cols-2 gap-3 md:gap-4">
+                                    <!-- Skins will be generated here -->
+                                </div>
+
+                                <div class="mt-4 md:mt-6 p-3 md:p-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="material-symbols-outlined text-yellow-600 dark:text-yellow-400 text-base md:text-lg">info</span>
+                                        <p class="text-yellow-800 dark:text-yellow-200 text-xs md:text-sm">
+                                            <strong>Tip:</strong> Collect more food to earn coins
+                                            and unlock better skins!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="mt-4 md:mt-6 glass-effect dark:glass-effect-dark rounded-xl p-4 md:p-6 shadow-sm">
+                                <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">
+                                    Controls
+                                </h3>
+                                <div class="grid grid-cols-2 gap-3 md:gap-4">
+                                    <div
+                                        class="flex flex-col items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-xl">
+                                        <span class="text-lg md:text-2xl font-bold">W</span>
+                                        <p class="text-xs md:text-sm mt-1">Move Up</p>
+                                    </div>
+                                    <div
+                                        class="flex flex-col items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-xl">
+                                        <span class="text-lg md:text-2xl font-bold">S</span>
+                                        <p class="text-xs md:text-sm mt-1">Move Down</p>
+                                    </div>
+                                    <div
+                                        class="flex flex-col items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-xl">
+                                        <span class="text-lg md:text-2xl font-bold">A</span>
+                                        <p class="text-xs md:text-sm mt-1">Move Left</p>
+                                    </div>
+                                    <div
+                                        class="flex flex-col items-center p-2 md:p-3 bg-white dark:bg-gray-700 rounded-xl">
+                                        <span class="text-lg md:text-2xl font-bold">D</span>
+                                        <p class="text-xs md:text-sm mt-1">Move Right</p>
+                                    </div>
+                                </div>
+                                <p class="mt-3 md:mt-4 text-center text-gray-600 dark:text-gray-400 text-xs md:text-sm">
+                                    Press
+                                    <kbd
+                                        class="px-1.5 md:px-2 py-0.5 md:py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs md:text-sm">Space</kbd>
+                                    to pause/resume
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievement Popup -->
+        <div id="achievement-popup"
+            class="fixed bottom-4 right-4 bg-green-500 text-white p-3 md:p-4 rounded-xl shadow-lg z-50 achievement hidden max-w-[300px]">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-base md:text-lg">emoji_events</span>
+                <span id="achievement-text" class="font-bold text-sm md:text-base">Achievement Unlocked!</span>
+            </div>
+        </div>
+
+        <!-- Game Over Popup -->
+        <div id="game-over-popup"
+            class="fixed inset-0 bg-black/30 dark:bg-black/70 flex items-center justify-center p-4 z-50 transition-colors duration-500 hidden">
+            <div
+                class="bg-background-light dark:bg-gray-800 rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full text-center flex flex-col items-center gap-3 md:gap-4 relative">
+                <!-- Close Button -->
+                <button id="close-popup-btn"
+                    class="close-btn absolute top-3 md:top-4 right-3 md:right-4 p-1.5 md:p-2 rounded-full text-gray-500 hover:text-red-500">
+                    <span class="material-symbols-outlined text-base md:text-lg">close</span>
+                </button>
+
+                <span class="material-symbols-outlined text-5xl md:text-7xl text-red-500">mood_bad</span>
+                <h2 class="text-2xl md:text-3xl font-bold">Game Over!</h2>
+                <p class="text-base md:text-lg text-slate-600 dark:text-slate-300" id="game-over-reason">
+                    You hit the wall!
+                </p>
+                <div
+                    class="flex flex-col gap-1 md:gap-2 rounded-xl p-3 md:p-4 glass-effect dark:glass-effect-dark w-full">
+                    <p class="text-sm md:text-base font-medium leading-normal">
+                        Final Score
+                    </p>
+                    <p id="final-score" class="tracking-light text-xl md:text-2xl font-bold leading-tight">
+                        0
+                    </p>
+                </div>
+                <div
+                    class="flex flex-col gap-1 md:gap-2 rounded-xl p-3 md:p-4 glass-effect dark:glass-effect-dark w-full">
+                    <p class="text-sm md:text-base font-medium leading-normal">
+                        Coins Earned
+                    </p>
+                    <p id="coins-earned" class="tracking-light text-xl md:text-2xl font-bold leading-tight">
+                        0
+                    </p>
+                </div>
+                <button id="play-again-btn"
+                    class="flex min-w-[70px] md:min-w-[84px] w-full max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 md:h-12 px-3 md:px-4 bg-orange-500 text-white gap-1 md:gap-2 text-sm md:text-base font-bold leading-normal tracking-[0.015em] shadow-sm mt-2 md:mt-4 transition-all duration-300 hover:scale-105">
+                    <span class="truncate">Play Again</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer border-t border-gray-300 dark:border-gray-700 pb-4 md:pb-6 mt-8 md:mt-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-gray-500 dark:text-gray-400 text-xs md:text-sm pt-4 md:pt-6">
+                <p>Nuran Karimbayli 2025 Open Source Project</p>
+                <!-- Social media links -->
+                <div class="flex justify-center gap-3 md:gap-4 mt-3 md:mt-4">
+                    <a href="https://www.linkedin.com/in/nurankarimbayli/" target="_blank"
+                        class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white transition-colors">
+                        <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                        </svg>
+                    </a>
+                    <a href="https://github.com/NuranKarimbayli" target="_blank"
+                        class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
+                        <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Game state
+        const GameStates = {
+            MENU: "menu",
+            PLAYING: "playing",
+            PAUSED: "paused",
+            GAME_OVER: "game_over",
+            LOADING: "loading",
+        };
+
+        let gameState = {
+            snake: [],
+            food: {},
+            direction: "right",
+            nextDirection: "right",
+            gameLoop: null,
+            score: 0,
+            highScore: 0,
+            coins: 100,
+            foodCollected: 0,
+            gameSpeed: 150,
+            currentState: GameStates.LOADING,
+            startTime: 0,
+            elapsedTime: 0,
+            currentSkin: "default",
+            ownedSkins: ["default"],
+            showGrid: false,
+            lastDirectionChange: 0,
+            assetsLoaded: 0,
+            totalAssets: 4,
+        };
+
+        // Game settings
+        const gridSize = 20;
+        let canvasSize = 600;
+        let cellSize = canvasSize / gridSize;
+        const DIRECTION_COOLDOWN = 50; // ms
+
+        // Snake skins data
+        const snakeSkins = [
+            {
+                id: "default",
+                name: "Classic Green",
+                price: 0,
+                color: "#10b981",
+                headColor: "#059669",
+                owned: true,
+            },
+            {
+                id: "blue",
+                name: "Ocean Blue",
+                price: 50,
+                color: "#3b82f6",
+                headColor: "#1d4ed8",
+                owned: false,
+            },
+            {
+                id: "purple",
+                name: "Royal Purple",
+                price: 100,
+                color: "#8b5cf6",
+                headColor: "#7c3aed",
+                owned: false,
+            },
+            {
+                id: "red",
+                name: "Fiery Red",
+                price: 150,
+                color: "#ef4444",
+                headColor: "#dc2626",
+                owned: false,
+            },
+            {
+                id: "gold",
+                name: "Golden Snake",
+                price: 300,
+                color: "#f59e0b",
+                headColor: "#d97706",
+                owned: false,
+            },
+            {
+                id: "rainbow",
+                name: "Rainbow",
+                price: 500,
+                color: "rainbow",
+                headColor: "#7c3aed",
+                owned: false,
+            },
+        ];
+
+        // Audio elements with error handling
+        const startSound = loadAudio(
+            "https://assets.mixkit.co/sfx/preview/mixkit-game-show-intro-331.mp3"
+        );
+        const eatSound = loadAudio(
+            "https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3"
+        );
+        const gameOverSound = loadAudio(
+            "https://assets.mixkit.co/sfx/preview/mixkit-arcade-retro-game-over-213.mp3"
+        );
+        const moveSound = loadAudio(
+            "https://assets.mixkit.co/sfx/preview/mixkit-short-sci-fi-click-485.mp3"
+        );
+
+        // Set audio volume
+        startSound.volume = 0.5;
+        eatSound.volume = 0.7;
+        gameOverSound.volume = 0.5;
+        moveSound.volume = 0.3;
+
+        // DOM elements
+        const gameCanvas = document.getElementById("game-canvas");
+        const ctx = gameCanvas.getContext("2d");
+        const scoreCounter = document.getElementById("score-counter");
+        const highScore = document.getElementById("high-score");
+        const coinsCounter = document.getElementById("coins-counter");
+        const foodCounter = document.getElementById("food-counter");
+        const speedCounter = document.getElementById("speed-counter");
+        const lengthCounter = document.getElementById("length-counter");
+        const timeCounter = document.getElementById("time-counter");
+        const restartBtn = document.getElementById("restart-btn");
+        const startBtn = document.getElementById("start-btn");
+        const marketBtn = document.getElementById("market-btn");
+        const resumeBtn = document.getElementById("resume-btn");
+        const loadingOverlay = document.getElementById("loading-overlay");
+        const gameOverlay = document.getElementById("game-overlay");
+        const pauseOverlay = document.getElementById("pause-overlay");
+        const gameOverPopup = document.getElementById("game-over-popup");
+        const closePopupBtn = document.getElementById("close-popup-btn");
+        const finalScore = document.getElementById("final-score");
+        const coinsEarned = document.getElementById("coins-earned");
+        const gameOverReason = document.getElementById("game-over-reason");
+        const playAgainBtn = document.getElementById("play-again-btn");
+        const achievementPopup = document.getElementById("achievement-popup");
+        const achievementText = document.getElementById("achievement-text");
+        const skinsContainer = document.getElementById("skins-container");
+        const touchControls = document.getElementById("touch-controls");
+
+        // Initialize game
+        function init() {
+            // Setup responsive canvas
+            setupCanvas();
+
+            // Load saved data
+            loadGameData();
+
+            // Initialize theme toggle
+            initializeThemeToggle();
+
+            // Initialize profile dropdown
+            initializeProfileDropdown();
+
+            // Event listeners
+            startBtn.addEventListener("click", startGame);
+            marketBtn.addEventListener("click", showMarket);
+            restartBtn.addEventListener("click", restartGame);
+            playAgainBtn.addEventListener("click", restartGame);
+            resumeBtn.addEventListener("click", resumeGame);
+            closePopupBtn.addEventListener("click", () => {
+                gameOverPopup.classList.add("hidden");
+            });
+
+            document.addEventListener("keydown", handleKeyPress);
+
+            // Prevent arrow keys from scrolling the page
+            document.addEventListener(
+                "keydown",
+                function (e) {
+                    if (
+                        ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(
+                            e.key
+                        ) &&
+                        gameState.currentState === GameStates.PLAYING
+                    ) {
+                        e.preventDefault();
+                    }
+                },
+                false
+            );
+
+            // Touch controls for mobile
+            setupTouchControls();
+
+            // Initialize skins market
+            initializeSkinsMarket();
+
+            // Draw initial game state
+            drawGame();
+
+            // Load assets
+            loadAssets();
+
+            // Window resize handler
+            window.addEventListener("resize", setupCanvas);
+        }
+
+        // Load audio with error handling
+        function loadAudio(url) {
+            const audio = new Audio(url);
+            audio.addEventListener("error", () => {
+                console.warn("Audio failed to load:", url);
+                gameState.assetsLoaded++;
+                checkAssetsLoaded();
+            });
+            audio.addEventListener("canplaythrough", () => {
+                gameState.assetsLoaded++;
+                checkAssetsLoaded();
+            });
+            return audio;
+        }
+
+        // Check if all assets are loaded
+        function checkAssetsLoaded() {
+            if (gameState.assetsLoaded >= gameState.totalAssets) {
+                setTimeout(() => {
+                    loadingOverlay.classList.add("hidden");
+                    gameState.currentState = GameStates.MENU;
+                }, 500);
+            }
+        }
+
+        // Setup responsive canvas
+        function setupCanvas() {
+            const container = gameCanvas.parentElement;
+            const maxSize = Math.min(container.clientWidth - 40, 600);
+            canvasSize = maxSize;
+            gameCanvas.width = canvasSize;
+            gameCanvas.height = canvasSize;
+            cellSize = canvasSize / gridSize;
+
+            // Redraw game if it's already running
+            if (
+                gameState.currentState === GameStates.PLAYING ||
+                gameState.currentState === GameStates.PAUSED
+            ) {
+                drawGame();
+            }
+        }
+
+        // Initialize theme toggle
+        function initializeThemeToggle() {
+            const themeToggle = document.getElementById("theme-toggle");
+            const htmlElement = document.documentElement;
+
+            // Check user preference
+            const savedTheme = localStorage.getItem("theme") || "light";
+            if (savedTheme === "dark") {
+                htmlElement.classList.add("dark");
+                themeToggle.classList.add("active");
+            } else {
+                htmlElement.classList.remove("dark");
+                themeToggle.classList.remove("active");
+            }
+
+            // Theme switching
+            themeToggle.addEventListener("click", function () {
+                if (htmlElement.classList.contains("dark")) {
+                    htmlElement.classList.remove("dark");
+                    themeToggle.classList.remove("active");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    htmlElement.classList.add("dark");
+                    themeToggle.classList.add("active");
+                    localStorage.setItem("theme", "dark");
+                }
+                // Redraw game with new theme
+                drawGame();
+            });
+        }
+
+        // Initialize profile dropdown
+        function initializeProfileDropdown() {
+            const profileButton = document.getElementById("profile-button");
+            const profileDropdown = document.getElementById("profile-dropdown");
+
+            profileButton.addEventListener("click", function (e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle("show");
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener("click", function () {
+                profileDropdown.classList.remove("show");
+            });
+
+            // Don't close when clicking inside dropdown
+            profileDropdown.addEventListener("click", function (e) {
+                e.stopPropagation();
+            });
+
+            // Load user info
+            loadUserInfo();
+        }
+
+        // Setup touch controls for mobile
+        function setupTouchControls() {
+            const controlButtons = touchControls.querySelectorAll(".touch-control");
+            controlButtons.forEach((button) => {
+                button.addEventListener("touchstart", (e) => {
+                    e.preventDefault();
+                    const direction = button.dataset.direction;
+                    handleSwipe(direction);
+                });
+
+                // Also work with click for testing
+                button.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const direction = button.dataset.direction;
+                    handleSwipe(direction);
+                });
+            });
+        }
+
+        // Handle swipe/touch direction
+        function handleSwipe(direction) {
+            if (gameState.currentState !== GameStates.PLAYING) return;
+
+            const now = Date.now();
+            if (now - gameState.lastDirectionChange < DIRECTION_COOLDOWN) return;
+
+            let directionChanged = false;
+
+            switch (direction) {
+                case "up":
+                    if (gameState.direction !== "down") {
+                        gameState.nextDirection = "up";
+                        directionChanged = true;
+                    }
+                    break;
+                case "down":
+                    if (gameState.direction !== "up") {
+                        gameState.nextDirection = "down";
+                        directionChanged = true;
+                    }
+                    break;
+                case "left":
+                    if (gameState.direction !== "right") {
+                        gameState.nextDirection = "left";
+                        directionChanged = true;
+                    }
+                    break;
+                case "right":
+                    if (gameState.direction !== "left") {
+                        gameState.nextDirection = "right";
+                        directionChanged = true;
+                    }
+                    break;
+            }
+
+            if (directionChanged) {
+                gameState.lastDirectionChange = now;
+                moveSound.currentTime = 0;
+                safePlayAudio(moveSound);
+            }
+        }
+
+        // Load user info
+        function loadUserInfo() {
+            const profileName = document.getElementById("profile-name");
+            const profileEmail = document.getElementById("profile-email");
+
+            // Default user info
+            profileName.textContent = "Nuran";
+            profileEmail.textContent = "karimbaylinuran@gmail.com";
+        }
+
+        // Load game data from localStorage
+        function loadGameData() {
+            try {
+                const savedHighScore = localStorage.getItem("snakeHighScore");
+                const savedCoins = localStorage.getItem("snakeCoins");
+                const savedOwnedSkins = localStorage.getItem("snakeOwnedSkins");
+                const savedCurrentSkin = localStorage.getItem("snakeCurrentSkin");
+
+                if (savedHighScore) {
+                    gameState.highScore = parseInt(savedHighScore);
+                    highScore.textContent = gameState.highScore;
+                }
+
+                if (savedCoins) {
+                    gameState.coins = parseInt(savedCoins);
+                    coinsCounter.textContent = gameState.coins;
+                }
+
+                if (savedOwnedSkins) {
+                    gameState.ownedSkins = JSON.parse(savedOwnedSkins);
+                }
+
+                if (savedCurrentSkin) {
+                    gameState.currentSkin = savedCurrentSkin;
+                }
+
+                // Update skin ownership
+                snakeSkins.forEach((skin) => {
+                    skin.owned = gameState.ownedSkins.includes(skin.id);
+                });
+            } catch (error) {
+                console.warn("Error loading game data:", error);
+                // Reset to defaults if there's an error
+                gameState.highScore = 0;
+                gameState.coins = 100;
+                gameState.ownedSkins = ["default"];
+                gameState.currentSkin = "default";
+            }
+        }
+
+        // Save game data to localStorage
+        function saveGameData() {
+            try {
+                localStorage.setItem("snakeHighScore", gameState.highScore);
+                localStorage.setItem("snakeCoins", gameState.coins);
+                localStorage.setItem(
+                    "snakeOwnedSkins",
+                    JSON.stringify(gameState.ownedSkins)
+                );
+                localStorage.setItem("snakeCurrentSkin", gameState.currentSkin);
+            } catch (error) {
+                console.warn("Error saving game data:", error);
+            }
+        }
+
+        // Initialize skins market
+        function initializeSkinsMarket() {
+            skinsContainer.innerHTML = "";
+
+            snakeSkins.forEach((skin) => {
+                const skinElement = document.createElement("div");
+                skinElement.className = `skin-item flex flex-col items-center p-3 md:p-4 rounded-xl border-2 ${skin.owned
+                    ? "owned border-green-500"
+                    : "locked border-gray-300 dark:border-gray-600"
+                    } ${gameState.currentSkin === skin.id ? "equipped" : ""}`;
+
+                skinElement.innerHTML = `
+                    <div class="w-12 h-12 md:w-16 md:h-16 rounded-full mb-1 md:mb-2 flex items-center justify-center" style="background-color: ${skin.color === "rainbow"
+                        ? "linear-gradient(45deg, #ff0000, #ff9900, #ffff00, #00ff00, #00ffff, #0000ff, #9900ff)"
+                        : skin.color
+                    }">
+                        <span class="material-symbols-outlined ${skin.owned ? "text-white" : "text-gray-400"
+                    } text-base md:text-lg">
+                            ${skin.owned ? "pets" : "lock"}
+                        </span>
+                    </div>
+                    <h4 class="font-bold text-center text-sm md:text-base">${skin.name
+                    }</h4>
+                    <p class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1">${skin.price
+                    } coins</p>
+                    <button class="mt-1 md:mt-2 px-2 md:px-3 py-1 rounded-lg text-xs md:text-sm font-medium ${skin.owned
+                        ? gameState.currentSkin === skin.id
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                        : gameState.coins >= skin.price
+                            ? "bg-green-500 text-white"
+                            : "bg-gray-400 text-white cursor-not-allowed"
+                    }" data-skin-id="${skin.id}">
+                        ${skin.owned
+                        ? gameState.currentSkin === skin.id
+                            ? "Equipped"
+                            : "Equip"
+                        : "Buy"
+                    }
+                    </button>
+                `;
+
+                skinsContainer.appendChild(skinElement);
+            });
+
+            // Add event listeners to skin buttons
+            document.querySelectorAll("[data-skin-id]").forEach((button) => {
+                button.addEventListener("click", function () {
+                    const skinId = this.getAttribute("data-skin-id");
+                    handleSkinAction(skinId);
+                });
+            });
+        }
+
+        // Handle skin buy/equip action
+        function handleSkinAction(skinId) {
+            const skin = snakeSkins.find((s) => s.id === skinId);
+
+            if (!skin) return;
+
+            if (skin.owned) {
+                // Equip the skin
+                gameState.currentSkin = skinId;
+                saveGameData();
+                initializeSkinsMarket();
+            } else {
+                // Buy the skin
+                if (gameState.coins >= skin.price) {
+                    gameState.coins -= skin.price;
+                    skin.owned = true;
+                    gameState.ownedSkins.push(skinId);
+                    gameState.currentSkin = skinId;
+
+                    coinsCounter.textContent = gameState.coins;
+                    saveGameData();
+                    initializeSkinsMarket();
+
+                    showAchievement(`New Skin: ${skin.name}!`);
+                }
+            }
+        }
+
+        // Show market
+        function showMarket() {
+            // In a real implementation, this would show a dedicated market screen
+            // For now, we'll just scroll to the market section
+            document
+                .querySelector(".lg\\:col-span-1")
+                .scrollIntoView({ behavior: "smooth" });
+        }
+
+        // Start the game
+        function startGame() {
+            resetGame();
+            gameOverlay.classList.add("hidden");
+            gameState.currentState = GameStates.PLAYING;
+            gameState.startTime = Date.now();
+
+            // Play start sound
+            safePlayAudio(startSound);
+
+            // Start game loop
+            gameState.gameLoop = setInterval(safeGameUpdate, gameState.gameSpeed);
+        }
+
+        // Resume the game
+        function resumeGame() {
+            pauseOverlay.classList.add("hidden");
+            gameState.currentState = GameStates.PLAYING;
+            gameState.gameLoop = setInterval(safeGameUpdate, gameState.gameSpeed);
+        }
+
+        // Pause the game
+        function pauseGame() {
+            pauseOverlay.classList.remove("hidden");
+            gameState.currentState = GameStates.PAUSED;
+            clearInterval(gameState.gameLoop);
+        }
+
+        // Reset game state
+        function resetGame() {
+            // Clear existing game loop
+            if (gameState.gameLoop) {
+                clearInterval(gameState.gameLoop);
+            }
+
+            // Reset game state
+            gameState.snake = [
+                { x: 10, y: 10 },
+                { x: 9, y: 10 },
+                { x: 8, y: 10 },
+            ];
+            gameState.direction = "right";
+            gameState.nextDirection = "right";
+            gameState.score = 0;
+            gameState.foodCollected = 0;
+            gameState.gameSpeed = 150;
+            gameState.currentState = GameStates.PLAYING;
+            gameState.startTime = Date.now();
+            gameState.elapsedTime = 0;
+            gameState.lastDirectionChange = 0;
+
+            // Generate initial food
+            generateFood();
+
+            // Update UI
+            scoreCounter.textContent = "0";
+            foodCounter.textContent = "0";
+            speedCounter.textContent = "1x";
+            lengthCounter.textContent = gameState.snake.length;
+            timeCounter.textContent = "0s";
+
+            // Hide overlays
+            gameOverPopup.classList.add("hidden");
+            pauseOverlay.classList.add("hidden");
+        }
+
+        // Restart game
+        function restartGame() {
+            resetGame();
+            gameOverlay.classList.add("hidden");
+            gameOverPopup.classList.add("hidden");
+
+            // Play start sound
+            safePlayAudio(startSound);
+
+            // Start game loop
+            gameState.gameLoop = setInterval(safeGameUpdate, gameState.gameSpeed);
+        }
+
+        // Safe game update with error handling
+        function safeGameUpdate() {
+            try {
+                updateGame();
+            } catch (error) {
+                console.error("Game update error:", error);
+                // Stop the game and show error
+                gameState.currentState = GameStates.GAME_OVER;
+                clearInterval(gameState.gameLoop);
+                gameOverReason.textContent = "Game error occurred!";
+                gameOverPopup.classList.remove("hidden");
+            }
+        }
+
+        // Safe audio play with error handling
+        function safePlayAudio(audio) {
+            try {
+                audio.currentTime = 0;
+                audio.play().catch((e) => {
+                    console.warn("Audio play failed:", e);
+                });
+            } catch (error) {
+                console.warn("Audio error:", error);
+            }
+        }
+
+        // Generate food at random position
+        function generateFood() {
+            let newFood;
+            let foodOnSnake;
+            let attempts = 0;
+            const maxAttempts = 100; // Prevent infinite loop
+
+            do {
+                foodOnSnake = false;
+                newFood = {
+                    x: Math.floor(Math.random() * gridSize),
+                    y: Math.floor(Math.random() * gridSize),
+                };
+
+                // Check if food is on snake
+                for (let segment of gameState.snake) {
+                    if (segment.x === newFood.x && segment.y === newFood.y) {
+                        foodOnSnake = true;
+                        break;
+                    }
+                }
+
+                attempts++;
+                if (attempts > maxAttempts) {
+                    // If we can't find a spot after many attempts, just place it anywhere
+                    break;
+                }
+            } while (foodOnSnake);
+
+            gameState.food = newFood;
+        }
+
+        // Update game state
+        function updateGame() {
+            if (gameState.currentState !== GameStates.PLAYING) return;
+
+            // Update elapsed time
+            gameState.elapsedTime = Math.floor(
+                (Date.now() - gameState.startTime) / 1000
+            );
+            timeCounter.textContent = `${gameState.elapsedTime}s`;
+
+            // Update direction
+            gameState.direction = gameState.nextDirection;
+
+            // Calculate new head position
+            const head = { ...gameState.snake[0] };
+
+            switch (gameState.direction) {
+                case "up":
+                    head.y -= 1;
+                    break;
+                case "down":
+                    head.y += 1;
+                    break;
+                case "left":
+                    head.x -= 1;
+                    break;
+                case "right":
+                    head.x += 1;
+                    break;
+            }
+
+            // Check for collision with walls
+            if (
+                head.x < 0 ||
+                head.x >= gridSize ||
+                head.y < 0 ||
+                head.y >= gridSize
+            ) {
+                endGame("wall");
+                return;
+            }
+
+            // Check for collision with self
+            for (let i = 0; i < gameState.snake.length; i++) {
+                if (
+                    head.x === gameState.snake[i].x &&
+                    head.y === gameState.snake[i].y
+                ) {
+                    endGame("self");
+                    return;
+                }
+            }
+
+            // Add new head to snake
+            gameState.snake.unshift(head);
+
+            // Check for food collision
+            if (head.x === gameState.food.x && head.y === gameState.food.y) {
+                // Increase score
+                gameState.score += 10;
+                gameState.foodCollected += 1;
+
+                // Add coins
+                gameState.coins += 5;
+
+                // Update UI
+                scoreCounter.textContent = gameState.score;
+                foodCounter.textContent = gameState.foodCollected;
+                coinsCounter.textContent = gameState.coins;
+                lengthCounter.textContent = gameState.snake.length;
+
+                // Play eat sound
+                safePlayAudio(eatSound);
+
+                // Increase speed every 5 foods
+                if (gameState.foodCollected % 5 === 0 && gameState.gameSpeed > 80) {
+                    gameState.gameSpeed -= 10;
+                    clearInterval(gameState.gameLoop);
+                    gameState.gameLoop = setInterval(
+                        safeGameUpdate,
+                        gameState.gameSpeed
+                    );
+
+                    // Update speed display
+                    const speedMultiplier = (150 - gameState.gameSpeed) / 10 + 1;
+                    speedCounter.textContent = `${speedMultiplier}x`;
+
+                    showAchievement(`Speed Increased to ${speedMultiplier}x!`);
+                }
+
+                // Check for achievements
+                checkAchievements();
+
+                // Generate new food
+                generateFood();
+            } else {
+                // Remove tail if no food was eaten
+                gameState.snake.pop();
+            }
+
+            // Draw updated game state
+            drawGame();
+        }
+
+        // Draw game on canvas
+        function drawGame() {
+            // Clear canvas
+            ctx.fillStyle = document.documentElement.classList.contains("dark")
+                ? "#111421"
+                : "#0a0a0a";
+            ctx.fillRect(0, 0, canvasSize, canvasSize);
+
+            // Draw grid (optional)
+            if (gameState.showGrid) {
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+                ctx.lineWidth = 0.5;
+
+                for (let i = 0; i < gridSize; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(i * cellSize, 0);
+                    ctx.lineTo(i * cellSize, canvasSize);
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(0, i * cellSize);
+                    ctx.lineTo(canvasSize, i * cellSize);
+                    ctx.stroke();
+                }
+            }
+
+            // Draw snake with connected body
+            const skin =
+                snakeSkins.find((s) => s.id === gameState.currentSkin) ||
+                snakeSkins[0];
+
+            // Draw connected snake body first
+            drawConnectedSnakeBody(skin);
+
+            // Then draw head on top
+            if (gameState.snake.length > 0) {
+                drawSnakeHead(
+                    gameState.snake[0].x * cellSize,
+                    gameState.snake[0].y * cellSize,
+                    skin
+                );
+            }
+
+            // Draw food
+            drawFood(gameState.food.x * cellSize, gameState.food.y * cellSize);
+        }
+
+        // Draw connected snake body
+        function drawConnectedSnakeBody(skin) {
+            if (gameState.snake.length < 2) return;
+
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.lineWidth = cellSize - 4;
+
+            // Start path
+            ctx.beginPath();
+
+            // Move to first segment
+            const firstSegment = gameState.snake[0];
+            ctx.moveTo(
+                firstSegment.x * cellSize + cellSize / 2,
+                firstSegment.y * cellSize + cellSize / 2
+            );
+
+            // Draw line through all segments
+            for (let i = 1; i < gameState.snake.length; i++) {
+                const segment = gameState.snake[i];
+                ctx.lineTo(
+                    segment.x * cellSize + cellSize / 2,
+                    segment.y * cellSize + cellSize / 2
+                );
+            }
+
+            // Set stroke style based on skin
+            if (skin.color === "rainbow") {
+                // Create rainbow gradient
+                const gradient = ctx.createLinearGradient(
+                    0,
+                    0,
+                    canvasSize,
+                    canvasSize
+                );
+                gradient.addColorStop(0, "#ff0000");
+                gradient.addColorStop(0.2, "#ff9900");
+                gradient.addColorStop(0.4, "#ffff00");
+                gradient.addColorStop(0.6, "#00ff00");
+                gradient.addColorStop(0.8, "#00ffff");
+                gradient.addColorStop(1, "#9900ff");
+                ctx.strokeStyle = gradient;
+            } else {
+                ctx.strokeStyle = skin.color;
+            }
+
+            // Draw the connected snake body
+            ctx.stroke();
+        }
+
+        // Draw 3D snake head
+        function drawSnakeHead(x, y, skin) {
+            const centerX = x + cellSize / 2;
+            const centerY = y + cellSize / 2;
+            const radius = cellSize / 2 - 2;
+
+            // Draw head body
+            ctx.fillStyle = skin.headColor;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Add 3D effect with gradient
+            const gradient = ctx.createRadialGradient(
+                centerX - radius / 3,
+                centerY - radius / 3,
+                1,
+                centerX,
+                centerY,
+                radius
+            );
+            gradient.addColorStop(0, "rgba(255, 255, 255, 0.3)");
+            gradient.addColorStop(1, "rgba(0, 0, 0, 0.3)");
+
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw eyes based on direction
+            let eye1X, eye1Y, eye2X, eye2Y;
+
+            switch (gameState.direction) {
+                case "right":
+                    eye1X = centerX + radius / 3;
+                    eye1Y = centerY - radius / 3;
+                    eye2X = centerX + radius / 3;
+                    eye2Y = centerY + radius / 3;
+                    break;
+                case "left":
+                    eye1X = centerX - radius / 3;
+                    eye1Y = centerY - radius / 3;
+                    eye2X = centerX - radius / 3;
+                    eye2Y = centerY + radius / 3;
+                    break;
+                case "up":
+                    eye1X = centerX - radius / 3;
+                    eye1Y = centerY - radius / 3;
+                    eye2X = centerX + radius / 3;
+                    eye2Y = centerY - radius / 3;
+                    break;
+                case "down":
+                    eye1X = centerX - radius / 3;
+                    eye1Y = centerY + radius / 3;
+                    eye2X = centerX + radius / 3;
+                    eye2Y = centerY + radius / 3;
+                    break;
+            }
+
+            // Draw eyes
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            ctx.arc(eye1X, eye1Y, radius / 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(eye2X, eye2Y, radius / 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw pupils
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.arc(eye1X, eye1Y, radius / 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(eye2X, eye2Y, radius / 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw tongue when moving
+            if (Math.floor(Date.now() / 200) % 2 === 0) {
+                let tongueX, tongueY, tongueWidth, tongueHeight;
+
+                switch (gameState.direction) {
+                    case "right":
+                        tongueX = centerX + radius;
+                        tongueY = centerY;
+                        tongueWidth = radius / 2;
+                        tongueHeight = radius / 4;
+                        break;
+                    case "left":
+                        tongueX = centerX - radius;
+                        tongueY = centerY;
+                        tongueWidth = radius / 2;
+                        tongueHeight = radius / 4;
+                        break;
+                    case "up":
+                        tongueX = centerX;
+                        tongueY = centerY - radius;
+                        tongueWidth = radius / 4;
+                        tongueHeight = radius / 2;
+                        break;
+                    case "down":
+                        tongueX = centerX;
+                        tongueY = centerY + radius;
+                        tongueWidth = radius / 4;
+                        tongueHeight = radius / 2;
+                        break;
+                }
+
+                ctx.fillStyle = "red";
+                ctx.beginPath();
+                if (
+                    gameState.direction === "right" ||
+                    gameState.direction === "left"
+                ) {
+                    ctx.roundRect(
+                        tongueX,
+                        tongueY - tongueHeight / 2,
+                        tongueWidth,
+                        tongueHeight,
+                        5
+                    );
+                } else {
+                    ctx.roundRect(
+                        tongueX - tongueWidth / 2,
+                        tongueY,
+                        tongueWidth,
+                        tongueHeight,
+                        5
+                    );
+                }
+                ctx.fill();
+            }
+        }
+
+        // Draw 3D food (apple)
+        function drawFood(x, y) {
+            const centerX = x + cellSize / 2;
+            const centerY = y + cellSize / 2;
+            const radius = cellSize / 2 - 2;
+
+            // Draw apple body
+            ctx.fillStyle = "#ef4444";
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Add 3D effect with gradient
+            const gradient = ctx.createRadialGradient(
+                centerX - radius / 3,
+                centerY - radius / 3,
+                1,
+                centerX,
+                centerY,
+                radius
+            );
+            gradient.addColorStop(0, "rgba(255, 255, 255, 0.3)");
+            gradient.addColorStop(1, "rgba(0, 0, 0, 0.3)");
+
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw apple stem
+            ctx.fillStyle = "#8B4513";
+            ctx.fillRect(centerX - 2, centerY - radius - 3, 4, 5);
+
+            // Draw apple leaf
+            ctx.fillStyle = "#22c55e";
+            ctx.beginPath();
+            ctx.ellipse(
+                centerX + 3,
+                centerY - radius - 2,
+                4,
+                2,
+                Math.PI / 4,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+
+            // Add shine effect
+            ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+            ctx.beginPath();
+            ctx.arc(
+                centerX - radius / 3,
+                centerY - radius / 3,
+                radius / 4,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+        }
+
+        // Handle keyboard input
+        function handleKeyPress(e) {
+            if (
+                gameState.currentState === GameStates.MENU ||
+                gameState.currentState === GameStates.GAME_OVER
+            )
+                return;
+
+            let directionChanged = false;
+
+            switch (e.key.toLowerCase()) {
+                case "w":
+                case "arrowup":
+                    if (
+                        gameState.direction !== "down" &&
+                        gameState.currentState === GameStates.PLAYING
+                    ) {
+                        gameState.nextDirection = "up";
+                        directionChanged = true;
+                    }
+                    break;
+                case "s":
+                case "arrowdown":
+                    if (
+                        gameState.direction !== "up" &&
+                        gameState.currentState === GameStates.PLAYING
+                    ) {
+                        gameState.nextDirection = "down";
+                        directionChanged = true;
+                    }
+                    break;
+                case "a":
+                case "arrowleft":
+                    if (
+                        gameState.direction !== "right" &&
+                        gameState.currentState === GameStates.PLAYING
+                    ) {
+                        gameState.nextDirection = "left";
+                        directionChanged = true;
+                    }
+                    break;
+                case "d":
+                case "arrowright":
+                    if (
+                        gameState.direction !== "left" &&
+                        gameState.currentState === GameStates.PLAYING
+                    ) {
+                        gameState.nextDirection = "right";
+                        directionChanged = true;
+                    }
+                    break;
+                case " ":
+                    // Space bar to pause/resume
+                    if (gameState.currentState === GameStates.PLAYING) {
+                        pauseGame();
+                    } else if (gameState.currentState === GameStates.PAUSED) {
+                        resumeGame();
+                    }
+                    break;
+            }
+
+            // Play move sound when direction changes
+            if (directionChanged) {
+                const now = Date.now();
+                if (now - gameState.lastDirectionChange < DIRECTION_COOLDOWN) return;
+
+                gameState.lastDirectionChange = now;
+                moveSound.currentTime = 0;
+                safePlayAudio(moveSound);
+            }
+        }
+
+        // End the game
+        function endGame(reason) {
+            gameState.currentState = GameStates.GAME_OVER;
+            clearInterval(gameState.gameLoop);
+
+            // Play game over sound
+            safePlayAudio(gameOverSound);
+
+            // Calculate coins earned
+            const coinsEarnedThisGame = Math.floor(gameState.score / 2);
+            gameState.coins += coinsEarnedThisGame;
+
+            // Update high score if needed
+            if (gameState.score > gameState.highScore) {
+                gameState.highScore = gameState.score;
+                highScore.textContent = gameState.highScore;
+                showAchievement("New High Score!");
+            }
+
+            // Save game data
+            saveGameData();
+
+            // Update UI
+            finalScore.textContent = gameState.score;
+            coinsEarned.textContent = coinsEarnedThisGame;
+
+            // Set game over reason
+            if (reason === "wall") {
+                gameOverReason.textContent = "You hit the wall!";
+            } else {
+                gameOverReason.textContent = "You collided with yourself!";
+            }
+
+            // Show game over popup
+            gameOverPopup.classList.remove("hidden");
+        }
+
+        // Check for achievements
+        function checkAchievements() {
+            // First food achievement
+            if (gameState.foodCollected === 1) {
+                showAchievement("First Food Collected!");
+            }
+
+            // 10 foods achievement
+            if (gameState.foodCollected === 10) {
+                showAchievement("10 Foods Collected!");
+            }
+
+            // 25 foods achievement
+            if (gameState.foodCollected === 25) {
+                showAchievement("25 Foods Collected!");
+            }
+
+            // 50 foods achievement
+            if (gameState.foodCollected === 50) {
+                showAchievement("50 Foods Collected!");
+            }
+
+            // Score milestones
+            if (gameState.score === 100) {
+                showAchievement("100 Points!");
+            }
+
+            if (gameState.score === 250) {
+                showAchievement("250 Points!");
+            }
+
+            if (gameState.score === 500) {
+                showAchievement("500 Points!");
+            }
+        }
+
+        // Show achievement
+        function showAchievement(text) {
+            achievementText.textContent = text;
+            achievementPopup.classList.remove("hidden");
+
+            setTimeout(() => {
+                achievementPopup.classList.add("hidden");
+            }, 3000);
+        }
+
+        // Load assets
+        function loadAssets() {
+            // Assets are loaded with the audio elements
+            // This function is just for organization
+            gameState.assetsLoaded = 0;
+            gameState.totalAssets = 4; // 4 audio files
+
+            // Force check in case audio loaded before event listeners were added
+            setTimeout(checkAssetsLoaded, 1000);
+        }
+
+        // Initialize the game when page loads
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+</body>
+
+</html>

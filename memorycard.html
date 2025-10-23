@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GameBox - Memory Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg"
+        href="https://imgs.search.brave.com/vcOicL6yCVdeBpDPth1MSwcFzMrlqx3RyoZ_FnlqtZs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcGxheXN0YXRp/b24tc3RpY2stY29u/dHJvbGxlci1jYXJ0/b29uLWlsbHVzdHJh/dGlvbi1wcmVtaXVt/LXZlY3Rvcl8yNjI5/NjItMTU0LmpwZz9z/ZW10PWFpc19oeWJy/aWQmdz03NDA">
+    <link rel="apple-touch-icon"
+        href="https://imgs.search.brave.com/vlz7U7Y0riMxxyxz0KW_KzAyiVhNFtwbM4LXlLlQkXE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzE2L2Nh/L2NmLzE2Y2FjZjJk/MjBlYjY0ODVlNzAx/ODVjZTZhZjIxMzRj/LmpwZw">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-light": "#4c69e6",
+                        "primary-dark": "#3d3b8e",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0a0a0a",
+                        "card-dark": "#1a1d2d",
+                        "text-light": "#0e111b",
+                        "text-dark": "#ffffff"
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+
+        /* Glass Effect Styles */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-effect-dark {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-hover {
+            transition: all 0.3s ease;
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .glass-hover-dark:hover {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            opacity: 0.7;
+            transform: scale(0.95);
+        }
+
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-front {
+            transform: rotateY(180deg);
+            background-color: white;
+        }
+
+        .dark .card-front {
+            background-color: #1a1d2d;
+        }
+
+        .card-back {
+            background-color: rgba(76, 105, 230, 0.2);
+        }
+
+        .dark .card-back {
+            background-color: rgba(61, 59, 142, 0.5);
+        }
+
+        .achievement {
+            animation: achievement 3s ease-out;
+        }
+
+        @keyframes achievement {
+            0% {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            20% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            80% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0.7;
+            animation: confetti-fall 5s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Toggle switch animation */
+        .toggle-switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            height: 2rem;
+            width: 3.5rem;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .dark .toggle-switch {
+            background-color: #4b5563;
+        }
+
+        .toggle-switch.active {
+            background-color: #4c69e6;
+        }
+
+        .toggle-knob {
+            position: absolute;
+            left: 0.25rem;
+            height: 1.5rem;
+            width: 1.5rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(1.5rem);
+        }
+
+        .toggle-icon {
+            font-size: 1rem;
+            transition: opacity 0.3s;
+            position: relative;
+            left: -7px;
+        }
+
+        .light-icon {
+            color: #f59e0b;
+            position: relative;
+            left: 8px;
+        }
+
+        .dark-icon {
+            color: #9ca3af;
+        }
+
+        .toggle-switch.active .light-icon {
+            opacity: 0;
+        }
+
+        .toggle-switch:not(.active) .dark-icon {
+            opacity: 0;
+        }
+
+        .dropdown-menu {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-white dark:bg-gray-900 font-display text-text-light dark:text-text-dark transition-colors duration-500">
+    <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- HEADER -->
+            <header
+                class="flex items-center justify-between whitespace-nowrap bg-white/50 dark:bg-black/30 backdrop-blur-sm rounded-xl px-6 py-3 shadow-sm transition-colors duration-500 mb-6 mx-10 mt-4">
+                <div class="flex items-center gap-4 text-text-light dark:text-text-dark">
+                    <!-- YENİ BACK TO HOME DÜYMƏSİ -->
+                    <a class="flex items-center gap-2 glass-effect glass-hover dark:glass-effect-dark dark:glass-hover-dark rounded-full px-5 py-3 text-text-light dark:text-text-dark text-base font-semibold leading-tight tracking-[-0.015em] transition-all duration-300 hover:scale-105"
+                        href="dashboard.html">
+                        <span class="material-symbols-outlined text-lg">arrow_back_ios</span>
+                        <span class="truncate">Back to Home</span>
+                    </a>
+
+                    <div class="size-8 text-primary-light dark:text-primary-dark">
+                        <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20 5.5H4C3.72 5.5 3.5 5.28 3.5 5V4C3.5 3.72 3.72 3.5 4 3.5H20C20.28 3.5 20.5 3.72 20.5 4V5C20.5 5.28 20.28 5.5 20 5.5Z">
+                            </path>
+                            <path
+                                d="M21.5 9H2.5C2.22 9 2 8.78 2 8.5V7.5C2 7.22 2.22 7 2.5 7H21.5C21.78 7 22 7.22 22 7.5V8.5C22 8.78 21.78 9 21.5 9Z">
+                            </path>
+                            <path
+                                d="M20 20.5H4C3.72 20.5 3.5 20.28 3.5 20V11H20.5V20C20.5 20.28 20.28 20.5 20 20.5ZM17.5 12.25H16.25V13.5H17.5V12.25ZM17.5 14.75H16.25V16H17.5V14.75ZM17.5 17.25H16.25V18.5H17.5V17.25ZM7.75 16.25H6.5V17.5H7.75V16.25ZM10.25 14.75H9V16H10.25V14.75ZM12.75 16.25H11.5V17.5H12.75V16.25Z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h2 class="text-text-light dark:text-text-dark text-lg font-bold leading-tight tracking-[-0.015em]">
+                        GameBox</h2>
+                </div>
+
+                <div class="hidden md:flex flex-1 justify-center gap-8">
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="dashboard.html">Home</a>
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="achievements.html">Achievements</a>
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="games.html">Games</a>
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="store.html">Store</a>
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="friends.html">Friends</a>
+                    <a class="text-text-light dark:text-text-dark text-sm font-medium leading-normal hover:text-primary-light dark:hover:text-primary-dark transition-colors"
+                        href="settings.html">Settings</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <!-- Dark/Light Mode Toggle -->
+                    <div class="toggle-switch" id="theme-toggle">
+                        <div class="toggle-knob">
+                            <span class="toggle-icon light-icon material-symbols-outlined">light_mode</span>
+                            <span class="toggle-icon dark-icon material-symbols-outlined">dark_mode</span>
+                        </div>
+                    </div>
+
+                    <!-- Profile Dropdown -->
+                    <div class="relative">
+                        <button id="profile-button"
+                            class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 glass-effect glass-hover dark:glass-effect-dark dark:glass-hover-dark text-text-light dark:text-text-dark transition-all duration-300 hover:scale-105">
+                            <span class="material-symbols-outlined">person</span>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="profile-dropdown"
+                            class="dropdown-menu absolute right-0 top-12 mt-2 w-56 rounded-xl bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+                            <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                                <p class="text-gray-900 dark:text-white font-medium" id="profile-name">Nuran</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm" id="profile-email">
+                                    karimbaylinuran@gmail.com</p>
+                            </div>
+                            <div class="p-2">
+                                <a href="profile.html"
+                                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <span class="material-symbols-outlined text-lg">person</span>
+                                    <span>Your Profile</span>
+                                </a>
+                                <a href="settings.html"
+                                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                    <span class="material-symbols-outlined text-lg">settings</span>
+                                    <span>Settings</span>
+                                </a>
+                                <div class="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                                <a href="auth.html"
+                                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                                    <span class="material-symbols-outlined text-lg">logout</span>
+                                    <span>Log Out</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="px-40 flex flex-1 justify-center py-10">
+                <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                    <div
+                        class="flex flex-wrap justify-between items-center gap-4 p-4 border-b border-b-[#e8eaf3] dark:border-b-gray-700 mb-8">
+                        <p class="text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Memory Game</p>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-4 glass-effect dark:glass-effect-dark shadow-sm">
+                                <p class="text-base font-medium leading-normal">Moves</p>
+                                <p id="moves-counter" class="tracking-light text-2xl font-bold leading-tight">0</p>
+                            </div>
+                            <div
+                                class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-4 glass-effect dark:glass-effect-dark shadow-sm">
+                                <p class="text-base font-medium leading-normal">Time</p>
+                                <p id="timer" class="tracking-light text-2xl font-bold leading-tight">02:00</p>
+                            </div>
+                            <button id="restart-btn"
+                                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-4 flex-1 bg-orange-500 text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] shadow-sm transition-all duration-300 hover:scale-105">
+                                <span class="material-symbols-outlined text-2xl">refresh</span>
+                                <span class="truncate">Restart</span>
+                            </button>
+                            <button id="new-game-btn"
+                                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-4 flex-1 bg-primary-light dark:bg-primary-dark text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] shadow-sm transition-all duration-300 hover:scale-105">
+                                <span class="material-symbols-outlined text-2xl">play_arrow</span>
+                                <span class="truncate">New Game</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="difficulty-selector" class="flex flex-col items-center justify-center gap-6 p-8">
+                        <h2 class="text-3xl font-bold">Select Difficulty</h2>
+                        <div class="grid grid-cols-2 gap-4 w-full max-w-md">
+                            <button data-difficulty="easy"
+                                class="difficulty-btn flex flex-col items-center justify-center gap-2 p-6 rounded-xl bg-green-500 text-white hover:bg-green-600 transition-all duration-300 hover:scale-105">
+                                <span class="material-symbols-outlined text-4xl">sentiment_very_satisfied</span>
+                                <span class="text-xl font-bold">Easy</span>
+                                <span class="text-sm">4x4 Grid</span>
+                                <span class="text-sm">2 Minutes</span>
+                            </button>
+                            <button data-difficulty="medium"
+                                class="difficulty-btn flex flex-col items-center justify-center gap-2 p-6 rounded-xl bg-yellow-500 text-white hover:bg-yellow-600 transition-all duration-300 hover:scale-105">
+                                <span class="material-symbols-outlined text-4xl">sentiment_satisfied</span>
+                                <span class="text-xl font-bold">Medium</span>
+                                <span class="text-sm">6x6 Grid</span>
+                                <span class="text-sm">4 Minutes</span>
+                            </button>
+                            <button data-difficulty="hard"
+                                class="difficulty-btn flex flex-col items-center justify-center gap-2 p-6 rounded-xl bg-orange-500 text-white hover:bg-orange-600 transition-all duration-300 hover:scale-105">
+                                <span class="material-symbols-outlined text-4xl">sentiment_neutral</span>
+                                <span class="text-xl font-bold">Hard</span>
+                                <span class="text-sm">8x8 Grid</span>
+                                <span class="text-sm">6 Minutes</span>
+                            </button>
+                            <button data-difficulty="extreme"
+                                class="difficulty-btn flex flex-col items-center justify-center gap-2 p-6 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-all duration-300 hover:scale-105">
+                                <span class="material-symbols-outlined text-4xl">sentiment_dissatisfied</span>
+                                <span class="text-xl font-bold">Extreme</span>
+                                <span class="text-sm">10x10 Grid</span>
+                                <span class="text-sm">8 Minutes</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="game-board" class="grid gap-4 p-4 hidden">
+                        <!-- Cards will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievement Popup -->
+        <div id="achievement-popup"
+            class="fixed bottom-4 right-4 bg-green-500 text-white p-4 rounded-xl shadow-lg z-50 achievement hidden">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined">emoji_events</span>
+                <span id="achievement-text" class="font-bold">Achievement Unlocked!</span>
+            </div>
+        </div>
+
+        <!-- Lose Popup -->
+        <div id="lose-popup"
+            class="fixed inset-0 bg-black/30 dark:bg-black/70 flex items-center justify-center p-4 z-50 transition-colors duration-500 hidden">
+            <div
+                class="bg-background-light dark:bg-gray-800 rounded-xl shadow-2xl p-8 max-w-sm w-full text-center flex flex-col items-center gap-4">
+                <span class="material-symbols-outlined text-7xl text-red-500">timer_off</span>
+                <h2 class="text-3xl font-bold">Time's Up!</h2>
+                <p class="text-lg text-slate-600 dark:text-slate-300">Better luck next time.</p>
+                <div class="flex flex-col gap-2 rounded-xl p-4 glass-effect dark:glass-effect-dark w-full">
+                    <p class="text-base font-medium leading-normal">Final Moves</p>
+                    <p id="final-moves" class="tracking-light text-2xl font-bold leading-tight">0</p>
+                </div>
+                <button id="play-again-btn"
+                    class="flex min-w-[84px] w-full max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-4 bg-orange-500 text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] shadow-sm mt-4 transition-all duration-300 hover:scale-105">
+                    <span class="truncate">Play Again</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = {
+            difficulty: null,
+            cards: [],
+            flippedCards: [],
+            matchedPairs: 0,
+            moves: 0,
+            timer: null,
+            timeLeft: 0,
+            gameStarted: false,
+            gameOver: false
+        };
+
+        // Audio elements
+        const flipSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+        const matchSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+        const winSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+        const loseSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+
+        // Difficulty settings
+        const difficultySettings = {
+            easy: {
+                gridSize: 4,
+                timeLimit: 120, // 2 minutes in seconds
+                cardIcons: ['star', 'favorite', 'diamond', 'rocket_launch', 'bolt', 'pets', 'music_note', 'cake']
+            },
+            medium: {
+                gridSize: 6,
+                timeLimit: 240, // 4 minutes in seconds
+                cardIcons: ['star', 'favorite', 'diamond', 'rocket_launch', 'bolt', 'pets', 'music_note', 'cake', 'local_cafe',
+                    'beach_access', 'flight', 'directions_car', 'sports_esports', 'fitness_center', 'spa', 'school',
+                    'anchor', 'apartment']
+            },
+            hard: {
+                gridSize: 8,
+                timeLimit: 360, // 6 minutes in seconds
+                cardIcons: ['star', 'favorite', 'diamond', 'rocket_launch', 'bolt', 'pets', 'music_note', 'cake', 'local_cafe',
+                    'beach_access', 'flight', 'directions_car', 'sports_esports', 'fitness_center', 'spa', 'school',
+                    'anchor', 'apartment', 'audiotrack', 'auto_awesome', 'bakery_dining', 'biotech', 'blender', 'book',
+                    'brightness_5', 'brush', 'bug_report', 'build', 'camera', 'campaign', 'celebration', 'chat']
+            },
+            extreme: {
+                gridSize: 10,
+                timeLimit: 480, // 8 minutes in seconds
+                cardIcons: ['star', 'favorite', 'diamond', 'rocket_launch', 'bolt', 'pets', 'music_note', 'cake', 'local_cafe',
+                    'beach_access', 'flight', 'directions_car', 'sports_esports', 'fitness_center', 'spa', 'school',
+                    'anchor', 'apartment', 'audiotrack', 'auto_awesome', 'bakery_dining', 'biotech', 'blender', 'book',
+                    'brightness_5', 'brush', 'bug_report', 'build', 'camera', 'campaign', 'celebration', 'chat',
+                    'cloud', 'code', 'coffee', 'compass', 'construction', 'cookie', 'credit_card', 'cruelty_free',
+                    'dashboard', 'deck', 'desktop_windows', 'diversity_3', 'eco', 'emoji_events', 'emoji_food_beverage',
+                    'emoji_nature', 'emoji_objects', 'emoji_people', 'emoji_symbols', 'emoji_transportation']
+            }
+        };
+
+        // DOM elements
+        const difficultySelector = document.getElementById('difficulty-selector');
+        const gameBoard = document.getElementById('game-board');
+        const movesCounter = document.getElementById('moves-counter');
+        const timerElement = document.getElementById('timer');
+        const restartBtn = document.getElementById('restart-btn');
+        const newGameBtn = document.getElementById('new-game-btn');
+        const losePopup = document.getElementById('lose-popup');
+        const achievementPopup = document.getElementById('achievement-popup');
+        const achievementText = document.getElementById('achievement-text');
+        const finalMoves = document.getElementById('final-moves');
+        const playAgainBtn = document.getElementById('play-again-btn');
+
+        // Initialize game
+        function init() {
+            // Event listeners
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.addEventListener('click', () => selectDifficulty(btn.dataset.difficulty));
+            });
+
+            restartBtn.addEventListener('click', restartGame);
+            newGameBtn.addEventListener('click', showDifficultySelector);
+            playAgainBtn.addEventListener('click', showDifficultySelector);
+
+            // Show difficulty selector initially
+            showDifficultySelector();
+
+            // Initialize theme toggle
+            initializeThemeToggle();
+
+            // Initialize profile dropdown
+            initializeProfileDropdown();
+        }
+
+        // Initialize theme toggle
+        function initializeThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+
+            // Kullanıcının tercihini kontrol et
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                htmlElement.classList.add('dark');
+                themeToggle.classList.add('active');
+            } else {
+                htmlElement.classList.remove('dark');
+                themeToggle.classList.remove('active');
+            }
+
+            // Tema değiştirme
+            themeToggle.addEventListener('click', function () {
+                if (htmlElement.classList.contains('dark')) {
+                    htmlElement.classList.remove('dark');
+                    themeToggle.classList.remove('active');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    htmlElement.classList.add('dark');
+                    themeToggle.classList.add('active');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        }
+
+        // Initialize profile dropdown
+        function initializeProfileDropdown() {
+            const profileButton = document.getElementById('profile-button');
+            const profileDropdown = document.getElementById('profile-dropdown');
+
+            profileButton.addEventListener('click', function (e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+
+            // Dropdown dışına tıklanınca kapat
+            document.addEventListener('click', function () {
+                profileDropdown.classList.remove('show');
+            });
+
+            // Dropdown içine tıklanınca kapatma
+            profileDropdown.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+
+            // Kullanıcı bilgilerini yükle
+            loadUserInfo();
+        }
+
+        // Load user info
+        function loadUserInfo() {
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+
+            // Varsayılan kullanıcı bilgileri
+            profileName.textContent = "Nuran";
+            profileEmail.textContent = "karimbaylinuran@gmail.com";
+        }
+
+        // Show difficulty selector
+        function showDifficultySelector() {
+            difficultySelector.classList.remove('hidden');
+            gameBoard.classList.add('hidden');
+            losePopup.classList.add('hidden');
+
+            // Reset game state
+            gameState.difficulty = null;
+            gameState.cards = [];
+            gameState.flippedCards = [];
+            gameState.matchedPairs = 0;
+            gameState.moves = 0;
+            gameState.gameStarted = false;
+            gameState.gameOver = false;
+
+            // Clear timer
+            if (gameState.timer) {
+                clearInterval(gameState.timer);
+                gameState.timer = null;
+            }
+
+            // Update UI
+            movesCounter.textContent = '0';
+            timerElement.textContent = '00:00';
+        }
+
+        // Select difficulty and start game
+        function selectDifficulty(difficulty) {
+            gameState.difficulty = difficulty;
+            const settings = difficultySettings[difficulty];
+
+            // Hide difficulty selector and show game board
+            difficultySelector.classList.add('hidden');
+            gameBoard.classList.remove('hidden');
+
+            // Initialize game
+            initializeGame(settings);
+        }
+
+        // Initialize game with settings
+        function initializeGame(settings) {
+            // Reset game state
+            gameState.cards = [];
+            gameState.flippedCards = [];
+            gameState.matchedPairs = 0;
+            gameState.moves = 0;
+            gameState.timeLeft = settings.timeLimit;
+            gameState.gameStarted = true;
+            gameState.gameOver = false;
+
+            // Update UI
+            movesCounter.textContent = '0';
+            updateTimer();
+
+            // Clear game board
+            gameBoard.innerHTML = '';
+
+            // Set grid layout
+            gameBoard.className = `grid gap-2 p-4`;
+            gameBoard.style.gridTemplateColumns = `repeat(${settings.gridSize}, 1fr)`;
+
+            // Create cards
+            const totalPairs = Math.floor(settings.gridSize * settings.gridSize / 2);
+            const icons = settings.cardIcons.slice(0, totalPairs);
+
+            // Duplicate icons to create pairs
+            const cardIcons = [...icons, ...icons];
+
+            // Shuffle cards
+            shuffleArray(cardIcons);
+
+            // Create card elements
+            cardIcons.forEach((icon, index) => {
+                const card = document.createElement('div');
+                card.className = 'card aspect-square rounded-xl cursor-pointer shadow-lg';
+                card.dataset.index = index;
+                card.dataset.icon = icon;
+
+                card.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-back flex items-center justify-center">
+                            <span class="material-symbols-outlined text-4xl text-white/80 dark:text-white/60">help_outline</span>
+                        </div>
+                        <div class="card-front flex items-center justify-center">
+                            <span class="material-symbols-outlined text-4xl">${icon}</span>
+                        </div>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => flipCard(card));
+                gameBoard.appendChild(card);
+                gameState.cards.push(card);
+            });
+
+            // Start timer
+            if (gameState.timer) {
+                clearInterval(gameState.timer);
+            }
+            gameState.timer = setInterval(updateGameTimer, 1000);
+        }
+
+        // Flip card
+        function flipCard(card) {
+            // Don't allow flipping if game is over or card is already flipped/matched
+            if (gameState.gameOver || card.classList.contains('flipped') ||
+                card.classList.contains('matched') || gameState.flippedCards.length >= 2) {
+                return;
+            }
+
+            // Flip the card
+            card.classList.add('flipped');
+            gameState.flippedCards.push(card);
+
+            // Play flip sound
+            flipSound.play();
+
+            // Check for match if two cards are flipped
+            if (gameState.flippedCards.length === 2) {
+                gameState.moves++;
+                movesCounter.textContent = gameState.moves;
+
+                const card1 = gameState.flippedCards[0];
+                const card2 = gameState.flippedCards[1];
+
+                if (card1.dataset.icon === card2.dataset.icon) {
+                    // Match found
+                    setTimeout(() => {
+                        card1.classList.add('matched');
+                        card2.classList.add('matched');
+                        gameState.flippedCards = [];
+                        gameState.matchedPairs++;
+
+                        // Play match sound
+                        matchSound.play();
+
+                        // Check for achievements
+                        checkAchievements();
+
+                        // Check if game is won
+                        if (gameState.matchedPairs === gameState.cards.length / 2) {
+                            winGame();
+                        }
+                    }, 500);
+                } else {
+                    // No match
+                    setTimeout(() => {
+                        card1.classList.remove('flipped');
+                        card2.classList.remove('flipped');
+                        gameState.flippedCards = [];
+                    }, 1000);
+                }
+            }
+        }
+
+        // Update game timer
+        function updateGameTimer() {
+            gameState.timeLeft--;
+            updateTimer();
+
+            if (gameState.timeLeft <= 0) {
+                loseGame();
+            }
+        }
+
+        // Update timer display
+        function updateTimer() {
+            const minutes = Math.floor(gameState.timeLeft / 60);
+            const seconds = gameState.timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Check for achievements
+        function checkAchievements() {
+            // First match achievement
+            if (gameState.matchedPairs === 1) {
+                showAchievement("First Match!");
+            }
+
+            // Halfway achievement
+            if (gameState.matchedPairs === Math.floor(gameState.cards.length / 4)) {
+                showAchievement("Halfway There!");
+            }
+
+            // Quick match achievement (match in first 5 moves)
+            if (gameState.moves <= 5 && gameState.matchedPairs >= 2) {
+                showAchievement("Quick Matcher!");
+            }
+        }
+
+        // Show achievement
+        function showAchievement(text) {
+            achievementText.textContent = text;
+            achievementPopup.classList.remove('hidden');
+
+            setTimeout(() => {
+                achievementPopup.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Win game - No popup, just celebration
+        function winGame() {
+            gameState.gameOver = true;
+            clearInterval(gameState.timer);
+
+            // Play win sound
+            winSound.play();
+
+            // Create confetti effect
+            createConfetti();
+
+            // Show achievement for winning
+            showAchievement("You Win! Game Completed!");
+
+            // Optionally, you could add a small celebration message in the UI
+            // without using a popup
+            const winMessage = document.createElement('div');
+            winMessage.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white p-4 rounded-xl shadow-lg z-40';
+            winMessage.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined">emoji_events</span>
+                    <span class="font-bold">Congratulations! You won the game!</span>
+                </div>
+            `;
+            document.body.appendChild(winMessage);
+
+            // Remove message after 3 seconds
+            setTimeout(() => {
+                winMessage.remove();
+            }, 3000);
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(confetti);
+
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Lose game
+        function loseGame() {
+            gameState.gameOver = true;
+            clearInterval(gameState.timer);
+
+            // Play lose sound
+            loseSound.play();
+
+            // Update lose popup
+            finalMoves.textContent = gameState.moves;
+
+            // Show lose popup
+            losePopup.classList.remove('hidden');
+        }
+
+        // Restart game
+        function restartGame() {
+            if (gameState.difficulty) {
+                const settings = difficultySettings[gameState.difficulty];
+                initializeGame(settings);
+            }
+        }
+
+        // Utility functions
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Initialize the game when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

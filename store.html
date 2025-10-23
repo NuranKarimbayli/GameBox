@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>GameBox - Store</title>
+    <meta name="description" content="Discover and purchase amazing games on GameBox Store" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="icon" type="image/jpeg"
+        href="https://imgs.search.brave.com/vcOicL6yCVdeBpDPth1MSwcFzMrlqx3RyoZ_FnlqtZs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvcGxheXN0YXRp/b24tc3RpY2stY29u/dHJvbGxlci1jYXJ0/b29uLWlsbHVzdHJh/dGlvbi1wcmVtaXVt/LXZlY3Rvcl8yNjI5/NjItMTU0LmpwZz9z/ZW10PWFpc19oeWJy/aWQmdz03NDA">
+    <link rel="apple-touch-icon"
+        href="https://imgs.search.brave.com/vlz7U7Y0riMxxyxz0KW_KzAyiVhNFtwbM4LXlLlQkXE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzE2L2Nh/L2NmLzE2Y2FjZjJk/MjBlYjY0ODVlNzAx/ODVjZTZhZjIxMzRj/LmpwZw">
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#4c69e6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111421",
+                    },
+                    fontFamily: {
+                        display: ["Spline Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        lg: "1rem",
+                        xl: "1.5rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        :root {
+            --glass-light: rgba(255, 255, 255, 0.5);
+            --glass-dark: rgba(18, 21, 33, 0.5);
+            --border-light: rgba(255, 255, 255, 0.3);
+            --border-dark: rgba(37, 43, 70, 0.3);
+        }
+
+        .glassmorphism {
+            background: var(--glass-light);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-light);
+        }
+
+        .dark .glassmorphism {
+            background: var(--glass-dark);
+            border: 1px solid var(--border-dark);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-effect-dark {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Popup styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-overlay.active {
+            display: flex;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #ef4444, #f87171);
+        }
+
+        .toast.warning {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        }
+
+        .toast.info {
+            background: linear-gradient(135deg, #4c69e6, #6a82fb);
+        }
+
+        /* Toggle switch animation */
+        .toggle-switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            height: 2rem;
+            width: 3.5rem;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .dark .toggle-switch {
+            background-color: #4b5563;
+        }
+
+        .toggle-switch.active {
+            background-color: #4c69e6;
+        }
+
+        .toggle-knob {
+            position: absolute;
+            left: 0.25rem;
+            height: 1.5rem;
+            width: 1.5rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(1.5rem);
+        }
+
+        .toggle-icon {
+            font-size: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        .light-icon {
+            color: #f59e0b;
+            left: 8px;
+            position: relative;
+        }
+
+        .dark-icon {
+            color: #9ca3af;
+            left: -8px;
+            position: relative;
+        }
+
+        .toggle-switch.active .light-icon {
+            opacity: 0;
+        }
+
+        .toggle-switch:not(.active) .dark-icon {
+            opacity: 0;
+        }
+
+        .dropdown-menu {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .glass-hover {
+            transition: all 0.3s ease;
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .glass-hover-dark:hover {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Game card cursor */
+        .game-card {
+            cursor: pointer;
+        }
+
+        /* Game images with dark mode support */
+        .game-image {
+            background-color: #f8fafc;
+            transition: background-color 0.3s;
+        }
+
+        .dark .game-image {
+            background-color: #1e293b;
+        }
+
+        /* Transparent game images */
+        .game-image-transparent {
+            background-color: transparent !important;
+        }
+
+        /* Enhanced dropdown styles */
+        .custom-select {
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .custom-select select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            border: none;
+            background-color: #e5e7eb;
+            color: #1a1f36;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark .custom-select select {
+            background-color: #252b46;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-select select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 105, 230, 0.3);
+        }
+
+        .dark .custom-select select:focus {
+            box-shadow: 0 0 0 2px rgba(76, 105, 230, 0.5);
+        }
+
+        .custom-select::after {
+            content: "expand_more";
+            font-family: "Material Symbols Outlined";
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #6b7280;
+            transition: transform 0.3s ease;
+        }
+
+        .dark .custom-select::after {
+            color: #959ec6;
+        }
+
+        .custom-select.active::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        /* Custom dropdown options styling */
+        .custom-select select option {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0.25rem 0;
+            background-color: white;
+            color: #1a1f36;
+        }
+
+        .dark .custom-select select option {
+            background-color: #252b46;
+            color: white;
+        }
+
+        .custom-select select option:hover,
+        .custom-select select option:focus {
+            background-color: #4c69e6;
+            color: white;
+        }
+
+        /* Checkbox styling */
+        .custom-checkbox {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .custom-checkbox input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 0.375rem;
+            background-color: #e5e7eb;
+            border: 2px solid #d1d5db;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .dark .custom-checkbox input[type="checkbox"] {
+            background-color: #252b46;
+            border-color: #4b5563;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked {
+            background-color: #4c69e6;
+            border-color: #4c69e6;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked::after {
+            content: "✓";
+            position: absolute;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .custom-checkbox input[type="checkbox"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 105, 230, 0.3);
+        }
+
+        .dark .custom-checkbox input[type="checkbox"]:focus {
+            box-shadow: 0 0 0 2px rgba(76, 105, 230, 0.5);
+        }
+
+        /* Game card border styles */
+        .game-card-container {
+            border: 1px solid rgba(76, 105, 230, 0.2);
+            border-radius: 1rem;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .game-card-container:hover {
+            border-color: rgba(76, 105, 230, 0.5);
+            box-shadow: 0 4px 12px rgba(76, 105, 230, 0.15);
+        }
+
+        .dark .game-card-container {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dark .game-card-container:hover {
+            border-color: rgba(76, 105, 230, 0.5);
+            box-shadow: 0 4px 12px rgba(76, 105, 230, 0.2);
+        }
+
+        /* Price and purchase status styles */
+        .price-tag {
+            background: linear-gradient(135deg, #4c69e6, #6a82fb);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .purchased-badge {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .wishlist-btn {
+            transition: all 0.3s ease;
+        }
+
+        .wishlist-btn.active {
+            color: #ef4444;
+        }
+
+        /* Payment form styles */
+        .payment-method {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark .payment-method {
+            border-color: #4b5563;
+        }
+
+        .payment-method:hover {
+            border-color: #4c69e6;
+        }
+
+        .payment-method.selected {
+            border-color: #4c69e6;
+            background-color: rgba(76, 105, 230, 0.05);
+        }
+
+        .dark .payment-method.selected {
+            background-color: rgba(76, 105, 230, 0.1);
+        }
+
+        /* Refund notice */
+        .refund-notice {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #f59e0b;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .dark .refund-notice {
+            background: linear-gradient(135deg, #78350f, #92400e);
+            border-color: #d97706;
+            color: #fef3c7;
+        }
+
+        /* Add card section */
+        .add-card-section {
+            border: 2px dashed #d1d5db;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark .add-card-section {
+            border-color: #4b5563;
+        }
+
+        .add-card-section:hover {
+            border-color: #4c69e6;
+            background-color: rgba(76, 105, 230, 0.05);
+        }
+
+        .dark .add-card-section:hover {
+            background-color: rgba(76, 105, 230, 0.1);
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 640px) {
+            .game-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 1rem;
+                padding: 0.5rem;
+            }
+
+            .layout-content-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .header-nav {
+                display: none;
+            }
+        }
+
+        /* Focus styles for accessibility */
+        button:focus-visible,
+        a:focus-visible,
+        select:focus-visible,
+        input:focus-visible {
+            outline: 2px solid #4c69e6;
+            outline-offset: 2px;
+        }
+
+        /* Screen reader only text */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display">
+    <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- HEADER -->
+            <header
+                class="flex items-center justify-between whitespace-nowrap bg-white/50 dark:bg-black/30 backdrop-blur-sm rounded-xl px-6 py-3 shadow-sm transition-colors duration-500 mb-6 mx-4 md:mx-10 mt-4">
+                <div class="flex items-center gap-4 text-gray-800 dark:text-white">
+                    <!-- BACK TO HOME BUTTON -->
+                    <a class="flex items-center gap-2 glass-effect glass-hover dark:glass-effect-dark dark:glass-hover-dark rounded-full px-3 md:px-5 py-2 md:py-3 text-gray-800 dark:text-white text-sm md:text-base font-semibold leading-tight tracking-[-0.015em] transition-all duration-300 hover:scale-105"
+                        href="dashboard.html" aria-label="Back to Home">
+                        <span class="material-symbols-outlined text-lg">arrow_back_ios</span>
+                        <span class="truncate hidden sm:inline">Back to Home</span>
+                    </a>
+
+                    <div class="size-6 md:size-8 text-primary" aria-hidden="true">
+                        <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20 5.5H4C3.72 5.5 3.5 5.28 3.5 5V4C3.5 3.72 3.72 3.5 4 3.5H20C20.28 3.5 20.5 3.72 20.5 4V5C20.5 5.28 20.28 5.5 20 5.5Z">
+                            </path>
+                            <path
+                                d="M21.5 9H2.5C2.22 9 2 8.78 2 8.5V7.5C2 7.22 2.22 7 2.5 7H21.5C21.78 7 22 7.22 22 7.5V8.5C22 8.78 21.78 9 21.5 9Z">
+                            </path>
+                            <path
+                                d="M20 20.5H4C3.72 20.5 3.5 20.28 3.5 20V11H20.5V20C20.5 20.28 20.28 20.5 20 20.5ZM17.5 12.25H16.25V13.5H17.5V12.25ZM17.5 14.75H16.25V16H17.5V14.75ZM17.5 17.25H16.25V18.5H17.5V17.25ZM7.75 16.25H6.5V17.5H7.75V16.25ZM10.25 14.75H9V16H10.25V14.75ZM12.75 16.25H11.5V17.5H12.75V16.25Z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h2
+                        class="text-gray-800 dark:text-white text-base md:text-lg font-bold leading-tight tracking-[-0.015em]">
+                        GameBox
+                    </h2>
+                </div>
+
+                <nav class="hidden md:flex flex-1 justify-center gap-6 lg:gap-8" aria-label="Main navigation">
+                    <a class="text-gray-800 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="dashboard.html">Home</a>
+                    <a class="text-gray-800 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="achievements.html">Achievements</a>
+                    <a class="text-gray-800 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="games.html">Games</a>
+                    <a class="text-primary text-sm font-medium leading-normal" href="store.html"
+                        aria-current="page">Store</a>
+                    <a class="text-gray-800 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="friends.html">Friends</a>
+                    <a class="text-gray-800 dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors"
+                        href="settings.html">Settings</a>
+                </nav>
+
+                <div class="flex items-center gap-3 md:gap-4">
+                    <!-- Balance Button -->
+                    <button id="balance-btn"
+                        class="flex items-center gap-2 glass-effect glass-hover dark:glass-effect-dark dark:glass-hover-dark rounded-full px-3 md:px-4 py-2 text-gray-800 dark:text-white text-sm font-semibold transition-all duration-300 hover:scale-105">
+                        <span class="material-symbols-outlined text-lg">account_balance_wallet</span>
+                        <span id="header-balance" class="price-tag">$25.00</span>
+                    </button>
+
+                    <!-- Dark/Light Mode Toggle -->
+                    <button id="theme-toggle" class="toggle-switch" aria-label="Toggle dark mode">
+                        <div class="toggle-knob">
+                            <span class="toggle-icon light-icon material-symbols-outlined">light_mode</span>
+                            <span class="toggle-icon dark-icon material-symbols-outlined">dark_mode</span>
+                        </div>
+                    </button>
+
+                    <!-- Profile Dropdown -->
+                    <div class="relative">
+                        <button id="profile-button"
+                            class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 w-8 md:h-10 md:w-10 glass-effect glass-hover dark:glass-effect-dark dark:glass-hover-dark text-gray-800 dark:text-white transition-all duration-300 hover:scale-105"
+                            aria-label="Profile menu" aria-expanded="false" aria-controls="profile-dropdown">
+                            <span class="material-symbols-outlined text-base md:text-lg">person</span>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="profile-dropdown"
+                            class="dropdown-menu absolute right-0 top-10 md:top-12 mt-2 w-48 md:w-56 rounded-xl bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 z-10"
+                            role="menu">
+                            <div class="p-3 md:p-4 border-b border-gray-200 dark:border-gray-700">
+                                <p class="text-gray-900 dark:text-white font-medium text-sm md:text-base"
+                                    id="profile-name">
+                                    Nuran
+                                </p>
+                                <p class="text-gray-500 dark:text-gray-400 text-xs md:text-sm truncate"
+                                    id="profile-email">
+                                    karimbaylinuran@gmail.com
+                                </p>
+                            </div>
+                            <div class="p-2">
+                                <a href="profile.html"
+                                    class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm md:text-base"
+                                    role="menuitem">
+                                    <span class="material-symbols-outlined text-base md:text-lg">person</span>
+                                    <span>Your Profile</span>
+                                </a>
+                                <a href="settings.html"
+                                    class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm md:text-base"
+                                    role="menuitem">
+                                    <span class="material-symbols-outlined text-base md:text-lg">settings</span>
+                                    <span>Settings</span>
+                                </a>
+                                <div class="border-t border-gray-200 dark:border-gray-700 my-1 md:my-2"></div>
+                                <a href="auth.html"
+                                    class="flex items-center gap-2 md:gap-3 px-2 md:px-3 py-1.5 md:py-2 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm md:text-base"
+                                    role="menuitem">
+                                    <span class="material-symbols-outlined text-base md:text-lg">logout</span>
+                                    <span>Log Out</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5">
+                <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                    <!-- Refund Notice -->
+                    <div class="refund-notice mt-6">
+                        <div class="flex items-start gap-3">
+                            <span
+                                class="material-symbols-outlined text-amber-600 dark:text-amber-400 mt-0.5">warning</span>
+                            <div>
+                                <p class="font-semibold text-amber-800 dark:text-amber-200">
+                                    Important Notice
+                                </p>
+                                <p class="text-amber-700 dark:text-amber-300 text-sm mt-1">
+                                    All game purchases are final. Once a game is purchased, it
+                                    cannot be refunded or returned. Please review your selection
+                                    carefully before completing your purchase.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <main
+                        class="flex-1 mt-8 p-4 md:p-6 lg:p-8 rounded-xl glassmorphism dark:glassmorphism flex flex-col lg:flex-row gap-6"
+                        role="main">
+                        <div class="filter-sort-panel w-full lg:w-64 glassmorphism dark:glassmorphism rounded-xl p-4 flex flex-col gap-6"
+                            aria-labelledby="filters-heading">
+                            <h5 id="filters-heading"
+                                class="text-gray-800 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">
+                                Filters &amp; Sort
+                            </h5>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-gray-600 dark:text-[#959ec6] text-sm font-medium"
+                                    for="genre-filter">Genre</label>
+                                <div class="custom-select" id="genre-select">
+                                    <select class="w-full" id="genre-filter" aria-label="Filter by genre">
+                                        <option value="">All Genres</option>
+                                        <option value="puzzle">Puzzle</option>
+                                        <option value="arcade">Arcade</option>
+                                        <option value="strategy">Strategy</option>
+                                        <option value="action">Action</option>
+                                        <option value="adventure">Adventure</option>
+                                        <option value="sports">Sports</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-gray-600 dark:text-[#959ec6] text-sm font-medium"
+                                    for="price-filter">Price Range</label>
+                                <div class="custom-select" id="price-select">
+                                    <select class="w-full" id="price-filter" aria-label="Filter by price">
+                                        <option value="">All Prices</option>
+                                        <option value="free">Free</option>
+                                        <option value="under5">Under $5</option>
+                                        <option value="5-10">$5 - $10</option>
+                                        <option value="10-20">$10 - $20</option>
+                                        <option value="over20">Over $20</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-gray-600 dark:text-[#959ec6] text-sm font-medium"
+                                    for="rating-filter">Rating</label>
+                                <div class="custom-select" id="rating-select">
+                                    <select class="w-full" id="rating-filter" aria-label="Filter by rating">
+                                        <option value="">All Ratings</option>
+                                        <option value="5">5 Stars</option>
+                                        <option value="4">4+ Stars</option>
+                                        <option value="3">3+ Stars</option>
+                                        <option value="2">2+ Stars</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-gray-600 dark:text-[#959ec6] text-sm font-medium"
+                                    for="status-filter">Status</label>
+                                <div class="custom-select" id="status-select">
+                                    <select class="w-full" id="status-filter" aria-label="Filter by status">
+                                        <option value="">All Games</option>
+                                        <option value="purchased">Purchased</option>
+                                        <option value="wishlist">In Wishlist</option>
+                                        <option value="new">New Releases</option>
+                                        <option value="sale">On Sale</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button
+                                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors mt-auto">
+                                <span class="truncate">Apply Filters</span>
+                            </button>
+                        </div>
+                        <div class="flex flex-col flex-1">
+                            <div class="flex flex-wrap justify-between gap-3 p-4">
+                                <h1
+                                    class="text-gray-800 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">
+                                    Store
+                                </h1>
+                            </div>
+                            <div class="game-grid grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-6 p-4"
+                                role="list" aria-label="List of games in store">
+                                <!-- 2048 Game -->
+                                <div class="game-card-container" role="listitem">
+                                    <div
+                                        class="flex flex-col gap-3 pb-3 group transform transition-transform duration-300 hover:scale-105">
+                                        <div class="relative">
+                                            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl game-image"
+                                                style="
+                            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/2048_logo.svg/1200px-2048_logo.svg.png');
+                            background-size: 80%;
+                          " aria-label="2048 game image"></div>
+                                            <button
+                                                class="wishlist-btn absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 rounded-full p-1.5 hover:scale-110 transition-all"
+                                                aria-label="Add to wishlist">
+                                                <span class="material-symbols-outlined text-sm">favorite</span>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between items-start mb-1">
+                                                <p
+                                                    class="text-gray-800 dark:text-white text-base font-medium leading-normal">
+                                                    2048
+                                                </p>
+                                                <span class="price-tag">$4.99</span>
+                                            </div>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                GameBox Team
+                                            </p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                4.5 ★ (128 reviews)
+                                            </p>
+                                            <div class="flex justify-between items-center mt-2">
+                                                <button
+                                                    class="preview-btn flex items-center gap-1 text-xs text-gray-600 dark:text-[#959ec6] hover:text-primary transition-colors">
+                                                    <span class="material-symbols-outlined text-sm">visibility</span>
+                                                    <span>Preview</span>
+                                                </button>
+                                                <button
+                                                    class="purchase-btn px-3 py-1 bg-primary text-white text-xs rounded-lg hover:bg-primary/90 transition-colors"
+                                                    data-game="2048" data-price="4.99">
+                                                    Purchase
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Snake Game -->
+                                <div class="game-card-container" role="listitem">
+                                    <div
+                                        class="flex flex-col gap-3 pb-3 group transform transition-transform duration-300 hover:scale-105">
+                                        <div class="relative">
+                                            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl game-image"
+                                                style="
+                            background-image: url('https://imgs.search.brave.com/kwikNgAg9LEMmRRydkMW59VK1astZq1S4Lu5_SS3vIQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/cG9raS1jZG4uY29t/L2Nkbi1jZ2kvaW1h/Z2UvcT03OCxzY3E9/NTAsd2lkdGg9MjA0/LGhlaWdodD0yMDQs/Zml0PWNvdmVyLGY9/YXV0by85ZmNjMTFk/OWJiNzAxM2QxNDU1/OGNjMzQ3YWY2NGI2/Ni9zbmFrZS5wbmc');
+                            background-size: cover;
+                          " aria-label="Snake game image"></div>
+                                            <button
+                                                class="wishlist-btn active absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 rounded-full p-1.5 hover:scale-110 transition-all"
+                                                aria-label="Remove from wishlist">
+                                                <span class="material-symbols-outlined text-sm">favorite</span>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between items-start mb-1">
+                                                <p
+                                                    class="text-gray-800 dark:text-white text-base font-medium leading-normal">
+                                                    Snake Game
+                                                </p>
+                                                <span class="price-tag">$2.99</span>
+                                            </div>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                GameBox Team
+                                            </p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                4.2 ★ (89 reviews)
+                                            </p>
+                                            <div class="flex justify-between items-center mt-2">
+                                                <button
+                                                    class="preview-btn flex items-center gap-1 text-xs text-gray-600 dark:text-[#959ec6] hover:text-primary transition-colors">
+                                                    <span class="material-symbols-outlined text-sm">visibility</span>
+                                                    <span>Preview</span>
+                                                </button>
+                                                <button
+                                                    class="purchase-btn px-3 py-1 bg-primary text-white text-xs rounded-lg hover:bg-primary/90 transition-colors"
+                                                    data-game="Snake Game" data-price="2.99">
+                                                    Purchase
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Memory Cards Game -->
+                                <div class="game-card-container" role="listitem">
+                                    <div
+                                        class="flex flex-col gap-3 pb-3 group transform transition-transform duration-300 hover:scale-105">
+                                        <div class="relative">
+                                            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl game-image"
+                                                style="
+                            background-image: url('https://imgs.search.brave.com/DHc5ZQ4tweYwWybgn_T8VuFumxDegFADpJyzplmoXPU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/Y29rb2dhbWVzLmNv/bS93cC1jb250ZW50/L3VwbG9hZHMvMjAy/My8wNS9tZW1vcnkt/Z2FtZS1raWRzLW9u/bGluZS5qcGc');
+                            background-size: cover;
+                          " aria-label="Memory Cards game image"></div>
+                                            <button
+                                                class="wishlist-btn absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 rounded-full p-1.5 hover:scale-110 transition-all"
+                                                aria-label="Add to wishlist">
+                                                <span class="material-symbols-outlined text-sm">favorite</span>
+                                            </button>
+                                            <div class="absolute top-2 left-2">
+                                                <span class="purchased-badge text-xs">PURCHASED</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between items-start mb-1">
+                                                <p
+                                                    class="text-gray-800 dark:text-white text-base font-medium leading-normal">
+                                                    Memory Cards
+                                                </p>
+                                                <span
+                                                    class="text-green-500 text-sm font-medium line-through">$3.99</span>
+                                            </div>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                GameBox Team
+                                            </p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                4.7 ★ (156 reviews)
+                                            </p>
+                                            <div class="flex justify-between items-center mt-2">
+                                                <button
+                                                    class="play-btn flex items-center gap-1 text-xs text-gray-600 dark:text-[#959ec6] hover:text-primary transition-colors"
+                                                    data-game="memory-cards">
+                                                    <span class="material-symbols-outlined text-sm">play_arrow</span>
+                                                    <span>Play</span>
+                                                </button>
+                                                <span class="text-green-500 text-xs font-medium">OWNED</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tetris Game -->
+                                <div class="game-card-container" role="listitem">
+                                    <div
+                                        class="flex flex-col gap-3 pb-3 group transform transition-transform duration-300 hover:scale-105">
+                                        <div class="relative">
+                                            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl game-image-transparent"
+                                                style="
+                            background-image: url('https://imgs.search.brave.com/UjuMK9CQ-fPU04K2EZom01eehzdqx0Gs2vJS9ETwIps/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzY1Lzhl/LzNiLzY1OGUzYmVk/ZGUzMzVhMDlhMmU0/M2U4YjcwODMyZDJk/LmpwZw');
+                            background-size: cover;
+                          " aria-label="Tetris game image"></div>
+                                            <button
+                                                class="wishlist-btn absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 rounded-full p-1.5 hover:scale-110 transition-all"
+                                                aria-label="Add to wishlist">
+                                                <span class="material-symbols-outlined text-sm">favorite</span>
+                                            </button>
+                                            <div class="absolute top-2 left-2">
+                                                <span
+                                                    class="bg-red-500 text-white text-xs px-2 py-1 rounded-lg">SALE</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between items-start mb-1">
+                                                <p
+                                                    class="text-gray-800 dark:text-white text-base font-medium leading-normal">
+                                                    Tetris
+                                                </p>
+                                                <div class="flex flex-col items-end">
+                                                    <span
+                                                        class="text-red-500 text-sm font-medium line-through">$6.99</span>
+                                                    <span class="price-tag">$4.99</span>
+                                                </div>
+                                            </div>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                GameBox Team
+                                            </p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                4.8 ★ (203 reviews)
+                                            </p>
+                                            <div class="flex justify-between items-center mt-2">
+                                                <button
+                                                    class="preview-btn flex items-center gap-1 text-xs text-gray-600 dark:text-[#959ec6] hover:text-primary transition-colors">
+                                                    <span class="material-symbols-outlined text-sm">visibility</span>
+                                                    <span>Preview</span>
+                                                </button>
+                                                <button
+                                                    class="purchase-btn px-3 py-1 bg-primary text-white text-xs rounded-lg hover:bg-primary/90 transition-colors"
+                                                    data-game="Tetris" data-price="4.99">
+                                                    Purchase
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Chess Game -->
+                                <div class="game-card-container" role="listitem">
+                                    <div
+                                        class="flex flex-col gap-3 pb-3 group transform transition-transform duration-300 hover:scale-105">
+                                        <div class="relative">
+                                            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl game-image"
+                                                style="
+                            background-image: url('https://imgs.search.brave.com/FAIAqUL5XiEbhbltNuGGhIjNm4QGDV_gHSLRrgJg7Kg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS12ZWN0/b3IvY2hlc3MtZXNw/b3J0LWxvZ28tZGVz/aWduLXRlbXBsYXRl/XzExMDQwNS0zNDMu/anBnP3NlbXQ9YWlz/X2luY29taW5nJnc9/NzQwJnE9ODA');
+                            background-size: cover;
+                          " aria-label="Chess game image"></div>
+                                            <button
+                                                class="wishlist-btn absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 rounded-full p-1.5 hover:scale-110 transition-all"
+                                                aria-label="Add to wishlist">
+                                                <span class="material-symbols-outlined text-sm">favorite</span>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between items-start mb-1">
+                                                <p
+                                                    class="text-gray-800 dark:text-white text-base font-medium leading-normal">
+                                                    Chess Pro
+                                                </p>
+                                                <span class="price-tag">$7.99</span>
+                                            </div>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                GameBox Team
+                                            </p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                4.6 ★ (167 reviews)
+                                            </p>
+                                            <div class="flex justify-between items-center mt-2">
+                                                <button
+                                                    class="preview-btn flex items-center gap-1 text-xs text-gray-600 dark:text-[#959ec6] hover:text-primary transition-colors">
+                                                    <span class="material-symbols-outlined text-sm">visibility</span>
+                                                    <span>Preview</span>
+                                                </button>
+                                                <button
+                                                    class="purchase-btn px-3 py-1 bg-primary text-white text-xs rounded-lg hover:bg-primary/90 transition-colors"
+                                                    data-game="Chess Pro" data-price="7.99">
+                                                    Purchase
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sudoku Game -->
+                                <div class="game-card-container" role="listitem">
+                                    <div
+                                        class="flex flex-col gap-3 pb-3 group transform transition-transform duration-300 hover:scale-105">
+                                        <div class="relative">
+                                            <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl game-image-transparent"
+                                                style="
+                            background-image: url('https://imgs.search.brave.com/k6cto4blt8JEzGKBSOreaYAcZ7AM54sQuclAGE_fKH0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/ZHJpYmJibGUuY29t/L3VzZXJ1cGxvYWQv/MTMzNjY5MzMvZmls/ZS9vcmlnaW5hbC00/YzA0MGM3ZDlmZjFj/MjBhOWY3YzQ4M2Jh/Zjc5YmZlOC5wbmc_/Zm9ybWF0PXdlYnAm/cmVzaXplPTQwMHgz/MDAmdmVydGljYWw9/Y2VudGVy');
+                            background-size: cover;
+                          " aria-label="Sudoku game image"></div>
+                                            <button
+                                                class="wishlist-btn active absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 rounded-full p-1.5 hover:scale-110 transition-all"
+                                                aria-label="Remove from wishlist">
+                                                <span class="material-symbols-outlined text-sm">favorite</span>
+                                            </button>
+                                            <div class="absolute top-2 left-2">
+                                                <span class="purchased-badge text-xs">PURCHASED</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between items-start mb-1">
+                                                <p
+                                                    class="text-gray-800 dark:text-white text-base font-medium leading-normal">
+                                                    Sudoku Master
+                                                </p>
+                                                <span class="text-green-500 text-sm font-medium">FREE</span>
+                                            </div>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                GameBox Team
+                                            </p>
+                                            <p
+                                                class="text-gray-600 dark:text-[#959ec6] text-sm font-normal leading-normal">
+                                                4.3 ★ (94 reviews)
+                                            </p>
+                                            <div class="flex justify-between items-center mt-2">
+                                                <button
+                                                    class="play-btn flex items-center gap-1 text-xs text-gray-600 dark:text-[#959ec6] hover:text-primary transition-colors"
+                                                    data-game="sudoku-master">
+                                                    <span class="material-symbols-outlined text-sm">play_arrow</span>
+                                                    <span>Play</span>
+                                                </button>
+                                                <span class="text-green-500 text-xs font-medium">OWNED</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Payment Popup -->
+    <div id="payment-popup" class="popup-overlay" role="dialog" aria-labelledby="payment-title" aria-modal="true">
+        <div class="bg-white dark:bg-[#252b46] rounded-xl p-6 w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="payment-title" class="text-lg font-bold text-gray-800 dark:text-white">
+                    Add Funds
+                </h3>
+                <button id="close-payment-popup"
+                    class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    aria-label="Close dialog">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div class="mb-6">
+                <p class="text-gray-600 dark:text-gray-300 mb-2">
+                    Current Balance:
+                    <span id="popup-balance" class="font-semibold text-primary">$25.00</span>
+                </p>
+                <label class="text-gray-600 dark:text-[#959ec6] text-sm font-medium mb-2 block" for="amount">Amount to
+                    Add</label>
+                <div class="flex gap-2 mb-4">
+                    <button
+                        class="flex-1 py-2 px-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors amount-btn"
+                        data-amount="5">
+                        $5
+                    </button>
+                    <button
+                        class="flex-1 py-2 px-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors amount-btn"
+                        data-amount="10">
+                        $10
+                    </button>
+                    <button
+                        class="flex-1 py-2 px-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors amount-btn"
+                        data-amount="20">
+                        $20
+                    </button>
+                    <button
+                        class="flex-1 py-2 px-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors amount-btn"
+                        data-amount="50">
+                        $50
+                    </button>
+                </div>
+                <input type="number" id="amount"
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1a1f36] text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Custom amount" min="1" step="0.01" />
+            </div>
+
+            <div class="mb-6">
+                <label class="text-gray-600 dark:text-[#959ec6] text-sm font-medium mb-3 block">Payment Method</label>
+                <div class="space-y-3">
+                    <div class="payment-method" data-method="visa">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
+                                <span class="text-white font-bold text-sm">V</span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-800 dark:text-white font-medium">Visa</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">
+                                    **** 1234
+                                </p>
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-primary radio-icon">radio_button_unchecked</span>
+                        </div>
+                    </div>
+
+                    <div class="payment-method" data-method="mastercard">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-red-500 rounded flex items-center justify-center">
+                                <span class="text-white font-bold text-sm">M</span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-800 dark:text-white font-medium">
+                                    Mastercard
+                                </p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">
+                                    **** 5678
+                                </p>
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-primary radio-icon">radio_button_unchecked</span>
+                        </div>
+                    </div>
+
+                    <div class="payment-method" data-method="paypal">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-400 rounded flex items-center justify-center">
+                                <span class="text-white font-bold text-sm">P</span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-800 dark:text-white font-medium">
+                                    PayPal
+                                </p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">
+                                    user@example.com
+                                </p>
+                            </div>
+                            <span
+                                class="material-symbols-outlined text-primary radio-icon">radio_button_unchecked</span>
+                        </div>
+                    </div>
+
+                    <!-- Add Card Section -->
+                    <div class="add-card-section" id="add-card-btn">
+                        <div class="flex flex-col items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-2xl">add_circle</span>
+                            <p class="text-gray-700 dark:text-gray-300 font-medium">
+                                Add New Card
+                            </p>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">
+                                Visa, Mastercard, American Express
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <button id="cancel-payment"
+                    class="px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    Cancel
+                </button>
+                <button id="confirm-payment"
+                    class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors">
+                    Add Funds
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global balance state
+        let userBalance = 25.0;
+
+        // Function to update balance display everywhere
+        function updateBalanceDisplay() {
+            const headerBalance = document.getElementById("header-balance");
+            const popupBalance = document.getElementById("popup-balance");
+
+            if (headerBalance) {
+                headerBalance.textContent = `$${userBalance.toFixed(2)}`;
+            }
+
+            if (popupBalance) {
+                popupBalance.textContent = `$${userBalance.toFixed(2)}`;
+            }
+        }
+
+        // Toast notification system
+        function showToast(message, type = "info", duration = 4000) {
+            const toastContainer = document.getElementById("toast-container");
+            const toast = document.createElement("div");
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">
+                        ${type === "success"
+                    ? "check_circle"
+                    : type === "error"
+                        ? "error"
+                        : type === "warning"
+                            ? "warning"
+                            : "info"
+                }
+                    </span>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Show toast with animation
+            setTimeout(() => {
+                toast.classList.add("show");
+            }, 100);
+
+            // Hide and remove toast after duration
+            setTimeout(() => {
+                toast.classList.remove("show");
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, duration);
+        }
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById("theme-toggle");
+        const htmlElement = document.documentElement;
+
+        // Check user preference
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        if (savedTheme === "dark") {
+            htmlElement.classList.add("dark");
+            themeToggle.classList.add("active");
+        } else {
+            htmlElement.classList.remove("dark");
+            themeToggle.classList.remove("active");
+        }
+
+        // Theme switching
+        themeToggle.addEventListener("click", function () {
+            if (htmlElement.classList.contains("dark")) {
+                htmlElement.classList.remove("dark");
+                themeToggle.classList.remove("active");
+                localStorage.setItem("theme", "light");
+            } else {
+                htmlElement.classList.add("dark");
+                themeToggle.classList.add("active");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+
+        // Profile dropdown functionality
+        const profileButton = document.getElementById("profile-button");
+        const profileDropdown = document.getElementById("profile-dropdown");
+
+        profileButton.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const isExpanded =
+                profileButton.getAttribute("aria-expanded") === "true";
+            profileButton.setAttribute("aria-expanded", !isExpanded);
+            profileDropdown.classList.toggle("show");
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function () {
+            profileDropdown.classList.remove("show");
+            profileButton.setAttribute("aria-expanded", "false");
+        });
+
+        // Don't close when clicking inside dropdown
+        profileDropdown.addEventListener("click", function (e) {
+            e.stopPropagation();
+        });
+
+        // Payment popup functionality
+        const balanceBtn = document.getElementById("balance-btn");
+        const paymentPopup = document.getElementById("payment-popup");
+        const closePaymentPopup = document.getElementById("close-payment-popup");
+        const cancelPayment = document.getElementById("cancel-payment");
+        const confirmPayment = document.getElementById("confirm-payment");
+        const amountInput = document.getElementById("amount");
+        const amountButtons = document.querySelectorAll(".amount-btn");
+        const paymentMethods = document.querySelectorAll(".payment-method");
+        const addCardBtn = document.getElementById("add-card-btn");
+
+        let selectedPaymentMethod = null;
+
+        balanceBtn.addEventListener("click", () => {
+            // Update popup balance before showing
+            updateBalanceDisplay();
+            paymentPopup.classList.add("active");
+            amountInput.focus();
+        });
+
+        const closePaymentPopupFunc = () => {
+            paymentPopup.classList.remove("active");
+            amountInput.value = "";
+            selectedPaymentMethod = null;
+
+            // Reset payment method selection
+            paymentMethods.forEach((method) => {
+                method.classList.remove("selected");
+                const radioIcon = method.querySelector(".radio-icon");
+                radioIcon.textContent = "radio_button_unchecked";
+            });
+
+            // Reset amount buttons
+            amountButtons.forEach((btn) => {
+                btn.classList.remove("bg-primary", "text-white");
+                btn.classList.add(
+                    "bg-gray-100",
+                    "dark:bg-gray-700",
+                    "text-gray-700",
+                    "dark:text-gray-300"
+                );
+            });
+        };
+
+        closePaymentPopup.addEventListener("click", closePaymentPopupFunc);
+        cancelPayment.addEventListener("click", closePaymentPopupFunc);
+
+        // Amount buttons
+        amountButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const amount = button.getAttribute("data-amount");
+                amountInput.value = amount;
+
+                // Highlight selected amount button
+                amountButtons.forEach((btn) => {
+                    btn.classList.remove("bg-primary", "text-white");
+                    btn.classList.add(
+                        "bg-gray-100",
+                        "dark:bg-gray-700",
+                        "text-gray-700",
+                        "dark:text-gray-300"
+                    );
+                });
+                button.classList.remove(
+                    "bg-gray-100",
+                    "dark:bg-gray-700",
+                    "text-gray-700",
+                    "dark:text-gray-300"
+                );
+                button.classList.add("bg-primary", "text-white");
+            });
+        });
+
+        // Payment method selection
+        paymentMethods.forEach((method) => {
+            method.addEventListener("click", () => {
+                paymentMethods.forEach((m) => {
+                    m.classList.remove("selected");
+                    const radioIcon = m.querySelector(".radio-icon");
+                    radioIcon.textContent = "radio_button_unchecked";
+                });
+
+                method.classList.add("selected");
+                const radioIcon = method.querySelector(".radio-icon");
+                radioIcon.textContent = "radio_button_checked";
+                selectedPaymentMethod = method.getAttribute("data-method");
+            });
+        });
+
+        // Add card functionality
+        addCardBtn.addEventListener("click", () => {
+            showToast("Card adding feature coming soon!", "info");
+            // In a real application, you would open a form to add a new card
+        });
+
+        // Confirm payment
+        confirmPayment.addEventListener("click", () => {
+            const amount = amountInput.value.trim();
+
+            if (!amount || parseFloat(amount) <= 0) {
+                showToast("Please enter a valid amount", "error");
+                amountInput.focus();
+                return;
+            }
+
+            if (!selectedPaymentMethod) {
+                showToast("Please select a payment method", "error");
+                return;
+            }
+
+            // Update balance
+            userBalance += parseFloat(amount);
+            updateBalanceDisplay();
+
+            showToast(`Successfully added $${amount} to your balance!`, "success");
+            closePaymentPopupFunc();
+        });
+
+        // Close popup when clicking outside or pressing ESC
+        paymentPopup.addEventListener("click", (e) => {
+            if (e.target === paymentPopup) {
+                closePaymentPopupFunc();
+            }
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && paymentPopup.classList.contains("active")) {
+                closePaymentPopupFunc();
+            }
+        });
+
+        // Wishlist functionality
+        const wishlistButtons = document.querySelectorAll(".wishlist-btn");
+        wishlistButtons.forEach((button) => {
+            button.addEventListener("click", function (e) {
+                e.stopPropagation();
+                this.classList.toggle("active");
+                const gameTitle = this.closest(".game-card-container").querySelector(
+                    "p.text-base"
+                ).textContent;
+
+                if (this.classList.contains("active")) {
+                    this.setAttribute("aria-label", "Remove from wishlist");
+                    showToast(`Added ${gameTitle} to wishlist`, "success");
+                } else {
+                    this.setAttribute("aria-label", "Add to wishlist");
+                    showToast(`Removed ${gameTitle} from wishlist`, "info");
+                }
+            });
+        });
+
+        // Purchase buttons functionality
+        const purchaseButtons = document.querySelectorAll(".purchase-btn");
+        purchaseButtons.forEach((button) => {
+            button.addEventListener("click", function (e) {
+                e.stopPropagation();
+                const gameTitle = this.getAttribute("data-game");
+                const gamePrice = parseFloat(this.getAttribute("data-price"));
+
+                if (gamePrice > userBalance) {
+                    showToast(
+                        `Insufficient balance! You need $${gamePrice.toFixed(
+                            2
+                        )} but only have $${userBalance.toFixed(
+                            2
+                        )}. Please add funds first.`,
+                        "error"
+                    );
+                    balanceBtn.click();
+                    return;
+                }
+
+                // Simulate purchase process
+                if (
+                    confirm(
+                        `Are you sure you want to purchase "${gameTitle}" for $${gamePrice.toFixed(
+                            2
+                        )}?`
+                    )
+                ) {
+                    // Update balance
+                    userBalance -= gamePrice;
+                    updateBalanceDisplay();
+
+                    // Update UI to show purchased status
+                    const gameCard = this.closest(".game-card-container");
+                    const priceElement = gameCard.querySelector(".price-tag");
+                    if (priceElement) {
+                        priceElement.remove();
+                    }
+
+                    const purchaseBtn = gameCard.querySelector(".purchase-btn");
+                    if (purchaseBtn) {
+                        purchaseBtn.remove();
+                    }
+
+                    // Add purchased badge
+                    const imageContainer = gameCard.querySelector(".relative");
+                    const purchasedBadge = document.createElement("div");
+                    purchasedBadge.className = "absolute top-2 left-2";
+                    purchasedBadge.innerHTML =
+                        '<span class="purchased-badge text-xs">PURCHASED</span>';
+                    imageContainer.appendChild(purchasedBadge);
+
+                    // Update action button
+                    const actionsContainer = gameCard.querySelector(
+                        ".flex.justify-between.items-center"
+                    );
+                    const playButton = document.createElement("button");
+                    playButton.className =
+                        "play-btn flex items-center gap-1 text-xs text-gray-600 dark:text-[#959ec6] hover:text-primary transition-colors";
+                    playButton.innerHTML =
+                        '<span class="material-symbols-outlined text-sm">play_arrow</span><span>Play</span>';
+
+                    // Add game data attribute for navigation
+                    const gameSlug = gameTitle.toLowerCase().replace(/\s+/g, "-");
+                    playButton.setAttribute("data-game", gameSlug);
+
+                    const ownedText = document.createElement("span");
+                    ownedText.className = "text-green-500 text-xs font-medium";
+                    ownedText.textContent = "OWNED";
+
+                    actionsContainer.innerHTML = "";
+                    actionsContainer.appendChild(playButton);
+                    actionsContainer.appendChild(ownedText);
+
+                    showToast(`Successfully purchased ${gameTitle}!`, "success");
+                }
+            });
+        });
+
+        // Preview buttons functionality - Coming Soon mesajı
+        document.addEventListener("click", function (e) {
+            if (e.target.closest(".preview-btn")) {
+                e.preventDefault();
+                e.stopPropagation();
+                const gameTitle = e.target
+                    .closest(".game-card-container")
+                    .querySelector("p.text-base").textContent;
+                showToast(`Preview feature for ${gameTitle} is coming soon!`, "info");
+            }
+        });
+
+        // Play buttons functionality - Oyun sayfasına yönlendirme
+        document.addEventListener("click", function (e) {
+            if (e.target.closest(".play-btn")) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const button = e.target.closest(".play-btn");
+                const gameCard = button.closest(".game-card-container");
+                const gameTitle = gameCard.querySelector("p.text-base").textContent;
+
+                // Oyun adından URL oluştur
+                let gameUrl;
+
+                // Özel durumlar
+                if (gameTitle === "2048") {
+                    gameUrl = "2048.html";
+                } else if (gameTitle === "Snake Game") {
+                    gameUrl = "snake.html";
+                } else if (gameTitle === "Memory Cards") {
+                    gameUrl = "memory.html";
+                } else if (gameTitle === "Tetris") {
+                    gameUrl = "tetris.html";
+                } else if (gameTitle === "Chess Pro") {
+                    gameUrl = "chess.html";
+                } else if (gameTitle === "Sudoku Master") {
+                    gameUrl = "sudoku.html";
+                } else {
+                    // Genel durum - oyun adından URL oluştur
+                    gameUrl = gameTitle.toLowerCase().replace(/\s+/g, "-") + ".html";
+                }
+
+                // Aynı sekmede oyun sayfasına git
+                window.location.href = gameUrl;
+            }
+        });
+
+        // Enhanced dropdown functionality
+        const customSelects = document.querySelectorAll(".custom-select");
+
+        customSelects.forEach((select) => {
+            const selectElement = select.querySelector("select");
+
+            // Add active class when focused
+            selectElement.addEventListener("focus", () => {
+                select.classList.add("active");
+            });
+
+            // Remove active class when blurred
+            selectElement.addEventListener("blur", () => {
+                select.classList.remove("active");
+            });
+
+            // Add click handler to the custom select container
+            select.addEventListener("click", () => {
+                selectElement.focus();
+            });
+        });
+
+        // Apply filters button functionality
+        const applyFiltersBtn = document.querySelector(
+            ".filter-sort-panel button"
+        );
+        applyFiltersBtn.addEventListener("click", () => {
+            const genreFilter = document.getElementById("genre-filter").value;
+            const priceFilter = document.getElementById("price-filter").value;
+            const ratingFilter = document.getElementById("rating-filter").value;
+            const statusFilter = document.getElementById("status-filter").value;
+
+            console.log("Store filters applied:", {
+                genre: genreFilter,
+                price: priceFilter,
+                rating: ratingFilter,
+                status: statusFilter,
+            });
+
+            showToast("Filters applied successfully!", "success");
+        });
+
+        // Initialize balance display
+        updateBalanceDisplay();
+    </script>
+</body>
+
+</html>
