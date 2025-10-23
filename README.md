@@ -14,7 +14,7 @@ This project was built during my free time out of passion for crafting engaging 
 ---
 
 ## 🧩 Development Details
-- **Timeline:** October 17–22, 2024  
+- **Timeline:** October 17–22, 2025
 - **AI Assistance:**  
   - 90% built with [Stitch AI](https://stitch.withgoogle.com/)  
   - 10% built with DeepSeek AI  
